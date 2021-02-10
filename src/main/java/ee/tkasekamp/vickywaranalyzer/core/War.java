@@ -35,15 +35,17 @@ public class War {
 	}
 
 	public void setCasusBelliAndStartDate() {
-		// The first one in the list has the oldest startDate
-		this.startDate = joinedCountryList[0].getStartDate();
-		/* Check required as only HoD uses original wargoals. Checking if it has been given values */
-		if (!(originalWarGoal.getCasus_belli().equals(""))) {
-			this.casus_belli = originalWarGoal.getCasus_belli();
-		} else if (!(warGoalList.length == 0)) {
-			this.casus_belli = warGoalList[0].getCasus_belli();
+		//Checks if its not an older war (that doesn't say shit about attackers or defenders for some reason
+		if(joinedCountryList != null && joinedCountryList.length != 0) {
+			// The first one in the list has the oldest startDate
+			this.startDate = joinedCountryList[0].getStartDate();
+			/* Check required as only HoD uses original wargoals. Checking if it has been given values */
+			if (!(originalWarGoal.getCasus_belli().equals(""))) {
+				this.casus_belli = originalWarGoal.getCasus_belli();
+			} else if (!(warGoalList.length == 0)) {
+				this.casus_belli = warGoalList[0].getCasus_belli();
+			}
 		}
-
 	}
 
 	/**

@@ -90,7 +90,7 @@ public class Parser {
 			if (line.startsWith("date=") || line.startsWith("player=") || line.startsWith("start_date=")) {
 				referenceReader(line);
 			}
-			if (line.startsWith("previous_war={") || line.equals("active_war={")) {
+			if (line.startsWith("previous_war={") || line.startsWith("active_war={")) {
 				warProcessing = true;
 		    	/* Further  check if war is active */
 				if (line.startsWith("previous_war=")) {
@@ -152,6 +152,16 @@ public class Parser {
 			}
 		}
 		scanner.close();
+		ArrayList<War> tempWarList = new ArrayList<>();
+		for(War war : warList ) {
+			if(war == null || war.getOriginalAttacker().equals("") || war.getOriginalDefender().equals("")) {
+				tempWarList.add(war);
+			}
+		}
+
+		for(War war : tempWarList) {
+			warList.remove(war);
+		}
 		/* Setting the start date and casus belli */
 		warList.forEach(ee.tkasekamp.vickywaranalyzer.core.War::setCasusBelliAndStartDate);
 		return warList;
@@ -213,12 +223,7 @@ public class Parser {
 			line = nameExtractor(line, 19, true);
 			/* Checking required for some older wars */
 			if (line.equals("---")) {
-				for (JoinedCountry country : countryList) {
-					if (country.isAttacker()) {
-						warList.get(WAR_COUNTER).setOriginalAttacker(country.getTag());
-						break;
-					}
-				}
+				//TODO: Yeet the war. Can't parse it any further
 			} else {
 				warList.get(WAR_COUNTER).setOriginalAttacker(line);
 			}
@@ -227,12 +232,7 @@ public class Parser {
 			line = nameExtractor(line, 19, true);
 			/* Checking required for some older wars */
 			if (line.equals("---")) {
-				for (JoinedCountry country : countryList) {
-					if (!country.isAttacker()) {
-						warList.get(WAR_COUNTER).setOriginalDefender(country.getTag());
-						break;
-					}
-				}
+				//TODO: Yeet the war. Can't parse it any further
 			} else {
 				warList.get(WAR_COUNTER).setOriginalDefender(line);
 			}
