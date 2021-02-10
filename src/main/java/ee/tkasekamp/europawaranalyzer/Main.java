@@ -29,7 +29,7 @@ public class Main extends Application {
 		Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(
 				"Main.fxml"));
 
-		stage.setTitle("Victoria II war analyzer");
+		stage.setTitle("EU4 war analyzer");
 		stage.setScene(new Scene(root));
 		stage.show();
 		/* Cause I'm Estonian, thats why */

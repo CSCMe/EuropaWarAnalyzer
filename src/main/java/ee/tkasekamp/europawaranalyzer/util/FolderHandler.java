@@ -2,7 +2,7 @@ package ee.tkasekamp.europawaranalyzer.util;
 
 import java.io.*;
 
-public class FolderHandler {
+public class FolderHandler { //TODO: Figure out how the hell this stuff works and what it even does
 	public static final String PROGRAM_FILES_X86 = "C:/Program Files (x86)";
 	public static final String PROGRAM_FILES = "C:/Program Files";
 	public static final String STEAM = "Steam/steamapps/common";

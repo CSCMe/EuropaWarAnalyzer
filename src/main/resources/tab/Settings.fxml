@@ -55,7 +55,7 @@
 							  GridPane.rowIndex="2">
 							<children>
 								<Label styleClass="label-dark"
-									   text="Victoria II install directory:"/>
+									   text="EU4 install directory:"/>
 							</children>
 						</HBox>
 						<Label fx:id="errorLabel" prefHeight="108.0" prefWidth="527.0"
@@ -63,7 +63,7 @@
 							   GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 						<Label alignment="CENTER" contentDisplay="CENTER" prefWidth="505.0"
 							   styleClass="label-header"
-							   text="Victoria II war analyzer" textAlignment="CENTER"
+							   text="EU4 war analyzer" textAlignment="CENTER"
 							   GridPane.columnIndex="1"
 							   GridPane.rowIndex="0"/>
 						<Label ellipsisString="" prefHeight="81.0" prefWidth="527.0"
