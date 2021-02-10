@@ -90,22 +90,22 @@ public class Parser {
 			if (line.startsWith("date=") || line.startsWith("player=") || line.startsWith("start_date=")) {
 				referenceReader(line);
 			}
-			if (line.startsWith("previous_war=") || line.equals("active_war=")) {
+			if (line.startsWith("previous_war={") || line.equals("active_war={")) {
 				warProcessing = true;
 		    	/* Further  check if war is active */
-				if (line.equals("previous_war=")) {
+				if (line.startsWith("previous_war=")) {
 					warList.add(new War(false));
 				} else {
 					warList.add(new War(true));
 				}
-
+				System.out.println(line);
 			}
 
-
 			if (warProcessing) {
+				System.out.println(line);
 				bracketCounterChange(line);
-		    	 /* Checking if the line needs to be passed on to other readers */
-				if (line.startsWith("battle") || battleProcessing) {
+				/* Checking if the line needs to be passed on to other readers */
+				if (line.startsWith("battle=") || battleProcessing) {
 					battleProcessing = true;
 					battleReader(line);
 				} else if (line.startsWith("war_goal") || warGoalProcessing) {
@@ -119,38 +119,37 @@ public class Parser {
 				} else {
 					warReader(line);
 				}
+				/*
+				 * bracketCounter will only reach 0 when the whole war has been processed. Name check is required because
+				 * on the first cycle bracketcounter will still be 0.
+				 */
+				if (bracketCounter == 0 && !(warList.get(WAR_COUNTER).getName().equals(""))) {
+					/* General housekeeping
+					 * country and battle lists to proper types
+					 *  */
+					JoinedCountry[] countryTempList = new JoinedCountry[countryList.size()];
+					JoinedCountry[] countryTempList2 = countryList.toArray(countryTempList);
+					warList.get(WAR_COUNTER).setCountryList(countryTempList2);
+
+					Battle[] battleTempList = new Battle[battleList.size()];
+					Battle[] battleTempList2 = battleList.toArray(battleTempList);
+					warList.get(WAR_COUNTER).setBattleList(battleTempList2);
+
+					WarGoal[] warGoalTempList = new WarGoal[warGoalList.size()];
+					WarGoal[] warGoalTempList2 = warGoalList.toArray(warGoalTempList);
+					warList.get(WAR_COUNTER).setWarGoalList(warGoalTempList2);
+					warGoalList.clear();
+
+					warGoalProcessing = false;
+					WARGOAL_COUNTER = 0;
+					BATTLE_COUNTER = 0;
+					countryList.clear();
+					battleList.clear();
+					WAR_COUNTER++;
+					warProcessing = false;
+
+				}
 			}
-		    /* 
-		     * bracketCounter will only reach 0 when the whole war has been processed. Name check is required because
-		     * on the first cycle bracketcounter will still be 0.
-		     */
-			if (bracketCounter == 0 && warProcessing && !(warList.get(WAR_COUNTER).getName().equals(""))) {
-		    	/* General housekeeping
-		    	 * country and battle lists to proper types
-		    	 *  */
-				JoinedCountry[] countryTempList = new JoinedCountry[countryList.size()];
-				JoinedCountry[] countryTempList2 = countryList.toArray(countryTempList);
-				warList.get(WAR_COUNTER).setCountryList(countryTempList2);
-
-				Battle[] battleTempList = new Battle[battleList.size()];
-				Battle[] battleTempList2 = battleList.toArray(battleTempList);
-				warList.get(WAR_COUNTER).setBattleList(battleTempList2);
-
-				WarGoal[] warGoalTempList = new WarGoal[warGoalList.size()];
-				WarGoal[] warGoalTempList2 = warGoalList.toArray(warGoalTempList);
-				warList.get(WAR_COUNTER).setWarGoalList(warGoalTempList2);
-				warGoalList.clear();
-
-				warGoalProcessing = false;
-				WARGOAL_COUNTER = 0;
-				BATTLE_COUNTER = 0;
-				countryList.clear();
-				battleList.clear();
-				WAR_COUNTER++;
-				warProcessing = false;
-
-			}
-
 		}
 		scanner.close();
 		/* Setting the start date and casus belli */
@@ -170,7 +169,7 @@ public class Parser {
 			line = nameExtractor(line, 6, true);
 			warList.get(WAR_COUNTER).setName(line);
 		} else if (line.startsWith("1")) {
-			line = line.replaceAll("=", "");
+			line = line.split("=")[0];
 			setDateBuffer(line);
 
 		} else if (line.startsWith("add_attacker=")) {
@@ -252,11 +251,11 @@ public class Parser {
 	 * Since the attacker is always first, it is only required to check if the attacker already has the data
 	 */
 	public void battleReader(String line) {
+		//Process the first part of the battle
 		if (line.startsWith("name")) {
 			line = nameExtractor(line, 6, true);
 			Battle b = new Battle(dateBuffer, line);
 			battleList.add(b);
-			attackerDefender = true; // From now on all unit data will be about the attacker
 		} else if (line.startsWith("location")) {
 			line = nameExtractor(line, 9, false);
 			int location = Integer.parseInt(line);
@@ -268,6 +267,20 @@ public class Parser {
 			} else {
 				battleList.get(BATTLE_COUNTER).setRes(Result.NO);
 			}
+		} else if(line.startsWith("attacker")) { //Check if it's about the attacker
+			attackerDefender = true; // From now on all unit data will be about the attacker
+		} else if(line.startsWith("defender")) { //Check if it's about the defender
+			attackerDefender = false; // From now on all unit data will be about the defender
+		} else if (line.startsWith("losses")) {
+			line = nameExtractor(line, 7, false);
+			int losses = Integer.parseInt(line);
+			if (attackerDefender) {
+				battleList.get(BATTLE_COUNTER).setAttackerLosses(losses);
+
+			} else {
+				battleList.get(BATTLE_COUNTER).setDefenderLosses(losses);
+				battleList.get(BATTLE_COUNTER).setTotalLosses(losses + battleList.get(BATTLE_COUNTER).getAttackerLosses());
+			}
 		} else if (line.startsWith("country")) {
 			line = nameExtractor(line, 9, true);
 			if (attackerDefender) {
@@ -275,39 +288,22 @@ public class Parser {
 			} else {
 				battleList.get(BATTLE_COUNTER).setDefender(line);
 			}
-		} else if (line.startsWith("leader")) {
-			line = nameExtractor(line, 8, true);
+		} else if (line.startsWith("commander")) {
+			line = nameExtractor(line, 11, true);
 			if (attackerDefender) {
 				battleList.get(BATTLE_COUNTER).setLeaderAttacker(line);
-			} else {
-				battleList.get(BATTLE_COUNTER).setLeaderDefender(line);
-			}
-		} else if (line.startsWith("losses")) {
-			line = nameExtractor(line, 7, false);
-			int losses = Integer.parseInt(line);
-			if (attackerDefender) {
-				/* If this point is reached all data about the attackers units will have been processed. 
-				 * Unit list added to battle and cleared
-				 * Now the defenders units will be processed
-				 */
-				attackerDefender = false;
-				battleList.get(BATTLE_COUNTER).setAttackerLosses(losses);
 
 				/* Housekeeping */
 				Unit[] unitTempList = new Unit[unitList.size()];
 				Unit[] unitTempList2 = unitList.toArray(unitTempList);
 				battleList.get(BATTLE_COUNTER).setAttackerUnits(unitTempList2);
 				unitList.clear();
-		    	/* Battle type */
+				/* Battle type */
 				battleList.get(BATTLE_COUNTER).determineType();
 
 			} else {
-				/* If this point is reached all data about the defender units will have been processed. 
-				 * Unit list added to battle and cleared
-				 * Total losses calculated
-				 */
-				battleList.get(BATTLE_COUNTER).setDefenderLosses(losses);
-				battleList.get(BATTLE_COUNTER).setTotalLosses(losses + battleList.get(BATTLE_COUNTER).getAttackerLosses());
+				battleList.get(BATTLE_COUNTER).setLeaderDefender(line);
+
 
 				Unit[] unitTempList = new Unit[unitList.size()];
 				Unit[] unitTempList2 = unitList.toArray(unitTempList);
@@ -318,7 +314,6 @@ public class Parser {
 				battleProcessing = false;
 				BATTLE_COUNTER++;
 			}
-
 		} else if (!(line.equals("attacker=")) && !(line.startsWith("defender=")) && !(line.equals("{"))
 				&& !(line.equals("}")) && !(line.equals("battle="))) {
 			/* All units such as "infantry=9000" will come here
@@ -332,6 +327,7 @@ public class Parser {
 			} catch (NumberFormatException e) {
 				// Mainly debug if the lines which come here aren't integers
 //				controller.getErrorLabel().setText(controller.getErrorLabel().getText() + "Problem with reading: " + line);
+
 			}
 
 		}
@@ -456,9 +452,10 @@ public class Parser {
 
 	public void bracketCounterChange(String line) {
 		// Increases or decreases the bracketCounter
-		if (line.equals("{")) {
+		if (line.contains("{")) {
 			bracketCounter++;
-		} else if (line.equals("}")) {
+		}
+		if (line.contains("}")) {
 			bracketCounter--;
 		}
 	}

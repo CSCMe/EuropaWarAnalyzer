@@ -68,9 +68,9 @@ public class SettingsController extends AbstractController {
 	@FXML
 	void saveGameIssueFired(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Victoria II save game");
+		fileChooser.setTitle("EU4 save game");
 		//Set extension filter
-		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Save game (*.v2)", "*.v2");
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Save game (*.eu4)", "*.eu4");
 		fileChooser.getExtensionFilters().add(extFilter);
 		/* Only if there is a path is it given to the filechooser */
 		if (!utilServ.getSaveGameFolder().equals("")) {
