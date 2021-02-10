@@ -1,8 +1,10 @@
-# Victoria II war analyzer
+# EU4 war analyzer
 
-Or the full name Victoria II save game war analyzer. Naming stuff is hard.
+Or the full name Europa Universalis save game war analyzer. Naming stuff is hard.
+Based on the Victoria II war analyzer: [link](https://forum.paradoxplaza.com/forum/index.php?threads/tool-victoria-ii-save-game-war-analyzer.689055/)
 
-Paradox forum thread: [link](https://forum.paradoxplaza.com/forum/index.php?threads/tool-victoria-ii-save-game-war-analyzer.689055/)
+###This doesn't work yet
+
 
 ## Download links
 * Version 1.0.1 that works with Java 7 [link](http://bit.ly/2iMy2L0)
