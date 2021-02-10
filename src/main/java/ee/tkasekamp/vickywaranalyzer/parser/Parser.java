@@ -108,7 +108,7 @@ public class Parser {
 				if (line.startsWith("battle=") || battleProcessing) {
 					battleProcessing = true;
 					battleReader(line);
-				} else if (line.startsWith("war_goal") || warGoalProcessing) { //TODO: Replace with Casus Belli
+				} else if (line.startsWith("war_goal") || warGoalProcessing) {
 					warGoalProcessing = true;
 					warGoalReader(line);
 
@@ -293,22 +293,27 @@ public class Parser {
 			if (attackerDefender) {
 				battleList.get(BATTLE_COUNTER).setLeaderAttacker(line);
 
+				/* Housekeeping */
+				Unit[] unitTempList = new Unit[unitList.size()];
+				Unit[] unitTempList2 = unitList.toArray(unitTempList);
+				battleList.get(BATTLE_COUNTER).setAttackerUnits(unitTempList2);
+				unitList.clear();
 				/* Battle type */
 				battleList.get(BATTLE_COUNTER).determineType();
 
 			} else {
 				battleList.get(BATTLE_COUNTER).setLeaderDefender(line);
 
+
+				Unit[] unitTempList = new Unit[unitList.size()];
+				Unit[] unitTempList2 = unitList.toArray(unitTempList);
+				battleList.get(BATTLE_COUNTER).setDefenderUnits(unitTempList2);
+				unitList.clear();
+
+
 				battleProcessing = false;
 				BATTLE_COUNTER++;
 			}
-
-			/* Housekeeping */
-			Unit[] unitTempList = new Unit[unitList.size()];
-			Unit[] unitTempList2 = unitList.toArray(unitTempList);
-			battleList.get(BATTLE_COUNTER).setDefenderUnits(unitTempList2);
-			unitList.clear();
-
 		} else if (!(line.equals("attacker=")) && !(line.startsWith("defender=")) && !(line.equals("{"))
 				&& !(line.equals("}")) && !(line.equals("battle="))) {
 			/* All units such as "infantry=9000" will come here
