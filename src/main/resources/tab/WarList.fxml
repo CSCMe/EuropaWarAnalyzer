@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <AnchorPane id="Content" styleClass="content" xmlns:fx="http://javafx.com/fxml/1"
-			fx:controller="ee.tkasekamp.vickywaranalyzer.controller.tab.WarListController">
+			fx:controller="ee.tkasekamp.europawaranalyzer.controller.tab.WarListController">
 	<children>
 		<GridPane id="GridPane" alignment="CENTER" hgap="20.0" AnchorPane.bottomAnchor="20.0"
 				  AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"

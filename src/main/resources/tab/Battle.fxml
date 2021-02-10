@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <AnchorPane id="Content" styleClass="content" xmlns:fx="http://javafx.com/fxml/1"
-			fx:controller="ee.tkasekamp.vickywaranalyzer.controller.tab.BattleController">
+			fx:controller="ee.tkasekamp.europawaranalyzer.controller.tab.BattleController">
 	<children>
 		<GridPane alignment="CENTER" hgap="20.0" maxHeight="1.7976931348623157E308"
 				  maxWidth="1.7976931348623157E308"

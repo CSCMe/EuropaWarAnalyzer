@@ -6,7 +6,7 @@
 <?import java.net.URL?>
 <AnchorPane id="AnchorPane" prefWidth="1100.0" styleClass="content"
 			xmlns:fx="http://javafx.com/fxml/1"
-			fx:controller="ee.tkasekamp.vickywaranalyzer.controller.tab.SettingsController">
+			fx:controller="ee.tkasekamp.europawaranalyzer.controller.tab.SettingsController">
 	<children>
 		<AnchorPane styleClass="background" AnchorPane.bottomAnchor="20.0"
 					AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
@@ -74,7 +74,7 @@
 							  GridPane.rowIndex="0">
 							<children>
 								<Label contentDisplay="RIGHT" prefWidth="73.0"
-									   styleClass="label-dark" text="Version 1.3.0"
+									   styleClass="label-dark" text="Version 0.5.0"
 									   wrapText="true"/>
 							</children>
 						</HBox>

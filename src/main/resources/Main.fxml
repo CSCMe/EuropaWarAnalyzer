@@ -5,7 +5,7 @@
 <?import java.net.URL?>
 <AnchorPane prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.40"
 			xmlns:fx="http://javafx.com/fxml/1"
-			fx:controller="ee.tkasekamp.vickywaranalyzer.controller.MainController">
+			fx:controller="ee.tkasekamp.europawaranalyzer.controller.MainController">
 	<stylesheets>
 		<URL value="@GUI.css"/>
 	</stylesheets>

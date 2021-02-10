@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <GridPane id="GridPane" prefHeight="621.0" prefWidth="307.0" xmlns="http://javafx.com/javafx/8"
 		  xmlns:fx="http://javafx.com/fxml/1"
-		  fx:controller="ee.tkasekamp.vickywaranalyzer.controller.box.BattleCountryBox">
+		  fx:controller="ee.tkasekamp.europawaranalyzer.controller.box.BattleCountryBox">
 	<children>
 		<TableView fx:id="unitsTable" maxHeight="1.7976931348623157E308"
 				   maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0"
