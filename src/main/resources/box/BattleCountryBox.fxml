@@ -65,6 +65,6 @@
 		<RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
 		<RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
 		<RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-		<RowConstraints maxHeight="531.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES"/>
+		<RowConstraints maxHeight="531.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
 	</rowConstraints>
 </GridPane>
