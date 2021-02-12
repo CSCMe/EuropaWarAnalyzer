@@ -10,12 +10,7 @@ public class WarGoal {
 	private String country = "";
 	private String actor = "";
 	private String receiver = "";
-	/* New from HoD */
-	private String date = "";
-	private double score = 0;
-	private double change = 0;
-
-
+	
 	public WarGoal(int state_province_id) {
 		super();
 		this.state_province_id = state_province_id;
@@ -29,8 +24,7 @@ public class WarGoal {
 	public String toString() {
 		return "WarGoal [state_province_id=" + state_province_id
 				+ ", casus_belli=" + casus_belli + ", country=" + country
-				+ ", actor=" + actor + ", receiver=" + receiver + ", date="
-				+ date + ", score=" + score + ", change=" + change
+				+ ", actor=" + actor + ", receiver=" + receiver
 				+ "]";
 	}
 
@@ -73,22 +67,5 @@ public class WarGoal {
 	public void setReceiver(String receiver) {
 		this.receiver = receiver;
 	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public double getScore() {
-		return score;
-	}
-
-	public void setScore(double score) {
-		this.score = score;
-	}
-
 
 }
