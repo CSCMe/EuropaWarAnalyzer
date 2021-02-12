@@ -224,7 +224,7 @@ public class Parser {
 			line = nameExtractor(line, 19, true);
 			/* Checking required for some older wars */
 			if (line.equals("---")) {
-				//TODO: Yeet the war. Can't parse it any further
+				//Yeets the war later in the program. Can't parse it any further
 			} else {
 				warList.get(WAR_COUNTER).setOriginalAttacker(line);
 			}
@@ -233,7 +233,7 @@ public class Parser {
 			line = nameExtractor(line, 19, true);
 			/* Checking required for some older wars */
 			if (line.equals("---")) {
-				//TODO: Yeet the war. Can't parse it any further
+				//Yeets the war later in the program. Can't parse it any further
 			} else {
 				warList.get(WAR_COUNTER).setOriginalDefender(line);
 			}
