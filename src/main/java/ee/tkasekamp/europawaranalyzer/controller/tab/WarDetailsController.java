@@ -62,10 +62,7 @@ public class WarDetailsController extends AbstractController {
 	private Label warHasEndedLabel;
 
 	@FXML
-	private Label warGoalActorLabel;
-
-	@FXML
-	private Label warGoalReceiverLabel;
+	private Label warGoalTypeLabel;
 
 	@FXML
 	private Label warGoalCBLabel;
@@ -211,21 +208,18 @@ public class WarDetailsController extends AbstractController {
 	 */
 	private void originalWarGoalPopulate(War war) {
 		try {
-			warGoalActorLabel.setText(modelService.getOfficialName(war
-					.getWarGoal().getActor()));
-			warGoalReceiverLabel.setText(modelService.getOfficialName(war
-						.getWarGoal().getReceiver()));
-				warGoalCBLabel
-						.setText(war.getWarGoal().getCasus_belli());
-				warGoalCountryLabel.setText(war.getWarGoal()
-						.getCountry());
-				warGoalStateLabel
-						.setText(Integer.toString(war.getWarGoal()
-								.getState_province_id()));
+			warGoalTypeLabel
+					.setText(war.getWarGoal().getType());
+			warGoalCBLabel
+					.setText(war.getWarGoal().getCasus_belli());
+			warGoalCountryLabel.setText(war.getWarGoal()
+					.getCountry());
+			warGoalStateLabel
+					.setText(Integer.toString(war.getWarGoal()
+							.getState_province_id()));
 			} catch (IndexOutOfBoundsException e) {
 				/* Setting values to blank as some wars don't have any wargoals */
-				warGoalActorLabel.setText("");
-				warGoalReceiverLabel.setText("");
+				warGoalTypeLabel.setText("");
 				warGoalCBLabel.setText("");
 				warGoalCountryLabel.setText("");
 				warGoalStateLabel.setText("");

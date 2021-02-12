@@ -8,9 +8,8 @@ public class WarGoal {
 	private int state_province_id = 0;
 	private String casus_belli = "";
 	private String country = "";
-	private String actor = "";
-	private String receiver = "";
-	
+	private String type = "";
+
 	public WarGoal(int state_province_id) {
 		super();
 		this.state_province_id = state_province_id;
@@ -24,7 +23,6 @@ public class WarGoal {
 	public String toString() {
 		return "WarGoal [state_province_id=" + state_province_id
 				+ ", casus_belli=" + casus_belli + ", country=" + country
-				+ ", actor=" + actor + ", receiver=" + receiver
 				+ "]";
 	}
 
@@ -52,20 +50,12 @@ public class WarGoal {
 		this.country = country;
 	}
 
-	public String getActor() {
-		return actor;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public void setActor(String actor) {
-		this.actor = actor;
-	}
-
-	public String getReceiver() {
-		return receiver;
-	}
-
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
+	public String getType() {
+		return type;
 	}
 
 }

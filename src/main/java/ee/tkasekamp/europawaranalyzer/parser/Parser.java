@@ -102,9 +102,10 @@ public class Parser {
 				}
 			}
 
+			/* Checking if the line needs to be passed on to other readers */
 			if (warProcessing) {
 				bracketCounterChange(line);
-				/* Checking if the line needs to be passed on to other readers */
+
 				if (line.startsWith("battle=") || battleProcessing) {
 					battleProcessing = true;
 					battleReader(line);
@@ -113,7 +114,7 @@ public class Parser {
 					warGoalReader(line);
 
 				} else if (Arrays.stream(Constants.CASUS_BELLI).anyMatch(line::startsWith) || casusBelliProcessing) {
-					casusBelliProcessing = true; //TODO: Change this to casus belli reader
+					casusBelliProcessing = true;
 					casusBelliReader(line);
 
 				} else {
@@ -164,7 +165,7 @@ public class Parser {
 		}
 
 		/* Setting the start date and casus belli */
-		warList.forEach(ee.tkasekamp.europawaranalyzer.core.War::setCasusBelliAndStartDate); //TODO: Add casus belli detection
+		warList.forEach(ee.tkasekamp.europawaranalyzer.core.War::setCasusBelliAndStartDate);
 		return warList;
 
 	}
@@ -352,14 +353,6 @@ public class Parser {
 		} else if (line.startsWith("country")) {
 			line = nameExtractor(line, 9, true);
 			warGoal.setCountry(line);
-		} else if (line.startsWith("actor")) {
-			line = nameExtractor(line, 7, true);
-			warGoal.setActor(line);
-		} else if (line.startsWith("receiver")) {
-			line = nameExtractor(line, 10, true);
-			warGoal.setReceiver(line);
-//			WARGOAL_COUNTER++;
-//			warGoalProcessing = false;
 		} else if (line.startsWith("}")) {
 			/* This is always the last line in a war goal 
 			 * Clearing the wargoal list and passing it on to war like in battleReader*/
@@ -391,7 +384,10 @@ public class Parser {
 			/* This is always the last line in a war goal
 			 * Clearing the wargoal list and passing it on to war like in battleReader*/
 			line = nameExtractor(line, 6, true);
-			warGoal.setCasus_belli(line);
+			if(warGoal.getCasus_belli().equals("")) {
+				warGoal.setCasus_belli(line);
+			}
+			warGoal.setType(line);
 		} else if (line.startsWith("}")) {
 			/* This means there is no more data to be added */
 			casusBelliProcessing = false;

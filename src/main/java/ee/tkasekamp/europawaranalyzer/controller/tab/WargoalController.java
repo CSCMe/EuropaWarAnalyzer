@@ -19,9 +19,7 @@ public class WargoalController extends AbstractController {
 	@FXML
 	private TableView<WarGoal> warGoalTable;
 	@FXML
-	private TableColumn<WarGoal, String> colWarGoalActor;
-	@FXML
-	private TableColumn<WarGoal, String> colWarGoalReceiver;
+	private TableColumn<WarGoal, String> colWarGoalType;
 	@FXML
 	private TableColumn<WarGoal, String> colWarGoalCasusBelli;
 	@FXML
@@ -70,13 +68,9 @@ public class WargoalController extends AbstractController {
 	 * are shown. Otherwise they are hidden.
 	 */
 	private void setWarGoalTabColumnValues() {
-		/* Wargoal tab columns */
-		colWarGoalActor
+		colWarGoalType
 				.setCellValueFactory(new PropertyValueFactory<>(
-						"actor"));
-		colWarGoalReceiver
-				.setCellValueFactory(new PropertyValueFactory<>(
-						"receiver"));
+						"type"));
 		colWarGoalCasusBelli
 				.setCellValueFactory(new PropertyValueFactory<>(
 						"casus_belli"));

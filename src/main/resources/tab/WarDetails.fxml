@@ -128,19 +128,11 @@
 								</HBox>
 								<HBox id="HBox" alignment="CENTER" prefHeight="30.0"
 									  prefWidth="323.0001220703125"
-									  spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+									  spacing="5.0" GridPane.columnIndex="2" GridPane.columnSpan="2"
+									  GridPane.rowIndex="2">
 									<children>
-										<Label styleClass="label-dark" text="Actor:"/>
-										<Label id="startDateLabel" fx:id="warGoalActorLabel"
-											   text="Label"/>
-									</children>
-								</HBox>
-								<HBox id="HBox" alignment="CENTER" prefHeight="30.0"
-									  prefWidth="323.0001220703125"
-									  spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
-									<children>
-										<Label styleClass="label-dark" text="Receiver:"/>
-										<Label id="startDateLabel" fx:id="warGoalReceiverLabel"
+										<Label styleClass="label-dark" text="Casus belli:"/>
+										<Label id="startDateLabel" fx:id="warGoalCBLabel"
 											   text="Label"/>
 									</children>
 								</HBox>
@@ -149,8 +141,8 @@
 									  spacing="5.0" GridPane.columnIndex="2" GridPane.columnSpan="2"
 									  GridPane.rowIndex="3">
 									<children>
-										<Label styleClass="label-dark" text="Casus belli:"/>
-										<Label id="startDateLabel" fx:id="warGoalCBLabel"
+										<Label styleClass="label-dark" text="Goal Type:"/>
+										<Label id="startDateLabel" fx:id="warGoalTypeLabel"
 											   text="Label"/>
 									</children>
 								</HBox>

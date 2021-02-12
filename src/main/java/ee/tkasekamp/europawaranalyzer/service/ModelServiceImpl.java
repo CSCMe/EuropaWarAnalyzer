@@ -42,17 +42,14 @@ public class ModelServiceImpl implements ModelService {
 		createUniqueCountryList();
 
 		/* Localisation */
-		// TODO multithreading
 		if (useLocalisation) {
 			Localisation.readLocalisation(utilServ.getInstallFolder(), countryTreeMap);
 		}
-		// TODO multithreading
 		try {
 			utilServ.writePathsToFile();
 		} catch (IOException e) {
 			return "Couldn't write to file";
 		}
-		// TODO multithreading
 		countryTreeMap.forEach((tag, country) -> country.setFlag(utilServ.loadFlag(tag)));
 
 		return "Everything is OK";

@@ -18,12 +18,10 @@
 						   prefHeight="226.0" prefWidth="396.0" GridPane.columnIndex="0"
 						   GridPane.rowIndex="2">
 					<columns>
-						<TableColumn minWidth="40.0" prefWidth="75.0" text="Actor"
-									 fx:id="colWarGoalActor"/>
-						<TableColumn minWidth="40.0" prefWidth="100.0" text="Receiver"
-									 fx:id="colWarGoalReceiver"/>
 						<TableColumn minWidth="40.0" prefWidth="150.0" text="Casus Belli"
 									 fx:id="colWarGoalCasusBelli"/>
+						<TableColumn minWidth="40.0" prefWidth="150.0" text="Goal Type"
+									 fx:id="colWarGoalType"/>
 						<TableColumn minWidth="20.0" prefWidth="100.0" text="Country"
 									 fx:id="colWarGoalCountry"/>
 						<TableColumn minWidth="20.0" prefWidth="100.0" text="Province ID"
@@ -34,7 +32,7 @@
 					  GridPane.rowIndex="1">
 					<children>
 						<Label prefHeight="101.0" prefWidth="532.0" styleClass="label-dark"
-							   text="Most wargoals only have an actor (makes a demand), a receiver and a casus belli. The country is shown when a country making demands is not the side leader. It seems that wargoals are only shown when the war is still active. "
+							   text="Most wargoals only a casus belli. Sometimes there's a province. The country is shown when its capital or similar needs to be occupied."
 							   wrapText="true"/>
 					</children>
 				</VBox>
