@@ -1,14 +1,11 @@
 # EU4 war analyzer
 
-Or the full name Europa Universalis save game war analyzer. Naming stuff is hard.
 Based on the Victoria II war analyzer: [link](https://forum.paradoxplaza.com/forum/index.php?threads/tool-victoria-ii-save-game-war-analyzer.689055/)
-
-##This doesn't work yet
-
 
 ## Download links
 
-* The analyzer doesn't fully work yet
+* The analyzer mostly works now. You can build your own version with the instructions found below. 
+* Download links will follow once *everything* works. 
 
 ## What is it
 The analyzer reads the save game produced by EU4 it's a strategy game, look it up) and presents all the wars in a family-friendly way. The program retrieves all the data that can be retrieved from the save file, such as total losses in a war, all the battles, wargoals and the war participants.
