@@ -98,11 +98,9 @@ public class Parser {
 				} else {
 					warList.add(new War(true));
 				}
-				System.out.println(line);
 			}
 
 			if (warProcessing) {
-				System.out.println(line);
 				bracketCounterChange(line);
 				/* Checking if the line needs to be passed on to other readers */
 				if (line.startsWith("battle=") || battleProcessing) {
@@ -153,6 +151,8 @@ public class Parser {
 		}
 		scanner.close();
 		ArrayList<War> tempWarList = new ArrayList<>();
+
+		/* This part makes sure broken wars don't get processed */
 		for(War war : warList ) {
 			if(war == null || war.getOriginalAttacker().equals("") || war.getOriginalDefender().equals("")) {
 				tempWarList.add(war);
@@ -162,8 +162,9 @@ public class Parser {
 		for(War war : tempWarList) {
 			warList.remove(war);
 		}
+
 		/* Setting the start date and casus belli */
-		warList.forEach(ee.tkasekamp.europawaranalyzer.core.War::setCasusBelliAndStartDate);
+		warList.forEach(ee.tkasekamp.europawaranalyzer.core.War::setCasusBelliAndStartDate); //TODO: Add casus belli detection
 		return warList;
 
 	}
@@ -207,19 +208,19 @@ public class Parser {
 					}
 				}
 			}
-		} else if (line.startsWith("attacker")) {
+		} else if (line.startsWith("attacker=")) {
 			/* Checking if it's empty so only the first one is the attacker */
 			if (warList.get(WAR_COUNTER).getAttacker().equals("")) {
 				line = nameExtractor(line, 10, true);
 				warList.get(WAR_COUNTER).setAttacker(line);
 			}
-		} else if (line.startsWith("defender")) {
+		} else if (line.startsWith("defender=")) {
 			/* Checking if it's empty so only the first one is the defender */
 			if (warList.get(WAR_COUNTER).getDefender().equals("")) {
 				line = nameExtractor(line, 10, true);
 				warList.get(WAR_COUNTER).setDefender(line);
 			}
-		} else if (line.startsWith("original_attacker")) {
+		} else if (line.startsWith("original_attacker=")) {
 			line = nameExtractor(line, 19, true);
 			/* Checking required for some older wars */
 			if (line.equals("---")) {
@@ -228,7 +229,7 @@ public class Parser {
 				warList.get(WAR_COUNTER).setOriginalAttacker(line);
 			}
 
-		} else if (line.startsWith("original_defender")) {
+		} else if (line.startsWith("original_defender=")) {
 			line = nameExtractor(line, 19, true);
 			/* Checking required for some older wars */
 			if (line.equals("---")) {
