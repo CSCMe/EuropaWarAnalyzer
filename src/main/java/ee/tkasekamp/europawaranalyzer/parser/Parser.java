@@ -239,7 +239,7 @@ public class Parser {
 			}
 
 		} else if (line.startsWith("action")) {
-			line = nameExtractor(line, 8, true);
+			line = nameExtractor(line, 7, false);
 			warList.get(WAR_COUNTER).setAction(line);
 
 		}
