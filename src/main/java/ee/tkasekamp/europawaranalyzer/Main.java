@@ -29,10 +29,10 @@ public class Main extends Application {
 		Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(
 				"Main.fxml"));
 
-		stage.setTitle("EU4 war analyzer");
+		stage.setTitle("EU IV war analyzer");
 		stage.setScene(new Scene(root));
 		stage.show();
-		/* Cause I'm Estonian, thats why */
+		/* Cause it's a more iconic eu4 flag */
 		stage.getIcons().add(new Image("/flags/HLR.png"));
 
 	}

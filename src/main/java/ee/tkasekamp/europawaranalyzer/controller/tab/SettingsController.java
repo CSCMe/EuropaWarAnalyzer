@@ -52,7 +52,7 @@ public class SettingsController extends AbstractController {
 	@FXML
 	void directoryIssueFired(ActionEvent event) {
 		DirectoryChooser chooser = new DirectoryChooser();
-		chooser.setTitle("Victoria II directory");
+		chooser.setTitle("EU IV directory");
 		/* Only if there is a path is it given to the chooser */
 		if (!utilServ.getInstallFolder().equals("")) {
 			chooser.setInitialDirectory(new File(utilServ.getInstallFolder()));
@@ -68,7 +68,7 @@ public class SettingsController extends AbstractController {
 	@FXML
 	void saveGameIssueFired(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("EU4 save game");
+		fileChooser.setTitle("EU IV save game");
 		//Set extension filter
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Save game (*.eu4)", "*.eu4");
 		fileChooser.getExtensionFilters().add(extFilter);
