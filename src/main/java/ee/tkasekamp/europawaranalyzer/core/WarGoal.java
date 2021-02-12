@@ -14,7 +14,6 @@ public class WarGoal {
 	private String date = "";
 	private double score = 0;
 	private double change = 0;
-	private Result fulfilled = Result.NO;
 
 
 	public WarGoal(int state_province_id) {
@@ -32,7 +31,7 @@ public class WarGoal {
 				+ ", casus_belli=" + casus_belli + ", country=" + country
 				+ ", actor=" + actor + ", receiver=" + receiver + ", date="
 				+ date + ", score=" + score + ", change=" + change
-				+ ", fulfilled=" + fulfilled + "]";
+				+ "]";
 	}
 
 	public int getState_province_id() {
@@ -97,14 +96,6 @@ public class WarGoal {
 
 	public void setChange(double change) {
 		this.change = change;
-	}
-
-	public Result getFulfilled() {
-		return fulfilled;
-	}
-
-	public void setFulfilled(Result fulfilled) {
-		this.fulfilled = fulfilled;
 	}
 
 

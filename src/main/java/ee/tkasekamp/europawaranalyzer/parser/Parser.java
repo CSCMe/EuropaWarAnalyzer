@@ -111,7 +111,7 @@ public class Parser {
 					warGoalReader(line);
 
 				} else if (line.startsWith("original_wargoal") || originalWarGoalProcessing) {
-					originalWarGoalProcessing = true;
+					originalWarGoalProcessing = true; //TODO: Change this to casus belli reader
 					originalWGoalReader(line);
 
 				} else {
@@ -343,14 +343,14 @@ public class Parser {
 		if (line.startsWith("war_goal")) {
 			WarGoal w = new WarGoal();
 			warGoalList.add(w);
-		} else if (line.startsWith("state")) { // state_province_id
-			line = nameExtractor(line, 18, false);
+		} else if (line.startsWith("province")) { // state_province_id
+			line = nameExtractor(line, 9, false);
 			int state = Integer.parseInt(line);
 			warGoalList.get(WARGOAL_COUNTER).setState_province_id(state);
-		} else if (line.startsWith("casus")) {
+		}/* else if (line.startsWith("casus")) { //Moving Casus Belli Processing somewhere else
 			line = nameExtractor(line, 13, true);
 			warGoalList.get(WARGOAL_COUNTER).setCasus_belli(line);
-		} else if (line.startsWith("country")) {
+		}*/ else if (line.startsWith("country")) {
 			line = nameExtractor(line, 9, true);
 			warGoalList.get(WARGOAL_COUNTER).setCountry(line);
 		} else if (line.startsWith("actor")) {
@@ -373,11 +373,6 @@ public class Parser {
 		} else if (line.startsWith("date")) {
 			line = nameExtractor(line, 6, true);
 			warGoalList.get(WARGOAL_COUNTER).setDate(line);
-		} else if (line.startsWith("is_fulfilled")) {
-			line = nameExtractor(line, 13, false);
-			if (line.equals("yes")) {
-				warGoalList.get(WARGOAL_COUNTER).setFulfilled(Result.YES);
-			}
 		} else if (line.startsWith("}")) {
 			/* This is always the last line in a war goal 
 			 * Clearing the wargoal list and passing it on to war like in battleReader*/
@@ -422,11 +417,6 @@ public class Parser {
 		} else if (line.startsWith("date")) {
 			line = nameExtractor(line, 6, true);
 			warList.get(WAR_COUNTER).getOriginalWarGoal().setDate(line);
-		} else if (line.startsWith("is_fulfilled")) {
-			line = nameExtractor(line, 13, false);
-			if (line.equals("yes")) {
-				warList.get(WAR_COUNTER).getOriginalWarGoal().setFulfilled(Result.YES);
-			}
 		} else if (line.startsWith("}")) {
 			/* This means there is no more data to be added */
 			originalWarGoalProcessing = false;

@@ -92,12 +92,6 @@ public class WarDetailsController extends AbstractController {
 	private Label warGoalDateLabel;
 
 	@FXML
-	private Label warGoalFulfilledHelper;
-
-	@FXML
-	private Label warGoalFulfilledLabel;
-
-	@FXML
 	private Label warGoalStateLabel;
 
 	@FXML
@@ -257,8 +251,6 @@ public class WarDetailsController extends AbstractController {
 						.getOriginalWarGoal().getScore()));
 				warGoalChangeLabel.setText(Double.toString(war
 						.getOriginalWarGoal().getChange()));
-				warGoalFulfilledLabel.setText(war.getOriginalWarGoal()
-						.getFulfilled().toString());
 			} else {
 				warGoalActorLabel.setText(modelService.getOfficialName(war
 						.getWarGoalList()[0].getActor()));
@@ -278,8 +270,6 @@ public class WarDetailsController extends AbstractController {
 				warGoalChangeLabel
 						.setText(Double.toString(war.getWarGoalList()[0]
 								.getChange()));
-				warGoalFulfilledLabel.setText(war.getWarGoalList()[0]
-						.getFulfilled().toString());
 			}
 			/* Showing the disabled labels */
 			warGoalDateLabel.setVisible(true);
@@ -288,8 +278,6 @@ public class WarDetailsController extends AbstractController {
 			warGoalScoreHelper.setVisible(true);
 			warGoalChangeLabel.setVisible(true);
 			warGoalChangeHelper.setVisible(true);
-			warGoalFulfilledLabel.setVisible(true);
-			warGoalFulfilledHelper.setVisible(true);
 		} else {
 			try {
 				warGoalActorLabel.setText(modelService.getOfficialName(war
@@ -318,8 +306,6 @@ public class WarDetailsController extends AbstractController {
 			warGoalScoreHelper.setVisible(false);
 			warGoalChangeLabel.setVisible(false);
 			warGoalChangeHelper.setVisible(false);
-			warGoalFulfilledLabel.setVisible(false);
-			warGoalFulfilledHelper.setVisible(false);
 		}
 	}
 

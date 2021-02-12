@@ -34,8 +34,6 @@ public class WargoalController extends AbstractController {
 	private TableColumn<WarGoal, Double> colWarGoalChange;
 	@FXML
 	private TableColumn<WarGoal, String> colWarGoalDate;
-	@FXML
-	private TableColumn<WarGoal, Result> colWarGoalFulfilled;
 
 	private ObservableList<WarGoal> warGoalTableContent;
 
@@ -107,10 +105,6 @@ public class WargoalController extends AbstractController {
 		colWarGoalChange
 				.setCellValueFactory(new PropertyValueFactory<>(
 						"change"));
-		colWarGoalFulfilled
-				.setCellValueFactory(new PropertyValueFactory<>(
-						"fulfilled"));
-
 	}
 
 	/**
@@ -122,7 +116,6 @@ public class WargoalController extends AbstractController {
 		colWarGoalDate.setVisible(isHOD);
 		colWarGoalScore.setVisible(isHOD);
 		colWarGoalChange.setVisible(isHOD);
-		colWarGoalFulfilled.setVisible(isHOD);
 	}
 
 }

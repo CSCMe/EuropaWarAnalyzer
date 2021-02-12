@@ -195,16 +195,6 @@
 								</HBox>
 								<HBox id="HBox" alignment="CENTER" prefHeight="30.0"
 									  prefWidth="323.0001220703125"
-									  spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
-									<children>
-										<Label fx:id="warGoalFulfilledHelper"
-											   styleClass="label-dark" text="Is fulfilled:"/>
-										<Label id="startDateLabel" fx:id="warGoalFulfilledLabel"
-											   text="Label"/>
-									</children>
-								</HBox>
-								<HBox id="HBox" alignment="CENTER" prefHeight="30.0"
-									  prefWidth="323.0001220703125"
 									  spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
 									<children>
 										<Label styleClass="label-dark" text="State ID:"/>

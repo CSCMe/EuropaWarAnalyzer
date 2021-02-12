@@ -33,8 +33,6 @@
 									 fx:id="colWarGoalScore"/>
 						<TableColumn minWidth="40.0" prefWidth="100.0" text="Change"
 									 fx:id="colWarGoalChange"/>
-						<TableColumn minWidth="40.0" prefWidth="100.0" text="Is fulfilled"
-									 fx:id="colWarGoalFulfilled"/>
 					</columns>
 				</TableView>
 				<VBox id="VBox" alignment="CENTER" spacing="5.0" GridPane.columnIndex="0"
