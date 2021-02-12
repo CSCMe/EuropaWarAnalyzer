@@ -33,7 +33,7 @@ public class Main extends Application {
 		stage.setScene(new Scene(root));
 		stage.show();
 		/* Cause I'm Estonian, thats why */
-		stage.getIcons().add(new Image("/flags/EST.png"));
+		stage.getIcons().add(new Image("/flags/HLR.png"));
 
 	}
 
