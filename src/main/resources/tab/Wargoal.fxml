@@ -22,9 +22,9 @@
 									 fx:id="colWarGoalCasusBelli"/>
 						<TableColumn minWidth="40.0" prefWidth="150.0" text="Goal Type"
 									 fx:id="colWarGoalType"/>
-						<TableColumn minWidth="20.0" prefWidth="100.0" text="Country"
+						<TableColumn minWidth="20.0" prefWidth="150.0" text="Country"
 									 fx:id="colWarGoalCountry"/>
-						<TableColumn minWidth="20.0" prefWidth="100.0" text="Province ID"
+						<TableColumn minWidth="40.0" prefWidth="150.0" text="Province ID"
 									 fx:id="colWarGoalStateID"/>
 					</columns>
 				</TableView>
