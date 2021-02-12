@@ -3,16 +3,15 @@
 Or the full name Europa Universalis save game war analyzer. Naming stuff is hard.
 Based on the Victoria II war analyzer: [link](https://forum.paradoxplaza.com/forum/index.php?threads/tool-victoria-ii-save-game-war-analyzer.689055/)
 
-###This doesn't work yet
+##This doesn't work yet
 
 
 ## Download links
-* Version 1.0.1 that works with Java 7 [link](http://bit.ly/2iMy2L0)
-* New version 1.2.1 that works with Java 8 [link](http://bit.ly/2esre3N)
-* Or you can look inside the dist folder for all the versions. 
+
+* The analyzer doesn't fully work yet
 
 ## What is it
-The analyzer reads the save game produced by Victoria II (it's a strategy game, look it up) and presents all the wars in a family-friendly way. The program retrieves all the data that can be retrieved from the save file, such as total losses in a war, all the battles, wargoals and the war participants.
+The analyzer reads the save game produced by EU4 it's a strategy game, look it up) and presents all the wars in a family-friendly way. The program retrieves all the data that can be retrieved from the save file, such as total losses in a war, all the battles, wargoals and the war participants.
 
 Most of the counties have a flag with them. Originally I planned to find all of them from the Victori II directory, but it converting .svg to a format usable by JavaFX turned out to be too difficult.
 
