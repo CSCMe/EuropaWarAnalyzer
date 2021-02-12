@@ -167,7 +167,7 @@
 									  prefWidth="323.0001220703125"
 									  spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
 									<children>
-										<Label styleClass="label-dark" text="State ID:"/>
+										<Label styleClass="label-dark" text="Province ID:"/>
 										<Label id="startDateLabel" fx:id="warGoalStateLabel"
 											   text="Label"/>
 									</children>
