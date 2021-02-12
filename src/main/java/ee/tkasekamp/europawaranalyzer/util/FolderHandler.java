@@ -7,9 +7,7 @@ public class FolderHandler { //TODO: Figure out how the hell this stuff works an
 	public static final String PROGRAM_FILES = "C:/Program Files";
 	public static final String STEAM = "Steam/steamapps/common";
 	public static final String PARADOX_FOLDER = "Paradox Interactive";
-	public static final String VICTORIA_2 = "Victoria 2";
-	public static final String VICTORIA_AHD = "Victoria 2 A House Divided";
-	public static final String VICTORIA_HOD = "Victoria II - A Heart of Darkness";
+	public static final String EUIV = "Europa Universalis IV";
 	public static final String SLASH = "/";
 
 	public static final String PATHS = "./paths.txt";
@@ -38,7 +36,7 @@ public class FolderHandler { //TODO: Figure out how the hell this stuff works an
 	private static String checkSaveGameFolder() {
 		String user = System.getProperty("user.name");
 		String saveGameFolder = "C:/Users/" + user
-				+ "/Documents/Paradox Interactive/Victoria II/save games/";
+				+ "/Documents/Paradox Interactive/Europa Universalis IV/save games/";
 		if (new File(saveGameFolder).exists())
 			return saveGameFolder;
 		else
@@ -51,52 +49,20 @@ public class FolderHandler { //TODO: Figure out how the hell this stuff works an
 	 * from the newest version.
 	 */
 	private static String checkInstallFolder() {
-		/* Heart of Darkness */
-		if (new File(PROGRAM_FILES + SLASH + PARADOX_FOLDER + SLASH
-				+ VICTORIA_HOD).exists()) {
-			return PROGRAM_FILES + SLASH + PARADOX_FOLDER + SLASH
-					+ VICTORIA_HOD;
-		} else if ((new File(PROGRAM_FILES + SLASH + STEAM + SLASH
-				+ VICTORIA_HOD)).exists()) {
-			return PROGRAM_FILES + SLASH + STEAM + SLASH + VICTORIA_HOD;
-		} else if ((new File(PROGRAM_FILES_X86 + SLASH + STEAM + SLASH
-				+ VICTORIA_HOD)).exists()) {
-			return PROGRAM_FILES_X86 + SLASH + STEAM + SLASH + VICTORIA_HOD;
-		} else if ((new File(PROGRAM_FILES_X86 + SLASH + PARADOX_FOLDER + SLASH
-				+ VICTORIA_HOD)).exists()) {
-			return PROGRAM_FILES_X86 + SLASH + PARADOX_FOLDER + SLASH
-					+ VICTORIA_HOD;
-		}
-		/* A House Divided */
-		if (new File(PROGRAM_FILES + SLASH + PARADOX_FOLDER + SLASH
-				+ VICTORIA_AHD).exists()) {
-			return PROGRAM_FILES + SLASH + PARADOX_FOLDER + SLASH
-					+ VICTORIA_AHD;
-		} else if ((new File(PROGRAM_FILES + SLASH + STEAM + SLASH
-				+ VICTORIA_AHD)).exists()) {
-			return PROGRAM_FILES + SLASH + STEAM + SLASH + VICTORIA_AHD;
-		} else if ((new File(PROGRAM_FILES_X86 + SLASH + STEAM + SLASH
-				+ VICTORIA_AHD)).exists()) {
-			return PROGRAM_FILES_X86 + SLASH + STEAM + SLASH + VICTORIA_AHD;
-		} else if ((new File(PROGRAM_FILES_X86 + SLASH + PARADOX_FOLDER + SLASH
-				+ VICTORIA_AHD)).exists()) {
-			return PROGRAM_FILES_X86 + SLASH + PARADOX_FOLDER + SLASH
-					+ VICTORIA_AHD;
-		}
 		/* Vanilla */
 		if (new File(PROGRAM_FILES + SLASH + PARADOX_FOLDER + SLASH
-				+ VICTORIA_2).exists()) {
-			return PROGRAM_FILES + SLASH + PARADOX_FOLDER + SLASH + VICTORIA_2;
-		} else if ((new File(PROGRAM_FILES + SLASH + STEAM + SLASH + VICTORIA_2))
+				+ EUIV).exists()) {
+			return PROGRAM_FILES + SLASH + PARADOX_FOLDER + SLASH + EUIV;
+		} else if ((new File(PROGRAM_FILES + SLASH + STEAM + SLASH + EUIV))
 				.exists()) {
-			return PROGRAM_FILES + SLASH + STEAM + SLASH + VICTORIA_2;
+			return PROGRAM_FILES + SLASH + STEAM + SLASH + EUIV;
 		} else if ((new File(PROGRAM_FILES_X86 + SLASH + STEAM + SLASH
-				+ VICTORIA_2)).exists()) {
-			return PROGRAM_FILES_X86 + SLASH + STEAM + SLASH + VICTORIA_2;
+				+ EUIV)).exists()) {
+			return PROGRAM_FILES_X86 + SLASH + STEAM + SLASH + EUIV;
 		} else if ((new File(PROGRAM_FILES_X86 + SLASH + PARADOX_FOLDER + SLASH
-				+ VICTORIA_2)).exists()) {
+				+ EUIV)).exists()) {
 			return PROGRAM_FILES_X86 + SLASH + PARADOX_FOLDER + SLASH
-					+ VICTORIA_2;
+					+ EUIV;
 		} else {
 			return "";
 		}
