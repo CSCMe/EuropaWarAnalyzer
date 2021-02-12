@@ -13,7 +13,7 @@ import ee.tkasekamp.europawaranalyzer.core.Country;
 
 public class Localisation {
 
-
+	private static String ENGLISH_LANGUAGE = "english";
 	/**
 	 * Main method of this class. Manages the reading from csv
 	 */
@@ -24,11 +24,33 @@ public class Localisation {
 			List<String> loclist = getLocalisationFiles(installPath);
 
 			for (String string : loclist) {
-				readCSV(installPath + "/localisation/" + string, countryTreeMap);
+				readYML(installPath + "/localisation/" + string, countryTreeMap);
 			}
 
 		} catch (NullPointerException | IOException e) {}
 
+	}
+
+	private static void readYML(String filename, TreeMap<String, Country> countryTreeMap)
+			throws IOException {
+		/* The same reader as in SaveGameReader */
+		InputStreamReader reader = new InputStreamReader(new FileInputStream(filename),
+				"UTF-8");
+		BufferedReader scanner = new BufferedReader(reader);
+
+		String line;
+		while ((line = scanner.readLine()) != null) {
+			String[] dataArray = line.split(":(0|1) "); // Splitting the line
+			String countryTag = dataArray[0].replace(" ", ""); //Gets the country tag properly
+			if(dataArray.length > 1) { //only do the later parts if the array is long enough
+				String countryName = dataArray[1].replace("\"","");
+				if (countryTreeMap.containsKey(countryTag)) {
+					countryTreeMap.get(countryTag).setOfficialName(countryName);
+				}
+			}
+		}
+		// Close the file once all data has been read.
+		scanner.close();
 	}
 
 	/**
@@ -67,8 +89,8 @@ public class Localisation {
 
 		for (File listOfFile : listOfFiles) {
 			if (listOfFile.isFile()) {
-				file = listOfFile.getName();
-				if (file.endsWith(".csv") || file.endsWith(".CSV")) {
+				file = listOfFile.getName(); //only gets the english names
+				if ((file.endsWith(ENGLISH_LANGUAGE + ".yml") || file.endsWith(ENGLISH_LANGUAGE + ".YML"))) {
 					locList.add(file);
 				}
 			}

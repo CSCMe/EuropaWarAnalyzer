@@ -94,7 +94,7 @@
 							   GridPane.rowIndex="6"/>
 						<CheckBox fx:id="localisationCheck" mnemonicParsing="false" selected="true"
 								  styleClass="label"
-								  text="Use localisation (if unselected, country tags will be displayed as names)"
+								  text="Use English localisation (if unselected, country tags will be displayed as names)"
 								  GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 					</children>
 					<columnConstraints>
