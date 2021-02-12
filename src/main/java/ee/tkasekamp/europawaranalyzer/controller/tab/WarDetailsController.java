@@ -74,24 +74,6 @@ public class WarDetailsController extends AbstractController {
 	private Label warGoalCountryLabel;
 
 	@FXML
-	private Label warGoalScoreHelper;
-
-	@FXML
-	private Label warGoalScoreLabel;
-
-	@FXML
-	private Label warGoalChangeHelper;
-
-	@FXML
-	private Label warGoalChangeLabel;
-
-	@FXML
-	private Label warGoalDateHelper;
-
-	@FXML
-	private Label warGoalDateLabel;
-
-	@FXML
 	private Label warGoalStateLabel;
 
 	@FXML
@@ -228,68 +210,17 @@ public class WarDetailsController extends AbstractController {
 	 * Gives values to the labels related to wargoals
 	 */
 	private void originalWarGoalPopulate(War war) {
-
-		/* True if the version is HoD. Otherwise some labels will be hidden */
-		if (modelService.isHOD()) {
-			/*
-			 * Checking if this particular war has an original wargoal.
-			 * Otherwise the first wargoal in the wargoalList will be used
-			 */
-			if (!(war.getOriginalWarGoal().getActor().equals(""))) {
-				warGoalActorLabel.setText(modelService.getOfficialName(war
-						.getOriginalWarGoal().getActor()));
-				warGoalReceiverLabel.setText(modelService.getOfficialName(war
-						.getOriginalWarGoal().getReceiver()));
-				warGoalCBLabel.setText(war.getOriginalWarGoal()
-						.getCasus_belli());
-				warGoalCountryLabel.setText(modelService.getOfficialName(war
-						.getOriginalWarGoal().getCountry()));
-				warGoalStateLabel.setText(Integer.toString(war
-						.getOriginalWarGoal().getState_province_id()));
-				warGoalDateLabel.setText(war.getOriginalWarGoal().getDate());
-				warGoalScoreLabel.setText(Double.toString(war
-						.getOriginalWarGoal().getScore()));
-				warGoalChangeLabel.setText(Double.toString(war
-						.getOriginalWarGoal().getChange()));
-			} else {
-				warGoalActorLabel.setText(modelService.getOfficialName(war
-						.getWarGoalList()[0].getActor()));
-				warGoalReceiverLabel.setText(modelService.getOfficialName(war
-						.getWarGoalList()[0].getReceiver()));
+		try {
+			warGoalActorLabel.setText(modelService.getOfficialName(war
+					.getWarGoal().getActor()));
+			warGoalReceiverLabel.setText(modelService.getOfficialName(war
+						.getWarGoal().getReceiver()));
 				warGoalCBLabel
-						.setText(war.getWarGoalList()[0].getCasus_belli());
-				warGoalCountryLabel.setText(modelService.getOfficialName(war
-						.getWarGoalList()[0].getCountry()));
-				warGoalStateLabel
-						.setText(Integer.toString(war.getWarGoalList()[0]
-								.getState_province_id()));
-				warGoalDateLabel.setText(war.getWarGoalList()[0].getDate());
-				warGoalScoreLabel
-						.setText(Double.toString(war.getWarGoalList()[0]
-								.getScore()));
-				warGoalChangeLabel
-						.setText(Double.toString(war.getWarGoalList()[0]
-								.getChange()));
-			}
-			/* Showing the disabled labels */
-			warGoalDateLabel.setVisible(true);
-			warGoalDateHelper.setVisible(true);
-			warGoalScoreLabel.setVisible(true);
-			warGoalScoreHelper.setVisible(true);
-			warGoalChangeLabel.setVisible(true);
-			warGoalChangeHelper.setVisible(true);
-		} else {
-			try {
-				warGoalActorLabel.setText(modelService.getOfficialName(war
-						.getWarGoalList()[0].getActor()));
-				warGoalReceiverLabel.setText(modelService.getOfficialName(war
-						.getWarGoalList()[0].getReceiver()));
-				warGoalCBLabel
-						.setText(war.getWarGoalList()[0].getCasus_belli());
-				warGoalCountryLabel.setText(war.getWarGoalList()[0]
+						.setText(war.getWarGoal().getCasus_belli());
+				warGoalCountryLabel.setText(war.getWarGoal()
 						.getCountry());
 				warGoalStateLabel
-						.setText(Integer.toString(war.getWarGoalList()[0]
+						.setText(Integer.toString(war.getWarGoal()
 								.getState_province_id()));
 			} catch (IndexOutOfBoundsException e) {
 				/* Setting values to blank as some wars don't have any wargoals */
@@ -299,14 +230,6 @@ public class WarDetailsController extends AbstractController {
 				warGoalCountryLabel.setText("");
 				warGoalStateLabel.setText("");
 			}
-			/* Disabling unused labels */
-			warGoalDateLabel.setVisible(false);
-			warGoalDateHelper.setVisible(false);
-			warGoalScoreLabel.setVisible(false);
-			warGoalScoreHelper.setVisible(false);
-			warGoalChangeLabel.setVisible(false);
-			warGoalChangeHelper.setVisible(false);
-		}
 	}
 
 	/**

@@ -28,11 +28,6 @@
 									 fx:id="colWarGoalCountry"/>
 						<TableColumn minWidth="20.0" prefWidth="100.0" text="State ID"
 									 fx:id="colWarGoalStateID"/>
-						<TableColumn prefWidth="75.0" text="Date" fx:id="colWarGoalDate"/>
-						<TableColumn minWidth="40.0" prefWidth="100.0" text="Score"
-									 fx:id="colWarGoalScore"/>
-						<TableColumn minWidth="40.0" prefWidth="100.0" text="Change"
-									 fx:id="colWarGoalChange"/>
 					</columns>
 				</TableView>
 				<VBox id="VBox" alignment="CENTER" spacing="5.0" GridPane.columnIndex="0"

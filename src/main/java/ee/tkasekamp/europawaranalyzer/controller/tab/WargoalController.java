@@ -28,12 +28,6 @@ public class WargoalController extends AbstractController {
 	private TableColumn<WarGoal, Integer> colWarGoalStateID;
 	@FXML
 	private TableColumn<WarGoal, String> colWarGoalCountry;
-	@FXML
-	private TableColumn<WarGoal, Double> colWarGoalScore;
-	@FXML
-	private TableColumn<WarGoal, Double> colWarGoalChange;
-	@FXML
-	private TableColumn<WarGoal, String> colWarGoalDate;
 
 	private ObservableList<WarGoal> warGoalTableContent;
 
@@ -64,17 +58,15 @@ public class WargoalController extends AbstractController {
 		warGoalTableContent.clear(); // A bit of cleaning
 
 		// Adding to list
-		warGoalTableContent.addAll(war.getWarGoalList());
+		warGoalTableContent.addAll(war.getWarGoal());
 
 
 		warGoalTable.setItems(warGoalTableContent);
 
-		setColumnVisiblility(modelService.isHOD());
-
 	}
 
 	/**
-	 * Sets the column values for wargoaltab. If the version is HoD, more column
+	 * Sets the column values for wargoaltab.
 	 * are shown. Otherwise they are hidden.
 	 */
 	private void setWarGoalTabColumnValues() {
@@ -94,28 +86,6 @@ public class WargoalController extends AbstractController {
 		colWarGoalStateID
 				.setCellValueFactory(new PropertyValueFactory<>(
 						"state_province_id"));
-
-		// Only used for HoD
-		colWarGoalDate
-				.setCellValueFactory(new PropertyValueFactory<>(
-						"date"));
-		colWarGoalScore
-				.setCellValueFactory(new PropertyValueFactory<>(
-						"score"));
-		colWarGoalChange
-				.setCellValueFactory(new PropertyValueFactory<>(
-						"change"));
-	}
-
-	/**
-	 * Some columns are only necessary for HoD.
-	 *
-	 * @param isHOD If is Heart of Darkness
-	 */
-	private void setColumnVisiblility(boolean isHOD) {
-		colWarGoalDate.setVisible(isHOD);
-		colWarGoalScore.setVisible(isHOD);
-		colWarGoalChange.setVisible(isHOD);
 	}
 
 }

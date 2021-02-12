@@ -3,12 +3,14 @@ package ee.tkasekamp.europawaranalyzer.parser;
 import ee.tkasekamp.europawaranalyzer.core.*;
 import ee.tkasekamp.europawaranalyzer.core.Battle.Result;
 import ee.tkasekamp.europawaranalyzer.service.ModelService;
+import ee.tkasekamp.europawaranalyzer.util.Constants;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Readers in order of activation in a typical save game:
@@ -38,7 +40,7 @@ public class Parser {
 	private String dateBuffer = ""; // Stores the last date for JoinedCountry or Battle dates
 	private ArrayList<JoinedCountry> countryList = new ArrayList<>();  // Stores temporarily to give to war
 	private ArrayList<Battle> battleList = new ArrayList<>();  // Stores temporarily to give to war
-	private ArrayList<WarGoal> warGoalList = new ArrayList<>();
+	private WarGoal warGoal = new WarGoal();
 	/* Battle details */
 	private ArrayList<Unit> unitList = new ArrayList<>();  // Stores temporarily to give to battle. Used by both attacker and defender.
 	private boolean battleProcessing; // True so all new lines will be read into battleReader
@@ -47,7 +49,7 @@ public class Parser {
 	/* WarGoal details */
 	private boolean warGoalProcessing; // True so all new lines will be read into warGoalReader
 	private int WARGOAL_COUNTER = 0;
-	private boolean originalWarGoalProcessing; // New for Hod. Has the same function as warGoalProcessing
+	private boolean casusBelliProcessing; // New for EU4. Has the same function as warGoalProcessing
 	/* Various */
 	private int bracketCounter = 0; // bracketCounter is uses to check if all data from the war has been read in
 //	static public Reference saveGameData = new Reference(); // public so it can be used by all methods
@@ -106,13 +108,13 @@ public class Parser {
 				if (line.startsWith("battle=") || battleProcessing) {
 					battleProcessing = true;
 					battleReader(line);
-				} else if (line.startsWith("war_goal") || warGoalProcessing) {
+				} else if (line.startsWith("war_goal") || warGoalProcessing) { //War goals are only set for OLD wars (wars before game start)
 					warGoalProcessing = true;
 					warGoalReader(line);
 
-				} else if (line.startsWith("original_wargoal") || originalWarGoalProcessing) {
-					originalWarGoalProcessing = true; //TODO: Change this to casus belli reader
-					originalWGoalReader(line);
+				} else if (Arrays.stream(Constants.CASUS_BELLI).anyMatch(line::startsWith) || casusBelliProcessing) {
+					casusBelliProcessing = true; //TODO: Change this to casus belli reader
+					casusBelliReader(line);
 
 				} else {
 					warReader(line);
@@ -133,10 +135,8 @@ public class Parser {
 					Battle[] battleTempList2 = battleList.toArray(battleTempList);
 					warList.get(WAR_COUNTER).setBattleList(battleTempList2);
 
-					WarGoal[] warGoalTempList = new WarGoal[warGoalList.size()];
-					WarGoal[] warGoalTempList2 = warGoalList.toArray(warGoalTempList);
-					warList.get(WAR_COUNTER).setWarGoalList(warGoalTempList2);
-					warGoalList.clear();
+					warList.get(WAR_COUNTER).setWarGoal(warGoal);
+					warGoal = new WarGoal();
 
 					warGoalProcessing = false;
 					WARGOAL_COUNTER = 0;
@@ -341,38 +341,25 @@ public class Parser {
 	public void warGoalReader(String line) {
 		/* Check required because the first line in war goal is not always the same */
 		if (line.startsWith("war_goal")) {
-			WarGoal w = new WarGoal();
-			warGoalList.add(w);
+			warGoal = new WarGoal();
 		} else if (line.startsWith("province")) { // state_province_id
 			line = nameExtractor(line, 9, false);
 			int state = Integer.parseInt(line);
-			warGoalList.get(WARGOAL_COUNTER).setState_province_id(state);
-		}/* else if (line.startsWith("casus")) { //Moving Casus Belli Processing somewhere else
+			warGoal.setState_province_id(state);
+		} else if (line.startsWith("casus")) { //Moving Casus Belli Processing somewhere else
 			line = nameExtractor(line, 13, true);
-			warGoalList.get(WARGOAL_COUNTER).setCasus_belli(line);
-		}*/ else if (line.startsWith("country")) {
+			warGoal.setCasus_belli(line);
+		} else if (line.startsWith("country")) {
 			line = nameExtractor(line, 9, true);
-			warGoalList.get(WARGOAL_COUNTER).setCountry(line);
+			warGoal.setCountry(line);
 		} else if (line.startsWith("actor")) {
 			line = nameExtractor(line, 7, true);
-			warGoalList.get(WARGOAL_COUNTER).setActor(line);
+			warGoal.setActor(line);
 		} else if (line.startsWith("receiver")) {
 			line = nameExtractor(line, 10, true);
-			warGoalList.get(WARGOAL_COUNTER).setReceiver(line);
+			warGoal.setReceiver(line);
 //			WARGOAL_COUNTER++;
 //			warGoalProcessing = false;
-
-		} else if (line.startsWith("score")) {
-			line = nameExtractor(line, 6, false);
-			double score = Double.parseDouble(line);
-			warGoalList.get(WARGOAL_COUNTER).setScore(score);
-		} else if (line.startsWith("change")) {
-			line = nameExtractor(line, 7, false);
-			double c = Double.parseDouble(line);
-			warGoalList.get(WARGOAL_COUNTER).setChange(c);
-		} else if (line.startsWith("date")) {
-			line = nameExtractor(line, 6, true);
-			warGoalList.get(WARGOAL_COUNTER).setDate(line);
 		} else if (line.startsWith("}")) {
 			/* This is always the last line in a war goal 
 			 * Clearing the wargoal list and passing it on to war like in battleReader*/
@@ -385,41 +372,29 @@ public class Parser {
 	}
 
 	/**
-	 * Similar to warGoalReader. Only used in HoD
+	 * casusBelliReader
 	 */
-	public void originalWGoalReader(String line) {
-		if (line.startsWith("state")) { // state_province_id
-			line = nameExtractor(line, 18, false);
+	public void casusBelliReader(String line) {
+		if (line.startsWith("province")) { // state_province_id
+			line = nameExtractor(line, 9, false);
 			int state = Integer.parseInt(line);
-			warList.get(WAR_COUNTER).getOriginalWarGoal().setState_province_id(state);
-		} else if (line.startsWith("casus")) {
-			line = nameExtractor(line, 13, true);
-			warList.get(WAR_COUNTER).getOriginalWarGoal().setCasus_belli(line);
-		} else if (line.startsWith("country")) {
-			line = nameExtractor(line, 9, true);
-			warList.get(WAR_COUNTER).getOriginalWarGoal().setCountry(line);
-		} else if (line.startsWith("actor")) {
-			line = nameExtractor(line, 7, true);
-			warList.get(WAR_COUNTER).getOriginalWarGoal().setActor(line);
-		} else if (line.startsWith("receiver")) {
+			warGoal.setState_province_id(state);
+		}else if (line.startsWith("tag")) {
+			line = nameExtractor(line, 5, true);
+			warGoal.setCountry(line);
+		} else if (line.startsWith("casus_belli")) {
 			/* This is always the last line in a war goal 
 			 * Clearing the wargoal list and passing it on to war like in battleReader*/
-			line = nameExtractor(line, 10, true);
-			warList.get(WAR_COUNTER).getOriginalWarGoal().setReceiver(line);
-		} else if (line.startsWith("score")) {
-			line = nameExtractor(line, 6, false);
-			double score = Double.parseDouble(line);
-			warList.get(WAR_COUNTER).getOriginalWarGoal().setScore(score);
-		} else if (line.startsWith("change")) {
-			line = nameExtractor(line, 7, false);
-			double c = Double.parseDouble(line);
-			warList.get(WAR_COUNTER).getOriginalWarGoal().setChange(c);
-		} else if (line.startsWith("date")) {
+			line = nameExtractor(line, 13, true);
+			warGoal.setCasus_belli(line);
+		} else if (line.startsWith("type")) {
+			/* This is always the last line in a war goal
+			 * Clearing the wargoal list and passing it on to war like in battleReader*/
 			line = nameExtractor(line, 6, true);
-			warList.get(WAR_COUNTER).getOriginalWarGoal().setDate(line);
+			warGoal.setCasus_belli(line);
 		} else if (line.startsWith("}")) {
 			/* This means there is no more data to be added */
-			originalWarGoalProcessing = false;
+			casusBelliProcessing = false;
 
 		}
 	}

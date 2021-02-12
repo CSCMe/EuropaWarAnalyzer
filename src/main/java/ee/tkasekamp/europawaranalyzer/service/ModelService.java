@@ -48,10 +48,5 @@ public interface ModelService {
 
 	public ArrayList<War> getWars();
 
-	/**
-	 * Determines if the game version is HoD by looking if any of the wars have
-	 * originalattacker and if they have, returns true
-	 */
-	public boolean isHOD();
 
 }

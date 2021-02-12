@@ -90,13 +90,5 @@ public class WarGoal {
 		this.score = score;
 	}
 
-	public double getChange() {
-		return change;
-	}
-
-	public void setChange(double change) {
-		this.change = change;
-	}
-
 
 }

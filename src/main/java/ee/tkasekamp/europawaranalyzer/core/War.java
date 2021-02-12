@@ -16,12 +16,10 @@ public class War {
 	private boolean isActive;
 	private Battle[] battleList;
 	private JoinedCountry[] joinedCountryList;
-	private WarGoal[] warGoalList;
+	private WarGoal warGoal;
 	private String startDate; // Set after reading
 	private String endDate = ""; // Set during reading
 	private String casus_belli = ""; // Primary casus belli displayed in table. Set after reading
-	/* New from HoD */
-	private WarGoal originalWarGoal = new WarGoal();
 
 	public War() {
 		super();
@@ -39,12 +37,7 @@ public class War {
 		if(joinedCountryList != null && joinedCountryList.length != 0) {
 			// The first one in the list has the oldest startDate
 			this.startDate = joinedCountryList[0].getStartDate();
-			/* Check required as only HoD uses original wargoals. Checking if it has been given values */
-			if (!(originalWarGoal.getCasus_belli().equals(""))) {
-				this.casus_belli = originalWarGoal.getCasus_belli();
-			} else if (!(warGoalList.length == 0)) {
-				this.casus_belli = warGoalList[0].getCasus_belli();
-			}
+			this.casus_belli = warGoal.getCasus_belli();
 		}
 	}
 
@@ -161,12 +154,12 @@ public class War {
 		this.joinedCountryList = countryList;
 	}
 
-	public WarGoal[] getWarGoalList() {
-		return warGoalList;
+	public WarGoal getWarGoal() {
+		return warGoal;
 	}
 
-	public void setWarGoalList(WarGoal[] warGoalList) {
-		this.warGoalList = warGoalList;
+	public void setWarGoal(WarGoal warGoal) {
+		this.warGoal = warGoal;
 	}
 
 	public boolean isActive() {
@@ -223,14 +216,11 @@ public class War {
 				attacker + ", originalDefender=" + originalDefender + ", defender=" + defender +
 				", action=" + action + ", isActive=" + isActive + ", battleList=" +
 				Arrays.toString(battleList) + ", joinedCountryList=" +
-				Arrays.toString(joinedCountryList) + ", warGoalList=" +
-				Arrays.toString(warGoalList) + ", startDate=" + startDate + ", endDate=" + endDate +
-				", casus_belli=" + casus_belli + ", originalWarGoal=" + originalWarGoal + "]";
+				Arrays.toString(joinedCountryList) + ", warGoal=" +
+				warGoal.toString() + ", startDate=" + startDate + ", endDate=" + endDate +
+				", casus_belli=" + casus_belli + "]";
 	}
 
-	public WarGoal getOriginalWarGoal() {
-		return originalWarGoal;
-	}
 
 	public int getCasualties() {
 		int[] casualties = this.getLosses();

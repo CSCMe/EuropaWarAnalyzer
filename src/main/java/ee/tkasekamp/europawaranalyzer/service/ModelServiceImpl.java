@@ -138,15 +138,6 @@ public class ModelServiceImpl implements ModelService {
 		return warList;
 	}
 
-	@Override
-	public boolean isHOD() {
-		for (War war : warList) {
-			if (!(war.getOriginalWarGoal().getCasus_belli().equals(""))) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	@Override
 	public Image getFlag(String tag) {
