@@ -67,7 +67,7 @@
 							   GridPane.columnIndex="1"
 							   GridPane.rowIndex="0"/>
 						<Label ellipsisString="" prefHeight="81.0" prefWidth="527.0"
-							   text="The save game reader has been tested to work with the base version and Extended Timeline. This tool works as long as the save game stucture remains the same. Any newly flags added by mods are not used. "
+							   text="The save game reader has been tested to work with the base version and Extended Timeline. This tool works as long as the save game structure remains the same. Any flags added by mods are not used. "
 							   textAlignment="JUSTIFY" wrapText="true" GridPane.columnIndex="1"
 							   GridPane.rowIndex="1"/>
 						<HBox id="HBox" alignment="CENTER" spacing="5.0" GridPane.columnIndex="3"
