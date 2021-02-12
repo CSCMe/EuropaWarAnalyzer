@@ -179,7 +179,7 @@ public class Parser {
 		if (line.startsWith("name") && (warList.get(WAR_COUNTER).getName().equals(""))) { // Name check required so it is not overwritten
 			line = nameExtractor(line, 6, true);
 			warList.get(WAR_COUNTER).setName(line);
-		} else if (line.startsWith("1")) {
+		} else if (line.matches("([0-9]{3,4}\\.((1[0-2])|[0-9])\\.([1-3][0-9]|[0-9]))+=.*")) {
 			line = line.split("=")[0];
 			setDateBuffer(line);
 
@@ -438,7 +438,7 @@ public class Parser {
 		/* Checking the line and if there is no date 
 		 * Same with start_date*/
 		if (line.startsWith("date=") && modelService.getDate().equals("")) {
-			line = nameExtractor(line, 6, true);
+			line = nameExtractor(line, 5, false);
 			modelService.setDate(line);
 		}
 		/* Checking if it's empty is not needed as there is only one line with player= */
@@ -446,7 +446,7 @@ public class Parser {
 			line = nameExtractor(line, 8, true);
 			modelService.setPlayer(line);
 		} else if (line.startsWith("start_date=") && modelService.getStartDate().equals("")) {
-			line = nameExtractor(line, 12, true);
+			line = nameExtractor(line, 11, false);
 			modelService.setStartDate(line);
 		}
 	}
