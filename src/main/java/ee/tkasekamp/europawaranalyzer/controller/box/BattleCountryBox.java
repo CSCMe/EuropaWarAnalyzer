@@ -41,9 +41,6 @@ public class BattleCountryBox {
 	@FXML
 	private Label leaderHelper;
 
-	@FXML
-	private Label sideUnitsHelper;
-
 	private ObservableList<Unit> unitsTableContent;
 
 	private String side;
@@ -86,7 +83,6 @@ public class BattleCountryBox {
 	private void setHelperLabels() {
 		sideHelper.setText(side + ":");
 		leaderHelper.setText(side + " leader:");
-		sideUnitsHelper.setText(side + " units");
 	}
 
 	private void setColumnValues() {
