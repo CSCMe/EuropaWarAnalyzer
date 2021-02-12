@@ -316,7 +316,7 @@ public class Parser {
 				BATTLE_COUNTER++;
 			}
 		} else if (!(line.equals("attacker=")) && !(line.startsWith("defender=")) && !(line.equals("{"))
-				&& !(line.equals("}")) && !(line.equals("battle="))) {
+				&& !(line.equals("}")) && !(line.equals("battle=")) && !(line.startsWith("war_goal"))) {
 			/* All units such as "infantry=9000" will come here
 			 * 
 			 */
