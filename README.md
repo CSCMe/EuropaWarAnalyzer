@@ -4,33 +4,33 @@ Based on the Victoria II war analyzer: [link](https://forum.paradoxplaza.com/for
 
 ## Download links
 
-* The analyzer mostly works now. You can build your own version with the instructions found below. 
-* Download links will follow once *everything* works. 
+* The analyzer works now.
+* You can find the beta release in the releases tab or the dist folder. 
 
 ## What is it
-The analyzer reads the save game produced by EU4 it's a strategy game, look it up) and presents all the wars in a family-friendly way. The program retrieves all the data that can be retrieved from the save file, such as total losses in a war, all the battles, wargoals and the war participants.
+The analyzer reads the save game produced by EU4 (it's a strategy game, look it up) and presents all the wars in a family-friendly way. The program retrieves all the data that can be retrieved from the save file, such as total losses in a war, all the battles, wargoals and the war participants.
 
-Most of the counties have a flag with them. Originally I planned to find all of them from the Victori II directory, but it converting .svg to a format usable by JavaFX turned out to be too difficult.
+Most of the counties have a flag with them. Colonial nations and some others won't have one though.
 
 This analyzer is NOT a fully-fledged save game analyzer. It does one thing and does it reasonably well.
 
 ### Instructions
 1. Make sure you have Java 8 installed on your computer
 2. Run the jar file
-3. Specify the save game. Usually the save games are in `C:\Users\USERNAME\Documents\Paradox Interactive\Victoria II\save games\`
-4. Optionally you can point to the Victoria II install directory. The analyzer will retrieve the country names from there. 
+3. Specify the save game. Usually the save games are in `C:\Users\USERNAME\Documents\Paradox Interactive\Europa Universalis IV\save games\`
+4. Optionally you can point to the EU4 install directory. The analyzer will retrieve the country names from there. 
 5. Click "Read file" and see how terrible your wars have been. 
 6. The analyzer will create a file called "paths.txt" in the jar directory. This stores the path to the last used save game directory.
 
 ### Screenshots
 All wars tab:
-![alt text](http://i.imgur.com/pldQN5y.png "All wars tab")
+![alt text](https://i.imgur.com/XOyukyh.png "All wars tab")
 War details tab:
-![alt text](http://i.imgur.com/45GCUTm.png "War details tab")
+![alt text](https://i.imgur.com/7LE4of0.png "War details tab")
 Battle details tab:
-![alt text](http://i.imgur.com/g8TKMQu.png "Battle details tab")
+![alt text](https://i.imgur.com/BIivRek.png "Battle details tab")
 Wargoals tab:
-![alt text](http://i.imgur.com/CZWOSRn.png "Wargoals tab")
+![alt text](https://i.imgur.com/gMXv9wJ.png "Wargoals tab")
 
 
 ## Bugs and limitations
@@ -38,9 +38,7 @@ Wargoals tab:
 
 * When the player country has fought no wars then it's name will be a TAG even if localisation is used.
 
-* Some versions of Modern Age Mod produce save games that won't work with the analyzer. The newest versions should however work. 
-
-* The analyzer will only show country names and flags for HoD vanilla countries.
+* The analyzer will only show country names and flags for vanilla countries.
 
 ## Tools
 * Java 8
@@ -57,12 +55,19 @@ If you really want to build your own version of this then go right ahead. I'm go
 4. Use `mvn eclipse:eclipse` to generate the project files for Eclipse. You might also need the m2e Eclipse plugin.
 
 ### Code 
-The UI design was made by me and with Java 7 it looked fine. With Java 8 it doesn't. Thanks, Oracle. Due to this, some words will be hidden and some tables will have empty columns.
+The UI design was made by TKasekamp for the VickyWarAnalyzer and with Java 7 it looked fine. With Java 8 it doesn't. Thanks, Oracle. 
+Due to this, some words will be hidden and some tables will have empty columns.
 
-The internal architecture is horrible and should be rebuilt from the ground up. Also, most comments are now outdated.
+TKasekamp said: The internal architecture is horrible and should be rebuilt from the ground up. Also, most comments are now outdated.
+
+I tried to clean some stuff up, but probably only made it slighty worse/better.
+
 ## About
-This project was my first big Java project. I started working on it in April 2013 and released it in the Paradox forums. Then I forgot (or avoided) this project because I the code was so horrible. But around 1500 people downloaded it from the Paradox forums, so that was nice. 
+This project was TKasekamp first big Java project. He started working on it in April 2013 and released it in the Paradox forums. Then he forgot (or avoided) this project because he the code was so horrible. But around 1500 people downloaded it from the Paradox forums, so that was nice. 
 
 The save game is read in by a hand-made parser. Suprisingly, it works. 
 
-In April 2015 I finally got around to making it work with Java 8. I replaced the mostly static variables with object-oriented programming. I also replaced the Ant build with Maven.
+In April 2015 he finally got around to making it work with Java 8. He replaced the mostly static variables with object-oriented programming. He also replaced the Ant build with Maven.
+
+Thanks to his work I was able to adapt the Analyzer for EU4.
+He laid down the framework and a lot of the code remains unchanged.
