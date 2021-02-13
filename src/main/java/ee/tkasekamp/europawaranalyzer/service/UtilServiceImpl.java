@@ -60,7 +60,7 @@ public class UtilServiceImpl implements UtilService {
 	@Override
 	public Image loadFlag(String tag) {
 		try {
-			return new Image(this.getClass().getResourceAsStream(FLAGPATH + tag + ".png"));
+			return new Image(this.getClass().getResourceAsStream(FLAGPATH + tag + ".PNG"));
 		} catch (NullPointerException e) {
 			return null;
 		}
