@@ -33,7 +33,7 @@ public class Main extends Application {
 		stage.setScene(new Scene(root));
 		stage.show();
 		/* Cause it's a more iconic eu4 flag */
-		stage.getIcons().add(new Image("/flags/HLR.png"));
+		stage.getIcons().add(new Image("/flags/HLR.PNG"));
 
 	}
 
