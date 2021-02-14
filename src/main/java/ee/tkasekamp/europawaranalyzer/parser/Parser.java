@@ -180,9 +180,9 @@ public class Parser {
 		if (line.startsWith("name") && (warList.get(WAR_COUNTER).getName().equals(""))) { // Name check required so it is not overwritten
 			line = nameExtractor(line, 6, true);
 			warList.get(WAR_COUNTER).setName(line);
-		} else if (line.matches("([0-9]{3,4}\\.((1[0-2])|[0-9])\\.([1-3][0-9]|[0-9]))+=.*")) {
+		} else if (line.matches("([0-9]{1,4}\\.((1[0-2])|[0-9])\\.([1-3][0-9]|[0-9]))+=.*")) {
 			line = line.split("=")[0];
-			setDateBuffer(line);
+			setDateBuffer(addZerosToDate(line));
 
 		} else if (line.startsWith("add_attacker=")) {
 			line = nameExtractor(line, 14, true);
@@ -400,7 +400,7 @@ public class Parser {
 		 * Same with start_date*/
 		if (line.startsWith("date=") && modelService.getDate().equals("")) {
 			line = nameExtractor(line, 5, false);
-			modelService.setDate(line);
+			modelService.setDate(addZerosToDate(line));
 		}
 		/* Checking if it's empty is not needed as there is only one line with player= */
 		else if (line.startsWith("player=")) {
@@ -408,7 +408,7 @@ public class Parser {
 			modelService.setPlayer(line);
 		} else if (line.startsWith("start_date=") && modelService.getStartDate().equals("")) {
 			line = nameExtractor(line, 11, false);
-			modelService.setStartDate(line);
+			modelService.setStartDate(addZerosToDate(line));
 		}
 	}
 
@@ -447,4 +447,18 @@ public class Parser {
 		this.dateBuffer = dateBuffer;
 	}
 
+	private String addZerosToDate(String date) {
+		String[] splitDate = date.split("\\.");
+		for(int i = splitDate[0].length(); i < 4; i++) {
+			splitDate[0] = "0" + splitDate[0];
+		}
+		for(int i = splitDate[1].length(); i < 2; i++) {
+			splitDate[1] = "0" + splitDate[1];
+		}
+		for(int i = splitDate[2].length(); i < 2; i++) {
+			splitDate[2] = "0" + splitDate[2];
+		}
+		System.out.println(splitDate[0] + "." + splitDate[1] + "." + splitDate[2]);
+		return splitDate[0] + "." + splitDate[1] + "." + splitDate[2];
+	}
 }
