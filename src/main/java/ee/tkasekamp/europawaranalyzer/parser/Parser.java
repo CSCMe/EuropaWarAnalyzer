@@ -458,7 +458,6 @@ public class Parser {
 		for(int i = splitDate[2].length(); i < 2; i++) {
 			splitDate[2] = "0" + splitDate[2];
 		}
-		System.out.println(splitDate[0] + "." + splitDate[1] + "." + splitDate[2]);
 		return splitDate[0] + "." + splitDate[1] + "." + splitDate[2];
 	}
 }
