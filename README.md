@@ -1,11 +1,12 @@
 # EU4 war analyzer
 
-Based on the Victoria II war analyzer: [link](https://forum.paradoxplaza.com/forum/index.php?threads/tool-victoria-ii-save-game-war-analyzer.689055/)
-
+Based on the Victoria II war analyzer: 
+* [Forum post](https://forum.paradoxplaza.com/forum/index.php?threads/tool-victoria-ii-save-game-war-analyzer.689055/)
+* [Github](https://github.com/TKasekamp/VickyWarAnalyzer/)
 ## Download links
 
-* The analyzer works now.
-* You can find the beta release in the releases tab or the dist folder. 
+* Current version download: v0.9.1 https://github.com/CSCMe/EuropaWarAnalyzer/releases/tag/v0.9.1
+* You can find the releases in the releases tab or the dist folder. 
 
 ## What is it
 The analyzer reads the save game produced by EU4 (it's a strategy game, look it up) and presents all the wars in a family-friendly way. The program retrieves all the data that can be retrieved from the save file, such as total losses in a war, all the battles, wargoals and the war participants.
