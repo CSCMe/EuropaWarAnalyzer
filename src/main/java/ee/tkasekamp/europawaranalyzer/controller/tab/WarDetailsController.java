@@ -215,8 +215,8 @@ public class WarDetailsController extends AbstractController {
 			warGoalCountryLabel.setText(war.getWarGoal()
 					.getCountry());
 			warGoalStateLabel
-					.setText(Integer.toString(war.getWarGoal()
-							.getState_province_id()));
+					.setText(war.getWarGoal().getState_province_id() == 0 ?
+							"" : Integer.toString(war.getWarGoal().getState_province_id()));
 			} catch (IndexOutOfBoundsException e) {
 				/* Setting values to blank as some wars don't have any wargoals */
 				warGoalTypeLabel.setText("");
