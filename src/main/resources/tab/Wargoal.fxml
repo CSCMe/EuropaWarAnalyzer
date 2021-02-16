@@ -17,6 +17,7 @@
 						   maxWidth="1.7976931348623157E308"
 						   prefHeight="226.0" prefWidth="396.0" GridPane.columnIndex="0"
 						   GridPane.rowIndex="2">
+					<columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
 					<columns>
 						<TableColumn minWidth="40.0" prefWidth="150.0" text="Casus Belli"
 									 fx:id="colWarGoalCasusBelli"/>
@@ -32,7 +33,7 @@
 					  GridPane.rowIndex="1">
 					<children>
 						<Label prefHeight="101.0" prefWidth="532.0" styleClass="label-dark"
-							   text="Most wargoals only a casus belli. Sometimes there's a province. The country is shown when its capital or similar needs to be occupied."
+							   text="Most wargoals only have a casus belli. Sometimes there's a province. The country is shown when its capital or similar needs to be occupied."
 							   wrapText="true"/>
 					</children>
 				</VBox>

@@ -57,8 +57,7 @@ public class WargoalController extends AbstractController {
 
 		// Adding to list
 		warGoalTableContent.addAll(war.getWarGoal());
-
-
+		setColumnVisibility(war);
 		warGoalTable.setItems(warGoalTableContent);
 
 	}
@@ -82,4 +81,19 @@ public class WargoalController extends AbstractController {
 						"state_province_id"));
 	}
 
+	private void setColumnVisibility(War war) {
+		if(war.getWarGoal().getState_province_id() == 0) {
+			colWarGoalStateID.setVisible(false);
+		}
+		else {
+			colWarGoalStateID.setVisible(true);
+		}
+
+		if(war.getWarGoal().getCountry() == "") {
+			colWarGoalCountry.setVisible(false);
+		}
+		else {
+			colWarGoalCountry.setVisible(true);
+		}
+	}
 }
