@@ -56,7 +56,7 @@ public class BattleCountryBox {
 
 	public void populate(Battle battle) {
 		unitsTableContent.clear();
-		if (side == "Attacker")
+		if (side.equals("Attacker"))
 			populateBox(battle.getAttacker(), battle.getAttackerUnits(),
 					battle.getAttackerLosses(), battle.getLeaderAttacker());
 

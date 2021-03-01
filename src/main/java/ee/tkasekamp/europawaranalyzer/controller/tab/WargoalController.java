@@ -89,7 +89,7 @@ public class WargoalController extends AbstractController {
 			colWarGoalStateID.setVisible(true);
 		}
 
-		if(war.getWarGoal().getCountry() == "") {
+		if(war.getWarGoal().getCountry().equals("")) {
 			colWarGoalCountry.setVisible(false);
 		}
 		else {

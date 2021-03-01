@@ -40,7 +40,7 @@ public class Localisation {
 
 		String line;
 		while ((line = scanner.readLine()) != null) {
-			String[] dataArray = line.split(":(0|1) "); // Splitting the line
+			String[] dataArray = line.split(":[01] "); // Splitting the line
 			String countryTag = dataArray[0].replace(" ", ""); //Gets the country tag properly
 			if(dataArray.length > 1) { //only do the later parts if the array is long enough
 				String countryName = dataArray[1].replace("\"","");
