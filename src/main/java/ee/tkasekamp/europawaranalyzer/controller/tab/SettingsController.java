@@ -70,7 +70,7 @@ public class SettingsController extends AbstractController {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("EU IV save game");
 		//Set extension filter
-		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Save game (*.eu4)", "*.eu4");
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Save games", "*.eu4", "gamestate");
 		fileChooser.getExtensionFilters().add(extFilter);
 		/* Only if there is a path is it given to the filechooser */
 		if (!utilServ.getSaveGameFolder().equals("")) {
