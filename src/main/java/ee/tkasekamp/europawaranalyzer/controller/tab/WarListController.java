@@ -84,9 +84,7 @@ public class WarListController extends AbstractController {
 		warTableContent = FXCollections.observableArrayList();
 
 		selectCountryIssue.getSelectionModel().selectedItemProperty()
-				.addListener((arg0, arg1, arg2) -> {
-					warTableShowCountry(arg2.getTag());
-				});
+				.addListener((arg0, arg1, arg2) -> warTableShowCountry(arg2.getTag()));
 		/* Listening to selections in warTable */
 		final ObservableList<War> warTableSelection =
 				warTable.getSelectionModel().getSelectedItems();
@@ -159,7 +157,7 @@ public class WarListController extends AbstractController {
 
 	private void warTableShowActive() {
 		warTableContent.clear();
-		warTableContent.addAll(modelServ.getWars().stream().filter(item -> item.isActive())
+		warTableContent.addAll(modelServ.getWars().stream().filter(War::isActive)
 				.collect(Collectors.toList()));
 	}
 

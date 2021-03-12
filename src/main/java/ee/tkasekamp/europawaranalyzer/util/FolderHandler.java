@@ -1,6 +1,7 @@
 package ee.tkasekamp.europawaranalyzer.util;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class FolderHandler {
 	public static final String PROGRAM_FILES_X86 = "C:/Program Files (x86)";
@@ -91,7 +92,7 @@ public class FolderHandler {
 	public static void savePaths(String saveGameFolder, String installFolder) throws IOException {
 		try {
 			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream("paths.txt"), "UTF-8"));
+					new FileOutputStream("paths.txt"), StandardCharsets.UTF_8));
 			out.write(saveGameFolder);
 			out.write("\n");
 			out.write(installFolder);
@@ -113,7 +114,7 @@ public class FolderHandler {
 		String[] paths = new String[2];
 
 		InputStreamReader reader = new InputStreamReader(new FileInputStream(
-				PATHS), "UTF-8");
+				PATHS), StandardCharsets.UTF_8);
 		BufferedReader scanner = new BufferedReader(reader);
 
 		String line;

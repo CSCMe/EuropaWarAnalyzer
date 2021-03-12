@@ -27,7 +27,7 @@ public class ModelServiceImpl implements ModelService {
 	public ModelServiceImpl(UtilService utilServ) {
 		this.utilServ = utilServ;
 		parser = new Parser(this);
-		countryTreeMap = new TreeMap();
+		countryTreeMap = new TreeMap<>();
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public class Parser {
 //	static public Reference saveGameData = new Reference(); // public so it can be used by all methods
 
 	private ModelService modelService;
-
+	//TODO: Dynamic Country Name Parsing, Search function in Country list (optional),  show war length, outcome (in file: outcome=x, x=1  white, x=2 win, x=3 loss)
 	public Parser(ModelService modelService) {
 		this.modelService = modelService;
 	}
@@ -224,18 +224,14 @@ public class Parser {
 		} else if (line.startsWith("original_attacker=")) {
 			line = nameExtractor(line, 19, true);
 			/* Checking required for some older wars */
-			if (line.equals("---")) {
-				//Yeets the war later in the program. Can't parse it any further
-			} else {
+			if (!line.equals("---")) {
 				warList.get(WAR_COUNTER).setOriginalAttacker(line);
 			}
 
 		} else if (line.startsWith("original_defender=")) {
 			line = nameExtractor(line, 19, true);
 			/* Checking required for some older wars */
-			if (line.equals("---")) {
-				//Yeets the war later in the program. Can't parse it any further
-			} else {
+			if (!line.equals("---")) {
 				warList.get(WAR_COUNTER).setOriginalDefender(line);
 			}
 
