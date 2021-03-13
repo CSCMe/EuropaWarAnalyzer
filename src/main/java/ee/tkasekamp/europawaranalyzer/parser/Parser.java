@@ -239,9 +239,13 @@ public class Parser {
 			warList.get(WAR_COUNTER).setAction(addZerosToDate(line));
 		} else if (line.startsWith("outcome")) {
 			Result result = Result.UNKNOWN;
-			if (line.contains("3")) result = Result.LOST;
-			else if (line.contains("2")) result = Result.WON;
-			else if (line.contains("1")) result = Result.WHITE;
+			line = nameExtractor(line, 8, false);
+			switch(line) {
+				case "3" : result = Result.LOST; break;
+				case "2" : result = Result.WON; break;
+				case "1" : result = Result.WHITE; break;
+				default: result = Result.UNKNOWN;
+			}
 			warList.get(WAR_COUNTER).setResult(result);
 		}
 

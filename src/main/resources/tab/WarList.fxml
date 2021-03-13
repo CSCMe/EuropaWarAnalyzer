@@ -108,7 +108,7 @@
 										<Button fx:id="showPreviousWarsIssue"
 												mnemonicParsing="false"
 												onAction="#showPreviousWarsIssue"
-												text="Show previous wars"/>
+												text="Show finished wars"/>
 										<Separator orientation="VERTICAL" prefHeight="200.0"/>
 										<Button fx:id="showMyWarsIssue" mnemonicParsing="false"
 												onAction="#showMyWarsIssue"
@@ -134,18 +134,20 @@
 										<TableColumn maxWidth="500.0" minWidth="150.0"
 													 prefWidth="300.0" text="Name"
 													 fx:id="colNameWar"/>
-										<TableColumn minWidth="50.0" prefWidth="120.0"
-													 text="Original attacker" fx:id="colAttackerWar"/>
-										<TableColumn minWidth="50.0" prefWidth="120.0"
-													 text="Original defender" fx:id="colDefenderWar"/>
+										<TableColumn minWidth="50.0" prefWidth="90.0"
+													 text="Attacker" fx:id="colAttackerWar"/>
+										<TableColumn minWidth="50.0" prefWidth="90.0"
+													 text="Defender" fx:id="colDefenderWar"/>
 										<TableColumn minWidth="50.0" prefWidth="120.0"
 													 text="Casus belli" fx:id="colCasusBelliWar"/>
-										<TableColumn prefWidth="120.0" text="Start date"
+										<TableColumn minWidth ="50.0" prefWidth="80.0" text="Start date"
 													 fx:id="colStartDateWar"/>
-										<TableColumn minWidth="50.0" prefWidth="120.0"
+										<TableColumn minWidth="50.0" prefWidth="80.0"
 													 text="End date" fx:id="colEndDateWar"/>
-										<TableColumn minWidth="50.0" prefWidth="120.0"
-													 text="Total losses" fx:id="colCasualtiesWar"/>
+										<TableColumn minWidth="50" prefWidth="65.0"
+													 text="Length" fx:id="colWarLength" />
+										<TableColumn minWidth="50.0" prefWidth="75.0"
+													 text="Losses" fx:id="colCasualtiesWar"/>
 									</columns>
 									<HBox.margin>
 										<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"

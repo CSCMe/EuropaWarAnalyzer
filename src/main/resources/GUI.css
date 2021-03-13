@@ -119,7 +119,7 @@ Tonis Kasekamp
 }
 
 .table-view .column-header .label {
-    -fx-font-size: 14pt;
+    -fx-font-size: 12pt;
     -fx-font-family: "Segoe UI Light";
     -fx-text-fill: white;
     -fx-alignment: center-left;

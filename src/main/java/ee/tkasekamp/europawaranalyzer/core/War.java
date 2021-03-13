@@ -1,6 +1,11 @@
 package ee.tkasekamp.europawaranalyzer.core;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * War class. All critical info and a list about war events.
@@ -17,7 +22,7 @@ public class War {
 	private Battle[] battleList;
 	private JoinedCountry[] joinedCountryList;
 	private WarGoal warGoal;
-	private String startDate; // Set after reading
+	private String startDate = ""; // Set after reading
 	private String endDate = ""; // Set during reading
 	private String casus_belli = ""; // Primary casus belli displayed in table. Set after reading
 	private Result result = Result.UNKNOWN;
@@ -225,6 +230,13 @@ public class War {
 	public int getCasualties() {
 		int[] casualties = this.getLosses();
 		return casualties[0] + casualties[2];
+	}
+
+	public float getLength() {
+		LocalDate startDateDate = LocalDate.parse(startDate.replace(".", "-"));
+		LocalDate endDateDate = LocalDate.parse( endDate.equals("") ? action.replace(".", "-") : endDate.replace(".", "-"));
+		Period interval = Period.between(startDateDate, endDateDate);
+		return interval.toTotalMonths() / 12.00f + interval.getDays() / 365.00f;
 	}
 
 	public void setResult(Result result) {
