@@ -44,6 +44,7 @@ public class ModelServiceImpl implements ModelService {
 		/* Localisation */
 		if (useLocalisation) {
 			Localisation.readLocalisation(utilServ.getInstallFolder(), countryTreeMap);
+			parser.getDynamicCountryList().forEach(x -> countryTreeMap.put(x.getTag(), x));
 		}
 		try {
 			utilServ.writePathsToFile();
@@ -84,7 +85,6 @@ public class ModelServiceImpl implements ModelService {
 			}
 		}
 		set.forEach(x -> countryTreeMap.put(x, new Country(x)));
-
 	}
 
 	@Override

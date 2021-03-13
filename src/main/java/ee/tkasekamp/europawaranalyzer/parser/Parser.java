@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 /**
  * Readers in order of activation in a typical save game:
@@ -49,12 +50,17 @@ public class Parser {
 	private boolean warGoalProcessing; // True so all new lines will be read into warGoalReader
 	private int WARGOAL_COUNTER = 0;
 	private boolean casusBelliProcessing; // New for EU4. Has the same function as warGoalProcessing
+	private boolean dynamicCountryListProcessing;
+	private boolean countryProcessing;
+	private boolean dynamicCountryProcessing; // New. True when processing a country.
 	/* Various */
 	private int bracketCounter = 0; // bracketCounter is uses to check if all data from the war has been read in
 //	static public Reference saveGameData = new Reference(); // public so it can be used by all methods
+	private ArrayList<Country> dynamicCountryList = new ArrayList<>();
+
 
 	private ModelService modelService;
-	//TODO: Dynamic Country Name Parsing, Search function in Country list (optional)
+	//TODO: Search function in Country list (optional)
 	public Parser(ModelService modelService) {
 		this.modelService = modelService;
 	}
@@ -74,8 +80,7 @@ public class Parser {
 		/* Resetting values for when user loads multiple files during a session 
 		 * Might not be necessary but doing it just in case. */
 //		saveGameData = new Reference();
-		long startNanoTime = System.nanoTime();
-		boolean encounteredWars = false;
+		Country currentDynamicCountry = null;
 		warList = new ArrayList<>();
 		WAR_COUNTER = 0;
 		BATTLE_COUNTER = 0;
@@ -85,16 +90,25 @@ public class Parser {
 		InputStreamReader reader = new InputStreamReader(new FileInputStream(saveGamePath), "ISO8859_1"); // This encoding seems to work for ö
 		BufferedReader scanner = new BufferedReader(reader);
 
-		String line;
-		while ((line = scanner.readLine()) != null) {
-			line = line.replaceAll("\t", "");
+		String originalLine;
+		while ((originalLine = scanner.readLine()) != null) {
+			String line = originalLine.replaceAll("\t", "");
+
 			/* Data about the game: date, player and start_date
 			 * The reading is done in referenceReader*/
-			if (!encounteredWars && (line.startsWith("date=") || line.startsWith("player=") || line.startsWith("start_date="))) {
+			if (line.startsWith("date=") || line.startsWith("player=") || line.startsWith("start_date=")) {
 				referenceReader(line);
 			}
+
+			if(line.startsWith("dynamic_countries=")) {
+				dynamicCountryListProcessing = true;
+			}
+
+			if (line.startsWith("countries=")) {
+				countryProcessing = true;
+			}
+
 			if (line.startsWith("previous_war={") || line.startsWith("active_war={")) {
-				encounteredWars = true;
 				warProcessing = true;
 		    	/* Further  check if war is active */
 				if (line.startsWith("previous_war=")) {
@@ -102,6 +116,32 @@ public class Parser {
 				} else {
 					warList.add(new War(true));
 				}
+			}
+
+			if (countryProcessing) {
+				bracketCounterChange(line);
+				if(bracketCounter == 0) {
+					countryProcessing = false;
+				}
+				else if(bracketCounter == 2) {
+					for (Country country : dynamicCountryList) {
+						if (line.contains(country.getTag())) {
+							currentDynamicCountry = country;
+							dynamicCountryProcessing = true;
+						}
+					}
+					if (dynamicCountryProcessing ) {
+						dynamicCountryReader(line, currentDynamicCountry);
+					}
+				}
+			}
+
+			if (dynamicCountryListProcessing) {
+				bracketCounterChange(line);
+				if (bracketCounter == 0) {
+					dynamicCountryListProcessing = false;
+				}
+				dynamicCountryList = dynamicCountryList.isEmpty() ? createDynamicCountryList(originalLine) : dynamicCountryList;
 			}
 
 			/* Checking if the line needs to be passed on to other readers */
@@ -153,24 +193,13 @@ public class Parser {
 			}
 		}
 		scanner.close();
-		ArrayList<War> tempWarList = new ArrayList<>();
 
 		/* This part makes sure broken wars don't get processed */
-		for(War war : warList ) {
-			if(war == null || war.getOriginalAttacker().equals("") || war.getOriginalDefender().equals("")) {
-				tempWarList.add(war);
-			}
-		}
-
-		for(War war : tempWarList) {
-			warList.remove(war);
-		}
+		Predicate<War> filter = war->(war == null || war.getOriginalAttacker().equals("") || war.getOriginalDefender().equals(""));
+		warList.removeIf(filter);
 
 		/* Setting the start date and casus belli */
 		warList.forEach(ee.tkasekamp.europawaranalyzer.core.War::setCasusBelliAndStartDate);
-		long endNanoTime = System.nanoTime();
-		long elapsedTime = endNanoTime - startNanoTime;
-		System.out.println(elapsedTime);
 		return warList;
 
 	}
@@ -422,6 +451,26 @@ public class Parser {
 		}
 	}
 
+	public ArrayList<Country> createDynamicCountryList(String line) {
+		ArrayList<Country> list = new ArrayList<>();
+		String[] splitLine = line.split("\\s");
+		for (String countryTag : splitLine) {
+			if (countryTag.contains("K") || countryTag.contains("C")) {
+				list.add(new Country(countryTag));
+			}
+		}
+		return list;
+	}
+
+	/** Used when reading a dynamic country */
+	public void dynamicCountryReader(String line, Country dynamicCountry) {
+		if (line.startsWith("name=")) {
+			String countryName = nameExtractor(line, 6, true);
+			dynamicCountry.setOfficialName(countryName);
+			dynamicCountryProcessing = false;
+		}
+	}
+
 	public void bracketCounterChange(String line) {
 		// Increases or decreases the bracketCounter
 		if (line.contains("{")) {
@@ -455,6 +504,10 @@ public class Parser {
 
 	public void setDateBuffer(String dateBuffer) {
 		this.dateBuffer = dateBuffer;
+	}
+
+	public ArrayList<Country> getDynamicCountryList() {
+		return dynamicCountryList;
 	}
 
 	private String addZerosToDate(String date) {
