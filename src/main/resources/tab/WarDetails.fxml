@@ -107,8 +107,8 @@
 									  GridPane.columnIndex="1"
 									  GridPane.rowIndex="4">
 									<children>
-										<Label styleClass="label-dark" text="Has ended:"/>
-										<Label id="warActionLabel" fx:id="warHasEndedLabel"
+										<Label styleClass="label-dark" text="Result:"/>
+										<Label id="warActionLabel" fx:id="warResultLabel"
 											   text="Label"/>
 									</children>
 								</HBox>

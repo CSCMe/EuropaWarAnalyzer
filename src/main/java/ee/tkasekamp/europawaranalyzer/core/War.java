@@ -20,16 +20,16 @@ public class War {
 	private String startDate; // Set after reading
 	private String endDate = ""; // Set during reading
 	private String casus_belli = ""; // Primary casus belli displayed in table. Set after reading
+	private Result result = Result.UNKNOWN;
 
 	public War() {
 		super();
-
 	}
 
 	public War(boolean isActive) {
 		super();
 		this.isActive = isActive;
-
+		if (isActive) this.result = Result.UNFINISHED;
 	}
 
 	public void setCasusBelliAndStartDate() {
@@ -226,4 +226,13 @@ public class War {
 		int[] casualties = this.getLosses();
 		return casualties[0] + casualties[2];
 	}
+
+	public void setResult(Result result) {
+		this.result = result;
+	}
+
+	public Result getResult() {
+		return result;
+	}
+
 }

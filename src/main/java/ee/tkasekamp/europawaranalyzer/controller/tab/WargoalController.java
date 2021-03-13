@@ -1,6 +1,6 @@
 package ee.tkasekamp.europawaranalyzer.controller.tab;
 
-import ee.tkasekamp.europawaranalyzer.core.Battle.Result;
+
 import ee.tkasekamp.europawaranalyzer.core.War;
 import ee.tkasekamp.europawaranalyzer.core.WarGoal;
 import ee.tkasekamp.europawaranalyzer.service.ModelService;

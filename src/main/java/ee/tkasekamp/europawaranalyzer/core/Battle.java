@@ -38,17 +38,8 @@ public class Battle {
 		attackerLosses = 0;
 	}
 
-
 	/**
-	 * Battle result. Yes or no.
-	 * Used in wargoal aswell because it also has yes and no states.
-	 */
-	public enum Result {
-		YES, NO
-	}
-
-	/**
-	 * Battle result. Land or naval.
+	 * Battle TYPE. Land or naval.
 	 */
 	public enum Type {
 		LAND, NAVAL
@@ -69,7 +60,6 @@ public class Battle {
 
 	/**
 	 * Checks if any of the units are ships. If they are, sets the battleType to true.
-	 * Also sets the Result.
 	 */
 	public void determineType() {
 		/* Some battles have no attacker units. Catching these strange battles */

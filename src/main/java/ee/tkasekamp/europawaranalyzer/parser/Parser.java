@@ -1,7 +1,6 @@
 package ee.tkasekamp.europawaranalyzer.parser;
 
 import ee.tkasekamp.europawaranalyzer.core.*;
-import ee.tkasekamp.europawaranalyzer.core.Battle.Result;
 import ee.tkasekamp.europawaranalyzer.service.ModelService;
 import ee.tkasekamp.europawaranalyzer.util.Constants;
 
@@ -55,7 +54,7 @@ public class Parser {
 //	static public Reference saveGameData = new Reference(); // public so it can be used by all methods
 
 	private ModelService modelService;
-	//TODO: Dynamic Country Name Parsing, Search function in Country list (optional),  show war length, outcome (in file: outcome=x, x=1  white, x=2 win, x=3 loss)
+	//TODO: Dynamic Country Name Parsing, Search function in Country list (optional),  show war length
 	public Parser(ModelService modelService) {
 		this.modelService = modelService;
 	}
@@ -238,7 +237,12 @@ public class Parser {
 		} else if (line.startsWith("action")) {
 			line = nameExtractor(line, 7, false);
 			warList.get(WAR_COUNTER).setAction(addZerosToDate(line));
-
+		} else if (line.startsWith("outcome")) {
+			Result result = Result.UNKNOWN;
+			if (line.contains("3")) result = Result.LOST;
+			else if (line.contains("2")) result = Result.WON;
+			else if (line.contains("1")) result = Result.WHITE;
+			warList.get(WAR_COUNTER).setResult(result);
 		}
 
 
@@ -261,9 +265,9 @@ public class Parser {
 		} else if (line.startsWith("result")) {
 			line = nameExtractor(line, 7, false);
 			if (line.equals("yes")) {
-				battleList.get(BATTLE_COUNTER).setRes(Result.YES);
+				battleList.get(BATTLE_COUNTER).setRes(Result.WON);
 			} else {
-				battleList.get(BATTLE_COUNTER).setRes(Result.NO);
+				battleList.get(BATTLE_COUNTER).setRes(Result.LOST);
 			}
 		} else if(line.startsWith("attacker")) { //Check if it's about the attacker
 			attackerDefender = true; // From now on all unit data will be about the attacker

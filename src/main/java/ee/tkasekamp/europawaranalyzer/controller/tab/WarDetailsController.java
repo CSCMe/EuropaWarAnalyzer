@@ -3,7 +3,7 @@ package ee.tkasekamp.europawaranalyzer.controller.tab;
 import ee.tkasekamp.europawaranalyzer.controller.MainController;
 import ee.tkasekamp.europawaranalyzer.controller.box.WarCountryBox;
 import ee.tkasekamp.europawaranalyzer.core.Battle;
-import ee.tkasekamp.europawaranalyzer.core.Battle.Result;
+import ee.tkasekamp.europawaranalyzer.core.Result;
 import ee.tkasekamp.europawaranalyzer.core.Battle.Type;
 import ee.tkasekamp.europawaranalyzer.core.War;
 import ee.tkasekamp.europawaranalyzer.service.ModelService;
@@ -59,7 +59,7 @@ public class WarDetailsController extends AbstractController {
 	private Label warActionLabel;
 
 	@FXML
-	private Label warHasEndedLabel;
+	private Label warResultLabel;
 
 	@FXML
 	private Label warGoalTypeLabel;
@@ -115,11 +115,7 @@ public class WarDetailsController extends AbstractController {
 		warStartDateLabel.setText(war.getStartDate());
 		warEndDateLabel.setText(war.getEndDate());
 		warActionLabel.setText(war.getAction());
-		if (war.isActive()) {
-			warHasEndedLabel.setText("No");
-		} else {
-			warHasEndedLabel.setText("Yes");
-		}
+		warResultLabel.setText(war.getResult().getResultString());
 
 		attackerBoxController.populate(war);
 		defenderBoxController.populate(war);

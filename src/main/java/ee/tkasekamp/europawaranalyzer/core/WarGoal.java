@@ -1,8 +1,5 @@
 package ee.tkasekamp.europawaranalyzer.core;
 
-import ee.tkasekamp.europawaranalyzer.core.Battle.Result;
-
-
 public class WarGoal {
 	/* Definitions are directly from save file */
 	private int state_province_id = 0;
