@@ -54,7 +54,7 @@ public class Parser {
 //	static public Reference saveGameData = new Reference(); // public so it can be used by all methods
 
 	private ModelService modelService;
-	//TODO: Dynamic Country Name Parsing, Search function in Country list (optional),  show war length
+	//TODO: Dynamic Country Name Parsing, Search function in Country list (optional)
 	public Parser(ModelService modelService) {
 		this.modelService = modelService;
 	}
@@ -74,6 +74,8 @@ public class Parser {
 		/* Resetting values for when user loads multiple files during a session 
 		 * Might not be necessary but doing it just in case. */
 //		saveGameData = new Reference();
+		long startNanoTime = System.nanoTime();
+		boolean encounteredWars = false;
 		warList = new ArrayList<>();
 		WAR_COUNTER = 0;
 		BATTLE_COUNTER = 0;
@@ -88,10 +90,11 @@ public class Parser {
 			line = line.replaceAll("\t", "");
 			/* Data about the game: date, player and start_date
 			 * The reading is done in referenceReader*/
-			if (line.startsWith("date=") || line.startsWith("player=") || line.startsWith("start_date=")) {
+			if (!encounteredWars && (line.startsWith("date=") || line.startsWith("player=") || line.startsWith("start_date="))) {
 				referenceReader(line);
 			}
 			if (line.startsWith("previous_war={") || line.startsWith("active_war={")) {
+				encounteredWars = true;
 				warProcessing = true;
 		    	/* Further  check if war is active */
 				if (line.startsWith("previous_war=")) {
@@ -165,6 +168,9 @@ public class Parser {
 
 		/* Setting the start date and casus belli */
 		warList.forEach(ee.tkasekamp.europawaranalyzer.core.War::setCasusBelliAndStartDate);
+		long endNanoTime = System.nanoTime();
+		long elapsedTime = endNanoTime - startNanoTime;
+		System.out.println(elapsedTime);
 		return warList;
 
 	}
