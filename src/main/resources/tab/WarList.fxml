@@ -148,6 +148,8 @@
 													 text="Length" fx:id="colWarLength" />
 										<TableColumn minWidth="50.0" prefWidth="75.0"
 													 text="Losses" fx:id="colCasualtiesWar"/>
+										<TableColumn minWidth="50.0" prefWidth="80.0"
+													 text="Lost ships" fx:id="colShipCasualtiesWar"/>
 									</columns>
 									<HBox.margin>
 										<Insets bottom="5.0" left="5.0" right="5.0" top="5.0"

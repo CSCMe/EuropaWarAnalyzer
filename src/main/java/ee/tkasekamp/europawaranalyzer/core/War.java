@@ -232,6 +232,11 @@ public class War {
 		return casualties[0] + casualties[2];
 	}
 
+	public int getShipCasualties() {
+		int[] lostUnits = this.getLosses();
+		return lostUnits[1] + lostUnits[3];
+	}
+
 	public float getLength() {
 		LocalDate startDateDate = LocalDate.parse(startDate.replace(".", "-"));
 		LocalDate endDateDate = LocalDate.parse( endDate.equals("") ? action.replace(".", "-") : endDate.replace(".", "-"));
