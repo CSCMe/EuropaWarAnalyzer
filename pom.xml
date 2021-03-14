@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ee.tkasekamp</groupId>
 	<artifactId>europawaranalyzer</artifactId>
-	<version>0.9.2</version>
+	<version>0.9.5</version>
 	<name>EU IV save game war analyser</name>
 	<description>Gets all the wars from the save game and presents them in a family-friendly way.</description>
 
