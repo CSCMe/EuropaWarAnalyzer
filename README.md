@@ -25,13 +25,13 @@ This analyzer is NOT a fully-fledged save game analyzer. It does one thing and d
 
 ### Screenshots
 All wars tab:
-![alt text](https://i.imgur.com/XOyukyh.png "All wars tab")
+![alt text](https://i.imgur.com/GhLNoyi.png "All wars tab")
 War details tab:
-![alt text](https://i.imgur.com/7LE4of0.png "War details tab")
+![alt text](https://i.imgur.com/D79WeBC.png "War details tab")
 Battle details tab:
-![alt text](https://i.imgur.com/BIivRek.png "Battle details tab")
+![alt text](https://i.imgur.com/6MX2Jdk.png "Battle details tab")
 Wargoals tab:
-![alt text](https://i.imgur.com/gMXv9wJ.png "Wargoals tab")
+![alt text](https://i.imgur.com/vchWN5z.png "Wargoals tab")
 
 
 ## Bugs and limitations
@@ -59,16 +59,16 @@ If you really want to build your own version of this then go right ahead. I'm go
 The UI design was made by TKasekamp for the VickyWarAnalyzer and with Java 7 it looked fine. With Java 8 it doesn't. Thanks, Oracle. 
 Due to this, some words will be hidden and some tables will have empty columns.
 
-TKasekamp said: The internal architecture is horrible and should be rebuilt from the ground up. Also, most comments are now outdated.
+TKasekamp: "The internal architecture is horrible and should be rebuilt from the ground up. Also, most comments are now outdated."
 
-I tried to clean some stuff up, but probably only made it slighty worse/better.
+I tried to clean some stuff up, but probably only made it worse :D
 
 ## About
-This project was TKasekamp first big Java project. He started working on it in April 2013 and released it in the Paradox forums. Then he forgot (or avoided) this project because he the code was so horrible. But around 1500 people downloaded it from the Paradox forums, so that was nice. 
+This project was TKasekamp first big Java project. 
+He started working on it in April 2013 and released it in the Paradox forums where ~ 1500 people downloaded it!
+In April 2015 he finally got around to making it work with Java 8. He replaced the mostly static variables with object-oriented programming.
 
-The save game is read in by a hand-made parser. Suprisingly, it works. 
-
-In April 2015 he finally got around to making it work with Java 8. He replaced the mostly static variables with object-oriented programming. He also replaced the Ant build with Maven.
+The save game is read in by a hand-made parser. It works.
 
 Thanks to his work I was able to adapt the Analyzer for EU4.
-He laid down the framework and a lot of the code remains unchanged.
+He did a lot of the work, and a lot of the code remains unchanged.
