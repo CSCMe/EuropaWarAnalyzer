@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import ee.tkasekamp.europawaranalyzer.controller.other.CountryLabel;
 import ee.tkasekamp.europawaranalyzer.controller.MainController;
+import ee.tkasekamp.europawaranalyzer.core.Country;
 import ee.tkasekamp.europawaranalyzer.core.JoinedCountry;
 import ee.tkasekamp.europawaranalyzer.core.War;
 import ee.tkasekamp.europawaranalyzer.service.ModelService;
@@ -12,13 +13,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class WarListController extends AbstractController {
@@ -34,6 +29,9 @@ public class WarListController extends AbstractController {
 
 	@FXML
 	private ListView<CountryLabel> selectCountryIssue;
+
+	@FXML
+	private TextField searchBox;
 
 	@FXML
 	private Button showAllWarsIssue;
@@ -92,7 +90,6 @@ public class WarListController extends AbstractController {
 		final ObservableList<War> warTableSelection =
 				warTable.getSelectionModel().getSelectedItems();
 		warTableSelection.addListener(tableSelectionChanged);
-
 		warTable.setItems(warTableContent);
 		setColumnValues();
 	}
@@ -115,6 +112,11 @@ public class WarListController extends AbstractController {
 	@FXML
 	void showPreviousWarsIssue(ActionEvent event) {
 		warTableShowPrevious();
+	}
+
+	@FXML
+	void filterCountryListIssue(ActionEvent event) {
+		searchCountryList();
 	}
 
 	@Override
@@ -199,6 +201,21 @@ public class WarListController extends AbstractController {
 		modelServ.getCountries()
 				.forEach((tag, x) -> selectCountryIssue.getItems().add(new CountryLabel(x)));
 
+	}
+
+	private void searchCountryList() {
+		String searchText = searchBox.getText().toLowerCase();
+		selectCountryIssue.getItems().clear();
+		for (Country country : modelServ.getCountries().values()) {
+			String lowerOfficial = country.getOfficialName().toLowerCase();
+			String lowerTag = country.getTag().toLowerCase();
+			if (lowerOfficial.contains(searchText) || lowerTag.contains(searchText)) {
+				selectCountryIssue.getItems().add(new CountryLabel(country));
+			}
+		}
+		if (selectCountryIssue.getItems().isEmpty()) {
+			populateCountryList();
+		}
 	}
 
 	private ListChangeListener<War> tableSelectionChanged = new ListChangeListener<War>() {

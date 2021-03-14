@@ -60,11 +60,9 @@ public class Parser {
 
 
 	private ModelService modelService;
-	//TODO: Search function in Country list (optional)
 	public Parser(ModelService modelService) {
 		this.modelService = modelService;
 	}
-
 
 	/**
 	 * This is the main reader. It gets a path and reads line by line from it.

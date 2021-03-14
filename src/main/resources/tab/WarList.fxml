@@ -55,8 +55,8 @@
 									  GridPane.columnIndex="0"
 									  GridPane.rowIndex="4">
 									<children>
-										<Label styleClass="label-dark"
-											   text="Click on the country to see its wars"/>
+										<TextField fx:id="searchBox" styleClass="transparent" />
+										<Button fx:id="searchButton" text="S" onAction="#filterCountryListIssue" />
 									</children>
 								</HBox>
 							</children>
