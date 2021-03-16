@@ -1,11 +1,8 @@
 package ee.tkasekamp.europawaranalyzer.core;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * War class. All critical info and a list about war events.
@@ -237,11 +234,11 @@ public class War {
 		return lostUnits[1] + lostUnits[3];
 	}
 
-	public float getLength() {
+	public double getLength() {
 		LocalDate startDateDate = LocalDate.parse(startDate.replace(".", "-"));
-		LocalDate endDateDate = LocalDate.parse( endDate.equals("") ? action.replace(".", "-") : endDate.replace(".", "-"));
+		LocalDate endDateDate = LocalDate.parse( isActive ? action.replace(".", "-") : endDate.replace(".", "-"));
 		Period interval = Period.between(startDateDate, endDateDate);
-		return interval.toTotalMonths() / 12.00f + interval.getDays() / 365.00f;
+		return Math.round((interval.toTotalMonths() / 12.00 + interval.getDays() / 365.00) * 1000) / 1000.00;
 	}
 
 	public void setResult(Result result) {
