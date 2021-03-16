@@ -74,7 +74,7 @@
 							  GridPane.rowIndex="0">
 							<children>
 								<Label contentDisplay="RIGHT" prefWidth="73.0"
-									   styleClass="label-dark" text="Version 0.9.5"
+									   styleClass="label-dark" text="Version 0.9.6"
 									   wrapText="true"/>
 							</children>
 						</HBox>

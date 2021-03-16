@@ -5,7 +5,7 @@ Based on the Victoria II war analyzer:
 * [Github](https://github.com/TKasekamp/VickyWarAnalyzer/)
 ## Download links
 
-* Current version download: [v0.9.5](https://github.com/CSCMe/EuropaWarAnalyzer/releases/tag/v0.9.5)
+* Current version download: [v0.9.6](https://github.com/CSCMe/EuropaWarAnalyzer/releases/tag/v0.9.6)
 * You can find the releases in the releases tab or the dist folder. 
 
 ## What is it
@@ -39,8 +39,9 @@ Wargoals tab:
 
 * When the player country has fought no wars then it's name will be a TAG even if localisation is used.
 
-* The analyzer will only show country names and flags for vanilla countries.
+* The analyzer will only show country names and flags for vanilla countries that have participated in at least 1 war.
 
+* Colonial Nations that don't exist anymore won't have a localised name
 ## Tools
 * Java 8
 * JavaFX
