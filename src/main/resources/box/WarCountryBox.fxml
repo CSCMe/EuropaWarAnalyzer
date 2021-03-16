@@ -44,7 +44,7 @@
 		<TableView fx:id="table" prefHeight="397.0" prefWidth="300.0" GridPane.columnIndex="0"
 				   GridPane.rowIndex="5">
 			<columns>
-				<TableColumn fx:id="colFlag" prefWidth="50.0" text="Flag"/>
+				<TableColumn fx:id="colFlag" prefWidth="42" text="Flag"/>
 				<TableColumn fx:id="colName" prefWidth="75.0" text="Country"/>
 				<TableColumn fx:id="colStartDate" prefWidth="63.0" text="Join date"/>
 				<TableColumn fx:id="colEndDate" prefWidth="63.0" text="End Date"/>
