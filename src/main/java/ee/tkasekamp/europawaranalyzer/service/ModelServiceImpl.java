@@ -34,7 +34,7 @@ public class ModelServiceImpl implements ModelService {
 	public String createModel(String saveGamePath, boolean useLocalisation) {
 
 		try {
-			warList = parser.read(saveGamePath);
+			warList = parser.readSaveFile(saveGamePath);
 		} catch (IOException e1) {
 			return "Couldn't read save game";
 		}

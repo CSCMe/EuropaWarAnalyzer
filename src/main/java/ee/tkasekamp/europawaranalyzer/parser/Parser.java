@@ -4,13 +4,12 @@ import ee.tkasekamp.europawaranalyzer.core.*;
 import ee.tkasekamp.europawaranalyzer.service.ModelService;
 import ee.tkasekamp.europawaranalyzer.util.Constants;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Predicate;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 /**
  * Readers in order of activation in a typical save game:
@@ -64,17 +63,62 @@ public class Parser {
 		this.modelService = modelService;
 	}
 
+	public ArrayList<War> readSaveFile(String saveGamePath) throws IOException {
+
+		ZipFile zipFile = null;
+		try {
+			zipFile = new ZipFile(saveGamePath);
+		}
+		catch (ZipException e) {
+		}
+
+		InputStream metaStream;
+		InputStream gameStateStream;
+
+		if (zipFile == null) {
+			metaStream = new FileInputStream(saveGamePath);
+			gameStateStream = new FileInputStream(saveGamePath);
+		}
+		else {
+			metaStream = zipFile.getInputStream(zipFile.getEntry("meta"));
+			gameStateStream = zipFile.getInputStream(zipFile.getEntry("gamestate"));
+		}
+
+		readMetaData(metaStream);
+		return read(gameStateStream);
+	}
+
+	public boolean readMetaData(InputStream metaDataStream) throws IOException {
+		InputStreamReader reader = new InputStreamReader(metaDataStream, "ISO8859_1");
+		BufferedReader scanner = new BufferedReader(reader);
+
+		String line;
+		while((line = scanner.readLine()) != null) {
+			if (line.startsWith("date=") && modelService.getDate().equals("")) {
+				line = nameExtractor(line, 5, false);
+				modelService.setDate(addZerosToDate(line));
+			}
+			/* Checking if it's empty is not needed as there is only one line with player= */
+			else if (line.startsWith("player=")) {
+				line = nameExtractor(line, 8, true);
+				modelService.setPlayer(line);
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * This is the main reader. It gets a path and reads line by line from it.
 	 * If it find a line with a specific keyword, it passes it on to the other readers in this class.
 	 * When reading a war, battle or wargoal, the Processing is set true and all lines are passed to that specific reader until
 	 * the Processing is set false. War reading ends when the bracketCounter is 0 again.
 	 *
-	 * @param saveGamePath
+	 * @param gameDataStream
 	 * @return ArrayList<War>
 	 * @throws IOException
 	 */
-	public ArrayList<War> read(String saveGamePath) throws IOException {
+	public ArrayList<War> read(InputStream gameDataStream) throws IOException {
 		/* Resetting values for when user loads multiple files during a session 
 		 * Might not be necessary but doing it just in case. */
 //		saveGameData = new Reference();
@@ -85,17 +129,18 @@ public class Parser {
 		WARGOAL_COUNTER = 0;
 		bracketCounter = 0;
 
-		InputStreamReader reader = new InputStreamReader(new FileInputStream(saveGamePath), "ISO8859_1"); // This encoding seems to work for ö
+		InputStreamReader reader = new InputStreamReader(gameDataStream, "ISO8859_1"); // This encoding seems to work for ö
 		BufferedReader scanner = new BufferedReader(reader);
 
 		String originalLine;
 		while ((originalLine = scanner.readLine()) != null) {
 			String line = originalLine.replaceAll("\t", "");
 
-			/* Data about the game: date, player and start_date
-			 * The reading is done in referenceReader*/
-			if (line.startsWith("date=") || line.startsWith("player=") || line.startsWith("start_date=")) {
-				referenceReader(line);
+			/* For some reason the start date is int the actual game state data
+			* But we need it so here we go*/
+			if (line.startsWith("start_date=") && modelService.getStartDate().equals("")) {
+				line = nameExtractor(line, 11, false);
+				modelService.setStartDate(addZerosToDate(line));
 			}
 
 			if(line.startsWith("dynamic_countries=")) {
@@ -429,23 +474,6 @@ public class Parser {
 			/* This means there is no more data to be added */
 			casusBelliProcessing = false;
 
-		}
-	}
-
-	public void referenceReader(String line) {
-		/* Checking the line and if there is no date 
-		 * Same with start_date*/
-		if (line.startsWith("date=") && modelService.getDate().equals("")) {
-			line = nameExtractor(line, 5, false);
-			modelService.setDate(addZerosToDate(line));
-		}
-		/* Checking if it's empty is not needed as there is only one line with player= */
-		else if (line.startsWith("player=")) {
-			line = nameExtractor(line, 8, true);
-			modelService.setPlayer(line);
-		} else if (line.startsWith("start_date=") && modelService.getStartDate().equals("")) {
-			line = nameExtractor(line, 11, false);
-			modelService.setStartDate(addZerosToDate(line));
 		}
 	}
 
