@@ -235,8 +235,9 @@ public class War {
 	}
 
 	public double getLength() {
+		if (endDate.equals("")) return 0.00;
 		LocalDate startDateDate = LocalDate.parse(startDate.replace(".", "-"));
-		LocalDate endDateDate = LocalDate.parse( isActive ? action.replace(".", "-") : endDate.replace(".", "-"));
+		LocalDate endDateDate = LocalDate.parse(endDate.replace(".", "-"));
 		Period interval = Period.between(startDateDate, endDateDate);
 		return Math.round((interval.toTotalMonths() / 12.00 + interval.getDays() / 365.00) * 1000) / 1000.00;
 	}
