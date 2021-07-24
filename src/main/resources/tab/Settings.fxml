@@ -95,6 +95,10 @@
 						<CheckBox fx:id="localisationCheck" mnemonicParsing="false" selected="true"
 								  styleClass="label"
 								  text="Use English localisation (if unselected, country tags will be displayed as names)"
+								  GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+						<CheckBox fx:id="multithreadingCheck" mnemonicParsing="false" selected="false"
+								  styleClass="label"
+								  text="Enable multithreaded parsing. EXPERIMENTAL!"
 								  GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 					</children>
 					<columnConstraints>

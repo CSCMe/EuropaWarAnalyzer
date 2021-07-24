@@ -35,6 +35,9 @@ public class SettingsController extends AbstractController {
 	@FXML
 	private CheckBox localisationCheck;
 
+	@FXML
+	private CheckBox multithreadingCheck;
+
 	private MainController main;
 	private UtilService utilServ;
 
@@ -88,7 +91,8 @@ public class SettingsController extends AbstractController {
 	@FXML
 	void startIssueFired(ActionEvent event) {
 		boolean useLocalisation = localisationCheck.isSelected();
-		main.readSaveGame(saveGameTextField.getText(), useLocalisation);
+		boolean useMultithreading = multithreadingCheck.isSelected();
+		main.readSaveGame(saveGameTextField.getText(), useLocalisation, useMultithreading);
 	}
 
 	@Override

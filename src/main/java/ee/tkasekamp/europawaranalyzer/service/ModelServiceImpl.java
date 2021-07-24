@@ -10,6 +10,8 @@ import ee.tkasekamp.europawaranalyzer.core.Country;
 import ee.tkasekamp.europawaranalyzer.core.JoinedCountry;
 import ee.tkasekamp.europawaranalyzer.core.War;
 import ee.tkasekamp.europawaranalyzer.parser.Parser;
+import ee.tkasekamp.europawaranalyzer.parser.NormalParser;
+import ee.tkasekamp.europawaranalyzer.parser.ThreadedParser;
 import ee.tkasekamp.europawaranalyzer.util.Localisation;
 import javafx.scene.image.Image;
 
@@ -22,19 +24,29 @@ public class ModelServiceImpl implements ModelService {
 	private ArrayList<War> warList;
 
 	private UtilService utilServ;
-	private Parser parser;
+
+	private boolean multithreading = true;
 
 	public ModelServiceImpl(UtilService utilServ) {
 		this.utilServ = utilServ;
-		parser = new Parser(this);
+
 		countryTreeMap = new TreeMap<>();
 	}
 
 	@Override
-	public String createModel(String saveGamePath, boolean useLocalisation) {
-
+	public String createModel(String saveGamePath, boolean useLocalisation, boolean useMultithreading) {
+		Parser parser;
+		if(useMultithreading) {
+			parser = new ThreadedParser(this);
+		}
+		else {
+			parser = new NormalParser(this);
+		}
 		try {
+			long start = System.nanoTime();
 			warList = parser.readSaveFile(saveGamePath);
+			System.out.println(System.nanoTime() - start);
+			System.out.println(warList.size());
 		} catch (IOException e1) {
 			return "Couldn't read save game";
 		}
@@ -44,7 +56,7 @@ public class ModelServiceImpl implements ModelService {
 		/* Localisation */
 		if (useLocalisation) {
 			Localisation.readLocalisation(utilServ.getInstallFolder(), countryTreeMap);
-			parser.getDynamicCountryList().forEach(x -> countryTreeMap.put(x.getTag(), x));
+			parser.getDynamicCountries().forEach(x -> countryTreeMap.put(x.getTag(), x));
 		}
 		try {
 			utilServ.writePathsToFile();

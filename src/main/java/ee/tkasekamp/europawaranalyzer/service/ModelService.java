@@ -15,10 +15,11 @@ public interface ModelService {
 	 *
 	 * @param saveGamePath
 	 * @param useLocalisation
+	 * @param useMultithreading
 	 * @return How the creation was handled
 	 * @throws IOException
 	 */
-	public String createModel(String saveGamePath, boolean useLocalisation);
+	public String createModel(String saveGamePath, boolean useLocalisation, boolean useMultithreading);
 
 	public void setDate(String line);
 
