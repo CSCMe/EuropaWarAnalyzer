@@ -90,17 +90,22 @@ public class ThreadedParser extends Parser {
                 encounteredWars = true;
                 i++;
                 warLists.add(new ArrayList<>());
-            } else if (encounteredWars && originalLine.contains("previous_war")) {
-                i++;
-                warLists.add(new ArrayList<>());
-            } else if (!gotStartDate && originalLine.contains("start_date=")) {
-                modelService.setStartDate(
-                        addZerosToDate(
-                                nameExtractor(
-                                        originalLine.replaceAll("\t", ""), 11, false)));
-                gotStartDate = true;
             }
-
+            if (encounteredWars) {
+                if (originalLine.contains("previous_war") || originalLine.contains("income")) {
+                    i++;
+                    warLists.add(new ArrayList<>());
+                }
+            }
+            else {
+                if (!gotStartDate && originalLine.contains("start_date=")) {
+                    modelService.setStartDate(
+                            addZerosToDate(
+                                    nameExtractor(
+                                            originalLine.replaceAll("\t", ""), 11, false)));
+                    gotStartDate = true;
+                }
+            }
             if (i > 0) {
                 warLists.get(i).add(originalLine);
             }
@@ -108,7 +113,7 @@ public class ThreadedParser extends Parser {
         }
 
         warLists.remove(0);
-
+        warLists.remove(warLists.size()-1);
         ExecutorService es = Executors.newCachedThreadPool();
         for (ArrayList<String> war : warLists) {
             es.execute(new WarParser(war, this));

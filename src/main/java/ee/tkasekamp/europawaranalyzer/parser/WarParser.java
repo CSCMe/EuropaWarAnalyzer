@@ -3,6 +3,7 @@ package ee.tkasekamp.europawaranalyzer.parser;
 import ee.tkasekamp.europawaranalyzer.core.*;
 import ee.tkasekamp.europawaranalyzer.util.Constants;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -32,7 +33,7 @@ public class WarParser implements Runnable{
     }
     @Override
     public void run() {
-        war = new War(lines.get(0).contains("current"));
+        war = new War(lines.get(0).contains("active"));
         for (String actualLine : lines) {
             String line = actualLine.replaceAll("\t", "");
             if (battleProcessing || line.startsWith("battle=")) {
@@ -219,8 +220,7 @@ public class WarParser implements Runnable{
                 battleProcessing = false;
                 BATTLE_COUNTER++;
             }
-        } else if (!(line.equals("attacker=")) && !(line.startsWith("defender=")) && !(line.equals("{"))
-                && !(line.equals("}")) && !(line.equals("battle=")) && !(line.startsWith("war_goal"))) {
+        } else if (Arrays.stream(Constants.LAND_UNITS).anyMatch(line::startsWith) || Arrays.stream(Constants.NAVAL_UNITS).anyMatch(line::startsWith)) {
             /* All units such as "infantry=9000" will come here
              *
              */
@@ -229,10 +229,10 @@ public class WarParser implements Runnable{
                 String[] pieces = line.split("=");
                 int losses = Integer.parseInt(pieces[1]);
                 unitList.add(new Unit(pieces[0], losses));
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                 // Mainly debug if the lines which come here aren't integers
-//				controller.getErrorLabel().setText(controller.getErrorLabel().getText() + "Problem with reading: " + line);
-
+				//controller.getErrorLabel().setText(controller.getErrorLabel().getText() + "Problem with reading: " + line);
+                System.out.println(line);
             }
 
         }

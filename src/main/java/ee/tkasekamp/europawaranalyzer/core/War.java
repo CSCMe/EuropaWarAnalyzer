@@ -3,6 +3,7 @@ package ee.tkasekamp.europawaranalyzer.core;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * War class. All critical info and a list about war events.
@@ -250,4 +251,16 @@ public class War {
 		return result;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		War war = (War) o;
+		return isActive() == war.isActive() && getCasualties() == war.getCasualties() && getResult() == war.getResult();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getCasualties(), isActive(), getResult());
+	}
 }
