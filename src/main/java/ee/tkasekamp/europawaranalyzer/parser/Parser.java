@@ -4,12 +4,15 @@ import ee.tkasekamp.europawaranalyzer.core.Country;
 import ee.tkasekamp.europawaranalyzer.core.War;
 import ee.tkasekamp.europawaranalyzer.service.ModelService;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public abstract class Parser {
-    protected Collection<Country> dynamicCountryList = new ArrayList<Country>();
+    protected Collection<Country> dynamicCountryList = new ArrayList<>();
     protected ModelService modelService;
 
     public Parser(ModelService modelService) {
@@ -17,6 +20,26 @@ public abstract class Parser {
     }
 
     abstract public ArrayList<War> readSaveFile(String saveGamePath) throws IOException;
+
+    public void readMetaData(InputStream metaDataStream) throws IOException {
+        InputStreamReader reader = new InputStreamReader(metaDataStream, "ISO8859_1");
+        BufferedReader scanner = new BufferedReader(reader);
+
+        String line;
+        while((line = scanner.readLine()) != null) {
+            if (line.startsWith("date=") && modelService.getDate().equals("")) {
+                line = nameExtractor(line, 5, false);
+                modelService.setDate(addZerosToDate(line));
+            }
+            /* Checking if it's empty is not needed as there is only one line with player= */
+            else if (line.startsWith("player=")) {
+                line = nameExtractor(line, 8, true);
+                modelService.setPlayer(line);
+                return;
+            }
+        }
+    }
+
 
     public Collection<Country> getDynamicCountries() {
         return dynamicCountryList;
@@ -37,6 +60,16 @@ public abstract class Parser {
             sb.setLength(sb.length() - 1); // Removes last "
         }
         return sb.toString();
+    }
+
+    protected ArrayList<Country> createDynamicCountryList(String line) {
+        ArrayList<Country> list = new ArrayList<>();
+        line = line.replaceAll("\t", "");
+        String[] splitLine = line.split("\\s");
+        for (String countryTag : splitLine) {
+            list.add(new Country(countryTag));
+        }
+        return list;
     }
 
     protected String addZerosToDate(String date) {

@@ -74,7 +74,7 @@
 							  GridPane.rowIndex="0">
 							<children>
 								<Label contentDisplay="RIGHT" prefWidth="73.0"
-									   styleClass="label-dark" text="Version 0.9.6"
+									   styleClass="label-dark" text="Version 1.0.0-pre"
 									   wrapText="true"/>
 							</children>
 						</HBox>
@@ -91,15 +91,15 @@
 						</HBox>
 						<Label styleClass="label-dark" text="Tõnis Kasekamp, 2013-2015; CSCMe, 2020-2021"
 							   GridPane.columnIndex="1"
-							   GridPane.rowIndex="6"/>
+							   GridPane.rowIndex="7"/>
 						<CheckBox fx:id="localisationCheck" mnemonicParsing="false" selected="true"
 								  styleClass="label"
-								  text="Use English localisation (if unselected, country tags will be displayed as names)"
-								  GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+								  text="Use English localisation"
+								  GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 						<CheckBox fx:id="multithreadingCheck" mnemonicParsing="false" selected="false"
 								  styleClass="label"
 								  text="Enable multithreaded parsing. EXPERIMENTAL!"
-								  GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+								  GridPane.columnIndex="1" GridPane.rowIndex="6"/>
 					</children>
 					<columnConstraints>
 						<ColumnConstraints hgrow="SOMETIMES" maxWidth="254.0" minWidth="10.0"

@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import ee.tkasekamp.europawaranalyzer.core.Country;
@@ -19,20 +20,20 @@ public class Localisation {
 	 * Main method of this class. Manages the reading from csv
 	 */
 	public static void readLocalisation(String installPath,
-			TreeMap<String, Country> countryTreeMap) {
+			Map<String, Country> countryMap) {
 
 		try {
 			List<String> loclist = getLocalisationFiles(installPath);
 
 			for (String string : loclist) {
-				readYML(installPath + "/localisation/" + string, countryTreeMap);
+				readYML(installPath + "/localisation/" + string, countryMap);
 			}
 
 		} catch (NullPointerException | IOException e) {}
 
 	}
 
-	private static void readYML(String filename, TreeMap<String, Country> countryTreeMap)
+	private static void readYML(String filename, Map<String, Country> countryMap)
 			throws IOException {
 		/* The same reader as in SaveGameReader */
 		InputStreamReader reader = new InputStreamReader(new FileInputStream(filename),
@@ -45,8 +46,8 @@ public class Localisation {
 			String countryTag = dataArray[0].replace(" ", ""); //Gets the country tag properly
 			if(dataArray.length > 1) { //only do the later parts if the array is long enough
 				String countryName = dataArray[1].replace("\"","");
-				if (countryTreeMap.containsKey(countryTag)) {
-					countryTreeMap.get(countryTag).setOfficialName(countryName);
+				if (countryMap.containsKey(countryTag)) {
+					countryMap.get(countryTag).setOfficialName(countryName);
 				}
 			}
 		}

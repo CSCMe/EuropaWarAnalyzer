@@ -62,47 +62,21 @@ public class NormalParser extends Parser {
 
 	public ArrayList<War> readSaveFile(String saveGamePath) throws IOException {
 
-		ZipFile zipFile = null;
-		try {
-			zipFile = new ZipFile(saveGamePath);
-		}
-		catch (ZipException e) {
-		}
-
+		ZipFile zipFile;
 		InputStream metaStream;
 		InputStream gameStateStream;
-
-		if (zipFile == null) {
-			metaStream = new FileInputStream(saveGamePath);
-			gameStateStream = new FileInputStream(saveGamePath);
-		}
-		else {
+		try {
+			zipFile = new ZipFile(saveGamePath);
 			metaStream = zipFile.getInputStream(zipFile.getEntry("meta"));
 			gameStateStream = zipFile.getInputStream(zipFile.getEntry("gamestate"));
+		}
+		catch (ZipException e) {
+			metaStream = new FileInputStream(saveGamePath);
+			gameStateStream = new FileInputStream(saveGamePath);
 		}
 
 		readMetaData(metaStream);
 		return read(gameStateStream);
-	}
-
-	public boolean readMetaData(InputStream metaDataStream) throws IOException {
-		InputStreamReader reader = new InputStreamReader(metaDataStream, "ISO8859_1");
-		BufferedReader scanner = new BufferedReader(reader);
-
-		String line;
-		while((line = scanner.readLine()) != null) {
-			if (line.startsWith("date=") && modelService.getDate().equals("")) {
-				line = nameExtractor(line, 5, false);
-				modelService.setDate(addZerosToDate(line));
-			}
-			/* Checking if it's empty is not needed as there is only one line with player= */
-			else if (line.startsWith("player=")) {
-				line = nameExtractor(line, 8, true);
-				modelService.setPlayer(line);
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**
@@ -434,8 +408,6 @@ public class NormalParser extends Parser {
 		} else if (line.startsWith("}")) {
 			/* This is always the last line in a war goal 
 			 * Clearing the wargoal list and passing it on to war like in battleReader*/
-//			line = nameExtractor(line, 10, true);
-//			warGoalList.get(WARGOAL_COUNTER).setReceiver(line);
 			WARGOAL_COUNTER++;
 			warGoalProcessing = false;
 
@@ -471,17 +443,6 @@ public class NormalParser extends Parser {
 			casusBelliProcessing = false;
 
 		}
-	}
-
-	public ArrayList<Country> createDynamicCountryList(String line) {
-		ArrayList<Country> list = new ArrayList<>();
-		String[] splitLine = line.split("\\s");
-		for (String countryTag : splitLine) {
-			if (countryTag.contains("K") || countryTag.contains("C")) {
-				list.add(new Country(countryTag));
-			}
-		}
-		return list;
 	}
 
 	/** Used when reading a dynamic country */

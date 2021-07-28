@@ -6,6 +6,7 @@ import ee.tkasekamp.europawaranalyzer.service.ModelService;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -15,65 +16,48 @@ import java.util.zip.ZipFile;
 
 public class ThreadedParser extends Parser {
     private ArrayList<War> warList = new ArrayList<>();
-
+    private InputStream countryStream;
     public ThreadedParser(ModelService modelService) {
         super(modelService);
     }
 
     @Override
     public ArrayList<War> readSaveFile(String saveGamePath) throws IOException {
-        warList = new ArrayList<>();
+
         ZipFile zipFile = null;
+        InputStream gameStateStream;
+        InputStream metaStream;
         try {
             zipFile = new ZipFile(saveGamePath);
-        }
-        catch (ZipException ignored) {
-        }
-
-        InputStream metaStream;
-        InputStream gameStateStream;
-
-        if (zipFile == null) {
-            metaStream = new FileInputStream(saveGamePath);
-            gameStateStream = new FileInputStream(saveGamePath);
-        }
-        else {
             metaStream = zipFile.getInputStream(zipFile.getEntry("meta"));
             gameStateStream = zipFile.getInputStream(zipFile.getEntry("gamestate"));
+            countryStream = zipFile.getInputStream(zipFile.getEntry("gamestate"));
         }
-        new Thread(() -> {
-            try {
-                readMeta(metaStream);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
-        read(gameStateStream);
+        catch (ZipException e) {
+            metaStream = new FileInputStream(saveGamePath);
+            gameStateStream = new FileInputStream(saveGamePath);
+            countryStream = new FileInputStream(saveGamePath);
+        }
+
+        warList = new ArrayList<>();
+
+        InputStream finalMetaStream = metaStream;
+        InputStream finalGameStateStream = gameStateStream;
+        Thread metaThread = new Thread(() -> { try { readMetaData(finalMetaStream); } catch (IOException e) { e.printStackTrace(); } });
+        Thread warThread = new Thread(() -> { try { read(finalGameStateStream); } catch (IOException e) { e.printStackTrace(); } });
+        metaThread.start();
+        warThread.start();
+        try {
+            metaThread.join();
+            warThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         Predicate<War> filter = war->(war == null || war.getOriginalAttacker().equals("") || war.getOriginalDefender().equals(""));
         warList.removeIf(filter);
 
         return warList;
-    }
-
-    public void readMeta(InputStream stream) throws IOException {
-        InputStreamReader reader = new InputStreamReader(stream, "ISO8859_1");
-        BufferedReader scanner = new BufferedReader(reader);
-
-        String line;
-        while((line = scanner.readLine()) != null) {
-            if (line.startsWith("date=") && modelService.getDate().equals("")) {
-                line = nameExtractor(line, 5, false);
-                modelService.setDate(addZerosToDate(line));
-            }
-            /* Checking if it's empty is not needed as there is only one line with player= */
-            else if (line.startsWith("player=")) {
-                line = nameExtractor(line, 8, true);
-                modelService.setPlayer(line);
-                return;
-            }
-        }
-        return;
     }
 
     public void read(InputStream stream) throws IOException {
@@ -82,38 +66,28 @@ public class ThreadedParser extends Parser {
         warLists.add(new ArrayList<>());
         int i = 0;
         String originalLine;
-        boolean encounteredWars = false;
         boolean gotStartDate = false;
         while((originalLine = reader.readLine()) != null) {
-
-            if (originalLine.contains("active_war")) {
-                encounteredWars = true;
-                i++;
-                warLists.add(new ArrayList<>());
-            }
-            if (encounteredWars) {
-                if (originalLine.contains("previous_war") || originalLine.contains("income")) {
-                    i++;
-                    warLists.add(new ArrayList<>());
+            if (gotStartDate) {
+                switch (originalLine) {
+                    case "active_war={":
+                    case "previous_war={":
+                        i++;
+                        warLists.add(new ArrayList<>());
+                    default:
+                        if (i > 0) {
+                            warLists.get(i).add(originalLine);
+                        }
+                        break;
                 }
+            } else if (originalLine.contains("start_date=")) {
+                modelService.setStartDate(addZerosToDate(
+                        nameExtractor(originalLine.replaceAll("\t", ""), 11, false)));
+                gotStartDate = true;
             }
-            else {
-                if (!gotStartDate && originalLine.contains("start_date=")) {
-                    modelService.setStartDate(
-                            addZerosToDate(
-                                    nameExtractor(
-                                            originalLine.replaceAll("\t", ""), 11, false)));
-                    gotStartDate = true;
-                }
-            }
-            if (i > 0) {
-                warLists.get(i).add(originalLine);
-            }
-
         }
 
         warLists.remove(0);
-        warLists.remove(warLists.size()-1);
         ExecutorService es = Executors.newCachedThreadPool();
         for (ArrayList<String> war : warLists) {
             es.execute(new WarParser(war, this));
@@ -124,6 +98,51 @@ public class ThreadedParser extends Parser {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Collection<Country> getDynamicCountries() {
+        BufferedReader reader;
+        ArrayList<Country> countries = new ArrayList<>();
+        try {
+            reader = new BufferedReader(new InputStreamReader(countryStream, "ISO8859_1"));
+
+            String originalLine;
+            boolean encounteredCountries = false;
+            boolean countryProcessing = false;
+            Country dynamicCountry = new Country("---");
+            while((originalLine = reader.readLine()) != null) {
+                if (originalLine.startsWith("\t\t\t")) {
+                    continue;
+                }
+                String line = originalLine.replaceAll("\t", "");
+                if (encounteredCountries) {
+                    if (countryProcessing) {
+                        if (line.startsWith("name=")) {
+                            dynamicCountry.setOfficialName(nameExtractor(line, 6, true));
+                            countryProcessing = false;
+                        }
+                    } else if (originalLine.matches("\t[A-Z][0-9]{2}=\\{")) {
+                        for (Country country : dynamicCountryList) {
+                            if (line.contains(country.getTag())) {
+                                dynamicCountry = country;
+                                countryProcessing = true;
+                            }
+                        }
+                    }
+                } else {
+                    if (line.startsWith("countries={")) {
+                        encounteredCountries = true;
+                    } else if(line.startsWith("dynamic_countries=")) {
+                        dynamicCountryList = dynamicCountryList.isEmpty() ? createDynamicCountryList(reader.readLine()) : dynamicCountryList;
+                    }
+                }
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return dynamicCountryList;
     }
 
     public synchronized void addWar(War war) {

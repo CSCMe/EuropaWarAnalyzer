@@ -2,7 +2,7 @@ package ee.tkasekamp.europawaranalyzer.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.TreeMap;
+import java.util.Map;
 
 import ee.tkasekamp.europawaranalyzer.core.Country;
 import ee.tkasekamp.europawaranalyzer.core.War;
@@ -45,7 +45,7 @@ public interface ModelService {
 
 	public Image getFlag(String tag);
 
-	public TreeMap<String, Country> getCountries();
+	public Map<String, Country> getCountries();
 
 	public ArrayList<War> getWars();
 

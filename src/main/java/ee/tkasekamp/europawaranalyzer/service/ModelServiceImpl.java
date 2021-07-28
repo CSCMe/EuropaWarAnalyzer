@@ -1,11 +1,11 @@
 package ee.tkasekamp.europawaranalyzer.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
+import ee.tkasekamp.europawaranalyzer.controller.MainController;
 import ee.tkasekamp.europawaranalyzer.core.Country;
 import ee.tkasekamp.europawaranalyzer.core.JoinedCountry;
 import ee.tkasekamp.europawaranalyzer.core.War;
@@ -20,17 +20,14 @@ public class ModelServiceImpl implements ModelService {
 	private String date = "";
 	private String player = "";
 	private String startDate = "";
-	private TreeMap<String, Country> countryTreeMap;
+	private ConcurrentSkipListMap<String, Country> countryMap;
 	private ArrayList<War> warList;
 
 	private UtilService utilServ;
 
-	private boolean multithreading = true;
-
 	public ModelServiceImpl(UtilService utilServ) {
 		this.utilServ = utilServ;
-
-		countryTreeMap = new TreeMap<>();
+		countryMap = new ConcurrentSkipListMap<>();
 	}
 
 	@Override
@@ -55,15 +52,22 @@ public class ModelServiceImpl implements ModelService {
 
 		/* Localisation */
 		if (useLocalisation) {
-			Localisation.readLocalisation(utilServ.getInstallFolder(), countryTreeMap);
-			parser.getDynamicCountries().forEach(x -> countryTreeMap.put(x.getTag(), x));
+			Localisation.readLocalisation(utilServ.getInstallFolder(), countryMap);
+			if (useMultithreading) {
+				new Thread(() -> {
+					parser.getDynamicCountries().forEach(x -> countryMap.get(x.getTag()).setOfficialName(x.getOfficialName()));
+					System.out.println("Done");
+				}).start();
+			} else {
+				parser.getDynamicCountries().forEach(x -> countryMap.put(x.getTag(), x));
+			}
 		}
 		try {
 			utilServ.writePathsToFile();
 		} catch (IOException e) {
 			return "Couldn't write to file";
 		}
-		countryTreeMap.forEach((tag, country) -> country.setFlag(utilServ.loadFlag(tag)));
+		countryMap.forEach((tag, country) -> country.setFlag(utilServ.loadFlag(tag)));
 
 		return "Everything is OK";
 	}
@@ -73,13 +77,13 @@ public class ModelServiceImpl implements ModelService {
 		date = "";
 		player = "";
 		startDate = "";
-		countryTreeMap.clear();
+		countryMap.clear();
 	}
 
 	@Override
 	public String getOfficialName(String tag) {
 		try {
-			return countryTreeMap.get(tag).getOfficialName();
+			return countryMap.get(tag).getOfficialName();
 		} catch (NullPointerException e) {
 			return tag;
 		}
@@ -96,7 +100,7 @@ public class ModelServiceImpl implements ModelService {
 				set.add(country.getTag());
 			}
 		}
-		set.forEach(x -> countryTreeMap.put(x, new Country(x)));
+		set.forEach(x -> countryMap.put(x, new Country(x)));
 	}
 
 	@Override
@@ -138,8 +142,8 @@ public class ModelServiceImpl implements ModelService {
 	}
 
 	@Override
-	public TreeMap<String, Country> getCountries() {
-		return countryTreeMap;
+	public Map<String, Country> getCountries() {
+		return countryMap;
 	}
 
 	@Override
@@ -150,7 +154,7 @@ public class ModelServiceImpl implements ModelService {
 
 	@Override
 	public Image getFlag(String tag) {
-		return countryTreeMap.get(tag).getFlag();
+		return countryMap.get(tag).getFlag();
 	}
 
 }

@@ -5,35 +5,25 @@ import ee.tkasekamp.europawaranalyzer.service.ModelService;
 import ee.tkasekamp.europawaranalyzer.service.ModelServiceImpl;
 import ee.tkasekamp.europawaranalyzer.service.UtilServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.TreeSet;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Arrays;
 
 public class ThreadedParserTest {
-    private static ThreadedParser threadedParser;
-    private static NormalParser normalParser;
+    private ThreadedParser threadedParser;
+    private NormalParser normalParser;
     private static final String SAVES_PATH = "src/test/resources/savegames";
-    private static ArrayList<File> testSaves;
+    private ArrayList<File> testSaves;
 
-    @BeforeAll
-    public static void setup() {
+    public void setup() {
         testSaves = new ArrayList<>();
         File dir = new File(SAVES_PATH);
         for (File file : dir.listFiles()) {
             if (file.isDirectory()) {
-                for (File saveFile : file.listFiles()) {
-                    testSaves.add(saveFile);
-                }
+                testSaves.addAll(Arrays.asList(file.listFiles()));
             }
             else {
                 testSaves.add(file);
@@ -46,6 +36,10 @@ public class ThreadedParserTest {
 
     @Test
     public void testAllSaves() {
+        setup();
+        if (testSaves == null) {
+            Assertions.fail("null");
+        }
         for (File file : testSaves) {
             threadedParserTest(file);
         }

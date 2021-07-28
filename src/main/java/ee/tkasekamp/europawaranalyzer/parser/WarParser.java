@@ -3,7 +3,6 @@ package ee.tkasekamp.europawaranalyzer.parser;
 import ee.tkasekamp.europawaranalyzer.core.*;
 import ee.tkasekamp.europawaranalyzer.util.Constants;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -36,7 +35,7 @@ public class WarParser implements Runnable{
         war = new War(lines.get(0).contains("active"));
         for (String actualLine : lines) {
             String line = actualLine.replaceAll("\t", "");
-            if (battleProcessing || line.startsWith("battle=")) {
+             if (battleProcessing || line.startsWith("battle=")) {
                 battleProcessing = true;
                 battleReader(line);
             } else if (warGoalProcessing || line.startsWith("war_goal")) { //War goals are only set for OLD wars (wars before game start)
@@ -47,6 +46,8 @@ public class WarParser implements Runnable{
                 casusBelliProcessing = true;
                 casusBelliReader(line);
 
+            } else if(line.contains("income")) {
+                break;
             } else {
                 warReader(line);
             }
@@ -259,8 +260,6 @@ public class WarParser implements Runnable{
         } else if (line.startsWith("}")) {
             /* This is always the last line in a war goal
              * Clearing the wargoal list and passing it on to war like in battleReader*/
-//			line = nameExtractor(line, 10, true);
-//			warGoalList.get(WARGOAL_COUNTER).setReceiver(line);
             warGoalProcessing = false;
 
         }
