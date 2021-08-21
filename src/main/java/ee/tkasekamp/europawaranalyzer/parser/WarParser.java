@@ -6,12 +6,12 @@ import ee.tkasekamp.europawaranalyzer.util.Constants;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class WarParser implements Runnable{
-    private ArrayList<String> lines;
-    private ThreadedParser parser;
+public class WarParser implements Runnable {
+    private final ArrayList<String> lines;
+    private final ThreadedParser parser;
 
     private String dateBuffer = ""; // Stores the last date for JoinedCountry or Battle dates
-    private ArrayList<JoinedCountry> countryList = new ArrayList<>();  // Stores temporarily to give to war
+    private final ArrayList<JoinedCountry> countryList = new ArrayList<>();  // Stores temporarily to give to war
     private ArrayList<Battle> battleList = new ArrayList<>();  // Stores temporarily to give to war
     private int BATTLE_COUNTER = 0; // Used to change the current battle in battleList
     private WarGoal warGoal = new WarGoal();
@@ -21,7 +21,7 @@ public class WarParser implements Runnable{
 
     private boolean attacker; // True is attacker, false is defender. Changed while reading a battle as the first units are attackers, the rest defenders
     /* Battle details */
-    private ArrayList<Unit> unitList = new ArrayList<>();
+    private final ArrayList<Unit> unitList = new ArrayList<>();
     
     
     private War war;
@@ -139,7 +139,7 @@ public class WarParser implements Runnable{
             line = parser.nameExtractor(line, 7, false);
             war.setAction(parser.addZerosToDate(line));
         } else if (line.startsWith("outcome")) {
-            Result result = Result.UNKNOWN;
+            Result result;
             line = parser.nameExtractor(line, 8, false);
             switch(line) {
                 case "3" : result = Result.LOST; break;

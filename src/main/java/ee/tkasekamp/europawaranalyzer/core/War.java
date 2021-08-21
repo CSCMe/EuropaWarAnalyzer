@@ -256,11 +256,14 @@ public class War {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		War war = (War) o;
-		return isActive() == war.isActive() && getCasualties() == war.getCasualties() && getResult() == war.getResult();
+		return isActive() == war.isActive()
+				&& getCasualties() == war.getCasualties()
+				&& getResult() == war.getResult()
+				&& getStartDate().equals(war.getStartDate());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getCasualties(), isActive(), getResult());
+		return Objects.hash(getCasualties(), isActive(), getResult(), getStartDate());
 	}
 }

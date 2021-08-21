@@ -5,7 +5,9 @@ import ee.tkasekamp.europawaranalyzer.service.ModelService;
 import ee.tkasekamp.europawaranalyzer.service.ModelServiceImpl;
 import ee.tkasekamp.europawaranalyzer.service.UtilServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,12 +15,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ThreadedParserTest {
-    private ThreadedParser threadedParser;
-    private NormalParser normalParser;
+    private static ThreadedParser threadedParser;
+    private static NormalParser normalParser;
     private static final String SAVES_PATH = "src/test/resources/savegames";
-    private ArrayList<File> testSaves;
+    private static ArrayList<File> testSaves;
 
-    public void setup() {
+    @BeforeAll
+    static void setup() {
         testSaves = new ArrayList<>();
         File dir = new File(SAVES_PATH);
         for (File file : dir.listFiles()) {
@@ -34,19 +37,9 @@ public class ThreadedParserTest {
         threadedParser = new ThreadedParser(model);
     }
 
-    @Test
-    public void testAllSaves() {
-        setup();
-        if (testSaves == null) {
-            Assertions.fail("null");
-        }
-        for (File file : testSaves) {
-            threadedParserTest(file);
-        }
-    }
-
-    @Test
-    private void threadedParserTest(File file) {
+    @ParameterizedTest
+    @MethodSource("getSaves")
+    public void threadedParserTest(File file) {
         ArrayList<War> normalList = new ArrayList<>();
         ArrayList<War> threadedList = new ArrayList<>();
         ArrayList<War> anomalies = new ArrayList<>();
@@ -72,5 +65,9 @@ public class ThreadedParserTest {
                 }
             }
         Assertions.assertTrue(normalList.containsAll(threadedList) && threadedList.containsAll(normalList), normalList.size() + "," + threadedList.size() + " anoms: " + anomalies.size());
+        System.out.println(normalList.size());
+    }
+    private static ArrayList<File> getSaves() {
+        return testSaves;
     }
 }

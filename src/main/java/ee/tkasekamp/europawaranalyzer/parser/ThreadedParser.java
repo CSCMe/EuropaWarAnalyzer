@@ -6,7 +6,6 @@ import ee.tkasekamp.europawaranalyzer.service.ModelService;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +15,6 @@ import java.util.zip.ZipFile;
 
 public class ThreadedParser extends Parser {
     private ArrayList<War> warList = new ArrayList<>();
-    private InputStream countryStream;
     public ThreadedParser(ModelService modelService) {
         super(modelService);
     }
@@ -27,6 +25,7 @@ public class ThreadedParser extends Parser {
         ZipFile zipFile = null;
         InputStream gameStateStream;
         InputStream metaStream;
+        InputStream countryStream;
         try {
             zipFile = new ZipFile(saveGamePath);
             metaStream = zipFile.getInputStream(zipFile.getEntry("meta"));
@@ -43,13 +42,33 @@ public class ThreadedParser extends Parser {
 
         InputStream finalMetaStream = metaStream;
         InputStream finalGameStateStream = gameStateStream;
-        Thread metaThread = new Thread(() -> { try { readMetaData(finalMetaStream); } catch (IOException e) { e.printStackTrace(); } });
-        Thread warThread = new Thread(() -> { try { read(finalGameStateStream); } catch (IOException e) { e.printStackTrace(); } });
-        metaThread.start();
-        warThread.start();
+        InputStream finalCountryStream = countryStream;
+        ExecutorService service = Executors.newCachedThreadPool();
+        service.execute(() -> {
+            try {
+                readMetaData(finalMetaStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        service.execute(() -> {
+            try {
+                read(finalGameStateStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        service.execute(() -> {
+            try {
+                readDynamicCountries(finalCountryStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
         try {
-            metaThread.join();
-            warThread.join();
+            service.shutdown();
+            service.awaitTermination(5, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -65,28 +84,30 @@ public class ThreadedParser extends Parser {
         ArrayList<ArrayList<String>> warLists = new ArrayList<>();
         warLists.add(new ArrayList<>());
         int i = 0;
-        String originalLine;
-        boolean gotStartDate = false;
-        while((originalLine = reader.readLine()) != null) {
-            if (gotStartDate) {
-                switch (originalLine) {
-                    case "active_war={":
-                    case "previous_war={":
-                        i++;
-                        warLists.add(new ArrayList<>());
-                    default:
-                        if (i > 0) {
-                            warLists.get(i).add(originalLine);
-                        }
-                        break;
-                }
-            } else if (originalLine.contains("start_date=")) {
+        String originalLine = "";
+        while ((originalLine = reader.readLine()) != null) {
+            if (originalLine.contains("start_date=")) {
                 modelService.setStartDate(addZerosToDate(
                         nameExtractor(originalLine.replaceAll("\t", ""), 11, false)));
-                gotStartDate = true;
+            } else if (originalLine.equals("active_war={")) {
+                break;
             }
         }
+        do {
+            switch (originalLine) {
+                case "active_war={":
+                case "previous_war={":
+                    i++;
+                    warLists.add(new ArrayList<>());
+                default:
+                    if (i > 0) {
+                        warLists.get(i).add(originalLine);
+                    }
+                    break;
+            }
+        } while((originalLine = reader.readLine()) != null);
 
+        reader.close();
         warLists.remove(0);
         ExecutorService es = Executors.newCachedThreadPool();
         for (ArrayList<String> war : warLists) {
@@ -100,49 +121,42 @@ public class ThreadedParser extends Parser {
         }
     }
 
-    @Override
-    public Collection<Country> getDynamicCountries() {
+    public void readDynamicCountries(InputStream stream) throws IOException{
         BufferedReader reader;
-        ArrayList<Country> countries = new ArrayList<>();
-        try {
-            reader = new BufferedReader(new InputStreamReader(countryStream, "ISO8859_1"));
+        reader = new BufferedReader(new InputStreamReader(stream, "ISO8859_1"));
+        String originalLine;
+        boolean countryProcessing = false;
+        Country dynamicCountry = new Country("---");
 
-            String originalLine;
-            boolean encounteredCountries = false;
-            boolean countryProcessing = false;
-            Country dynamicCountry = new Country("---");
-            while((originalLine = reader.readLine()) != null) {
-                if (originalLine.startsWith("\t\t\t")) {
-                    continue;
-                }
-                String line = originalLine.replaceAll("\t", "");
-                if (encounteredCountries) {
-                    if (countryProcessing) {
-                        if (line.startsWith("name=")) {
-                            dynamicCountry.setOfficialName(nameExtractor(line, 6, true));
-                            countryProcessing = false;
-                        }
-                    } else if (originalLine.matches("\t[A-Z][0-9]{2}=\\{")) {
-                        for (Country country : dynamicCountryList) {
-                            if (line.contains(country.getTag())) {
-                                dynamicCountry = country;
-                                countryProcessing = true;
-                            }
-                        }
-                    }
-                } else {
-                    if (line.startsWith("countries={")) {
-                        encounteredCountries = true;
-                    } else if(line.startsWith("dynamic_countries=")) {
-                        dynamicCountryList = dynamicCountryList.isEmpty() ? createDynamicCountryList(reader.readLine()) : dynamicCountryList;
-                    }
-                }
+        while((originalLine = reader.readLine()) != null) {
+            if (originalLine.startsWith("dynamic_countries=")) {
+                dynamicCountryList = dynamicCountryList.isEmpty() ? createDynamicCountryList(reader.readLine()) : dynamicCountryList;
 
+            } else if (originalLine.startsWith("countries={")) {
+                break;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return dynamicCountryList;
+
+        while((originalLine = reader.readLine()) != null) {
+            if (originalLine.startsWith("\t\t\t")) {
+                continue;
+            }
+            String line = originalLine.replaceAll("\t", "");
+            if (countryProcessing) {
+                if (line.startsWith("name=")) {
+                    dynamicCountry.setOfficialName(nameExtractor(line, 6, true));
+                    countryProcessing = false;
+                }
+            } else if (originalLine.matches("\t[A-Z][0-9]{2}=\\{")) {
+                for (Country country : dynamicCountryList) {
+                    if (line.contains(country.getTag())) {
+                        dynamicCountry = country;
+                        countryProcessing = true;
+                    }
+                }
+            }
+        }
+        reader.close();
     }
 
     public synchronized void addWar(War war) {

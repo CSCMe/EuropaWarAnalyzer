@@ -154,7 +154,7 @@ public class NormalParser extends Parser {
 				if (bracketCounter == 0) {
 					dynamicCountryListProcessing = false;
 				}
-				dynamicCountryList = dynamicCountryList.isEmpty() ? createDynamicCountryList(originalLine) : dynamicCountryList;
+				dynamicCountryList = dynamicCountryList.isEmpty() ? createDynamicCountryList(scanner.readLine()) : dynamicCountryList;
 			}
 
 			/* Checking if the line needs to be passed on to other readers */

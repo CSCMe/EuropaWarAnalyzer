@@ -13,6 +13,7 @@ import ee.tkasekamp.europawaranalyzer.parser.Parser;
 import ee.tkasekamp.europawaranalyzer.parser.NormalParser;
 import ee.tkasekamp.europawaranalyzer.parser.ThreadedParser;
 import ee.tkasekamp.europawaranalyzer.util.Localisation;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 
 public class ModelServiceImpl implements ModelService {
@@ -24,7 +25,6 @@ public class ModelServiceImpl implements ModelService {
 	private ArrayList<War> warList;
 
 	private UtilService utilServ;
-
 	public ModelServiceImpl(UtilService utilServ) {
 		this.utilServ = utilServ;
 		countryMap = new ConcurrentSkipListMap<>();
@@ -39,11 +39,9 @@ public class ModelServiceImpl implements ModelService {
 		else {
 			parser = new NormalParser(this);
 		}
+		long start = System.nanoTime();
 		try {
-			long start = System.nanoTime();
 			warList = parser.readSaveFile(saveGamePath);
-			System.out.println(System.nanoTime() - start);
-			System.out.println(warList.size());
 		} catch (IOException e1) {
 			return "Couldn't read save game";
 		}
@@ -53,14 +51,10 @@ public class ModelServiceImpl implements ModelService {
 		/* Localisation */
 		if (useLocalisation) {
 			Localisation.readLocalisation(utilServ.getInstallFolder(), countryMap);
-			if (useMultithreading) {
-				new Thread(() -> {
-					parser.getDynamicCountries().forEach(x -> countryMap.get(x.getTag()).setOfficialName(x.getOfficialName()));
-					System.out.println("Done");
-				}).start();
-			} else {
-				parser.getDynamicCountries().forEach(x -> countryMap.put(x.getTag(), x));
-			}
+			parser.getDynamicCountries().forEach(x -> {
+				Country country = countryMap.getOrDefault(x.getTag(), new Country("---"));
+				country.setOfficialName(x.getOfficialName());
+			});
 		}
 		try {
 			utilServ.writePathsToFile();
@@ -68,8 +62,7 @@ public class ModelServiceImpl implements ModelService {
 			return "Couldn't write to file";
 		}
 		countryMap.forEach((tag, country) -> country.setFlag(utilServ.loadFlag(tag)));
-
-		return "Everything is OK";
+		return "Analyzed " + warList.size() + " wars in ~" + ((System.nanoTime() - start)/1000000000.00) + "s";
 	}
 
 	@Override
