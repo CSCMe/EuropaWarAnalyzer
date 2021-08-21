@@ -35,10 +35,10 @@ public abstract class Parser {
             else if (line.startsWith("player=")) {
                 line = nameExtractor(line, 8, true);
                 modelService.setPlayer(line);
+                reader.close();
                 return;
             }
         }
-        reader.close();
     }
 
 

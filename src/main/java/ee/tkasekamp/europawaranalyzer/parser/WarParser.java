@@ -109,18 +109,6 @@ public class WarParser implements Runnable {
                     }
                 }
             }
-        } else if (line.startsWith("attacker=")) {
-            /* Checking if it's empty so only the first one is the attacker */
-            if (war.getAttacker().equals("")) {
-                line = parser.nameExtractor(line, 10, true);
-                war.setAttacker(line);
-            }
-        } else if (line.startsWith("defender=")) {
-            /* Checking if it's empty so only the first one is the defender */
-            if (war.getDefender().equals("")) {
-                line = parser.nameExtractor(line, 10, true);
-                war.setDefender(line);
-            }
         } else if (line.startsWith("original_attacker=")) {
             line = parser.nameExtractor(line, 19, true);
             /* Checking required for some older wars */

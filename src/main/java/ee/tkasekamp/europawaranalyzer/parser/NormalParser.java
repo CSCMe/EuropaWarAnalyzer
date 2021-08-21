@@ -256,18 +256,6 @@ public class NormalParser extends Parser {
 					}
 				}
 			}
-		} else if (line.startsWith("attacker=")) {
-			/* Checking if it's empty so only the first one is the attacker */
-			if (warList.get(WAR_COUNTER).getAttacker().equals("")) {
-				line = nameExtractor(line, 10, true);
-				warList.get(WAR_COUNTER).setAttacker(line);
-			}
-		} else if (line.startsWith("defender=")) {
-			/* Checking if it's empty so only the first one is the defender */
-			if (warList.get(WAR_COUNTER).getDefender().equals("")) {
-				line = nameExtractor(line, 10, true);
-				warList.get(WAR_COUNTER).setDefender(line);
-			}
 		} else if (line.startsWith("original_attacker=")) {
 			line = nameExtractor(line, 19, true);
 			/* Checking required for some older wars */
