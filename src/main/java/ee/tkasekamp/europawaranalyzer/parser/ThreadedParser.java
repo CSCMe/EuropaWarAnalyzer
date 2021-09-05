@@ -154,6 +154,8 @@ public class ThreadedParser extends Parser {
                         countryProcessing = true;
                     }
                 }
+            } else if (originalLine.matches("active_advisors=\\{")) {
+                break;
             }
         }
         reader.close();

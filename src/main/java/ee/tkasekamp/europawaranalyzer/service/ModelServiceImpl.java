@@ -24,10 +24,11 @@ public class ModelServiceImpl implements ModelService {
 	private ConcurrentSkipListMap<String, Country> countryMap;
 	private ArrayList<War> warList;
 
-	private UtilService utilServ;
+	private final UtilService utilServ;
 	public ModelServiceImpl(UtilService utilServ) {
 		this.utilServ = utilServ;
 		countryMap = new ConcurrentSkipListMap<>();
+		warList = new ArrayList<>();
 	}
 
 	@Override
@@ -71,6 +72,7 @@ public class ModelServiceImpl implements ModelService {
 		player = "";
 		startDate = "";
 		countryMap.clear();
+		warList.clear();
 	}
 
 	@Override
