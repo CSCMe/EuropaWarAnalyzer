@@ -2,6 +2,8 @@ package ee.tkasekamp.europawaranalyzer.core;
 
 import javafx.scene.image.Image;
 
+import java.util.Objects;
+
 /**
  * Holds the flag and a longer name than just three letters.
  * There will only be one instance of this class for each country as opposed to <code>JoinedCountry</code>,
@@ -48,4 +50,16 @@ public class Country {
 		this.flag = flag;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Country country = (Country) o;
+		return Objects.equals(getTag(), country.getTag()) && Objects.equals(getOfficialName(), country.getOfficialName());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getTag(), getOfficialName());
+	}
 }

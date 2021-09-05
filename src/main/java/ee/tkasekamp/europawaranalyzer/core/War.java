@@ -259,11 +259,16 @@ public class War {
 		return isActive() == war.isActive()
 				&& getCasualties() == war.getCasualties()
 				&& getResult() == war.getResult()
-				&& getStartDate().equals(war.getStartDate());
+				&& getStartDate().equals(war.getStartDate())
+				&& getAttacker().equals(war.getAttacker())
+				&& getDefender().equals(war.getDefender())
+				&& getName().equals(war.getName())
+				&& getCasus_belli().equals(war.getCasus_belli())
+				&& getLength() ==  war.getLength();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getCasualties(), isActive(), getResult(), getStartDate());
+		return Objects.hash(getCasualties(), isActive(), getResult(), getStartDate(), getAttacker(), getDefender(), getName(), getCasus_belli(), getLength());
 	}
 }
