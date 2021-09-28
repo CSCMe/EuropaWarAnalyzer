@@ -5,7 +5,7 @@ Based on the Victoria II war analyzer:
 * [Github](https://github.com/TKasekamp/VickyWarAnalyzer/)
 ## Download links
 
-* Current version download: [v0.9.6](https://github.com/CSCMe/EuropaWarAnalyzer/releases/tag/v0.9.6)
+* Current version download: [v1.0.0](https://github.com/CSCMe/EuropaWarAnalyzer/releases/tag/v1.0.0)
 * You can find the releases in the releases tab or the dist folder. 
 
 ## What is it
@@ -35,13 +35,21 @@ Wargoals tab:
 
 
 ## Bugs and limitations
+###Limitations
 * The analyzer will produce many errors when it can't find the flag or the name for a country. Just ignore it.
 
 * When the player country has fought no wars then it's name will be a TAG even if localisation is used.
 
 * The analyzer will only show country names and flags for vanilla countries that have participated in at least 1 war.
 
-* Colonial Nations that don't exist anymore won't have a localised name
+* Colonial Nations that got annexed won't have a localised name
+
+* The Personal Union casus belli is a bit funky (that's just how the game works)
+
+###Bugs
+
+* Please report any bugs you find
+
 ## Tools
 * Java 8
 * JavaFX
@@ -57,19 +65,16 @@ If you really want to build your own version of this then go right ahead. I'm go
 4. Use `mvn eclipse:eclipse` to generate the project files for Eclipse. You might also need the m2e Eclipse plugin.
 
 ### Code 
-The UI design was made by TKasekamp for the VickyWarAnalyzer and with Java 7 it looked fine. With Java 8 it doesn't. Thanks, Oracle. 
-Due to this, some words will be hidden and some tables will have empty columns.
+The UI was designed to work with Java 7, but apparently migrating to Java 8 made some parts look weird.
+Due to this, some words will be hidden, and some tables will have empty columns.
 
-TKasekamp: "The internal architecture is horrible and should be rebuilt from the ground up. Also, most comments are now outdated."
-
-I tried to clean some stuff up, but probably only made it worse :D
+TKasekamp 
 
 ## About
-This project was TKasekamp first big Java project. 
+[Vicky War Analyzer](https://github.com/TKasekamp/VickyWarAnalyzer) was Tkasekamp first big Java project.
 He started working on it in April 2013 and released it in the Paradox forums where ~ 1500 people downloaded it!
-In April 2015 he finally got around to making it work with Java 8. He replaced the mostly static variables with object-oriented programming.
+In April 2015 he made it work with Java 8.
 
-The save game is read in by a hand-made parser. It works.
+I adapted it to work with EU4 saves, but most of his work remains unchanged.
 
-Thanks to his work I was able to adapt the Analyzer for EU4.
-He did a lot of the work, and a lot of the code remains unchanged.
+The save game is read in by a hand-made parser. It works  ¯\_(ツ)_/¯
