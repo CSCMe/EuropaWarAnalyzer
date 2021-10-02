@@ -57,7 +57,7 @@ public class SettingsController extends AbstractController {
 		DirectoryChooser chooser = new DirectoryChooser();
 		chooser.setTitle("EU IV directory");
 		/* Only if there is a path is it given to the chooser */
-		if (utilServ.getInstallFolder() == null || utilServ.getInstallFolder().equals("")) {
+		if (!(utilServ.getInstallFolder() == null || utilServ.getInstallFolder().equals(""))) {
 			chooser.setInitialDirectory(new File(utilServ.getInstallFolder()));
 		}
 		// Throws error when user cancels selection
@@ -76,7 +76,7 @@ public class SettingsController extends AbstractController {
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Save games", "*.eu4");
 		fileChooser.getExtensionFilters().add(extFilter);
 		/* Only if there is a path is it given to the filechooser */
-		if (utilServ.getSaveGameFolder() != null || utilServ.getSaveGameFolder().equals("")) {
+		if (!(utilServ.getSaveGameFolder() == null || utilServ.getSaveGameFolder().equals(""))) {
 			fileChooser.setInitialDirectory(new File(utilServ.getSaveGameFolder()));
 		}
 
