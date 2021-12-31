@@ -103,32 +103,20 @@ public class NormalParser extends Parser {
 		InputStreamReader reader = new InputStreamReader(gameDataStream, "ISO8859_1"); // This encoding seems to work for ö
 		BufferedReader scanner = new BufferedReader(reader);
 		String originalLine;
-		while ((originalLine = scanner.readLine()) != null) {
+
+		// Reads start date, (dynamic) countries, skips until wars are reached.
+		while (((originalLine) = scanner.readLine()) != null) {
 			String line = originalLine.replaceAll("\t", "");
 
 			/* For some reason the start date is int the actual game state data
-			* But we need it so here we go*/
+			 * But we need it so here we go*/
 			if (line.startsWith("start_date=") && modelService.getStartDate().equals("")) {
 				line = nameExtractor(line, 11, false);
 				modelService.setStartDate(addZerosToDate(line));
-			}
-
-			if(line.startsWith("dynamic_countries=")) {
+			} else if(line.startsWith("dynamic_countries=")) {
 				dynamicCountryListProcessing = true;
-			}
-
-			if (line.startsWith("countries=")) {
+			} else if (line.startsWith("countries=")) {
 				countryProcessing = true;
-			}
-
-			if (line.startsWith("previous_war={") || line.startsWith("active_war={")) {
-				warProcessing = true;
-		    	/* Further  check if war is active */
-				if (line.startsWith("previous_war=")) {
-					warList.add(new War(false));
-				} else {
-					warList.add(new War(true));
-				}
 			}
 
 			if (countryProcessing) {
@@ -147,14 +135,30 @@ public class NormalParser extends Parser {
 						dynamicCountryReader(line, currentDynamicCountry);
 					}
 				}
-			}
-
-			if (dynamicCountryListProcessing) {
+			} else if (dynamicCountryListProcessing) {
 				bracketCounterChange(line);
 				if (bracketCounter == 0) {
 					dynamicCountryListProcessing = false;
 				}
 				dynamicCountryList = dynamicCountryList.isEmpty() ? createDynamicCountryList(scanner.readLine()) : dynamicCountryList;
+			}
+
+			if (line.startsWith("previous_war={") || line.startsWith("active_war={")) {
+				break;
+			}
+		}
+		assert originalLine != null;
+		do {
+			String line = originalLine.replaceAll("\t", "");
+
+			if (line.startsWith("previous_war={") || line.startsWith("active_war={")) {
+				warProcessing = true;
+		    	/* Further  check if war is active */
+				if (line.startsWith("previous_war=")) {
+					warList.add(new War(false));
+				} else {
+					warList.add(new War(true));
+				}
 			}
 
 			/* Checking if the line needs to be passed on to other readers */
@@ -204,7 +208,7 @@ public class NormalParser extends Parser {
 
 				}
 			}
-		}
+		} while (((originalLine) = scanner.readLine()) != null);
 		scanner.close();
 
 		/* This part makes sure broken wars don't get processed */
