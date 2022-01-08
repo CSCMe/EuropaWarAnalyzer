@@ -39,6 +39,8 @@ public abstract class Parser {
                 return;
             }
         }
+        reader.close();
+        scanner.close();
     }
 
 

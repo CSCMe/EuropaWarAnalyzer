@@ -210,6 +210,7 @@ public class NormalParser extends Parser {
 			}
 		} while (((originalLine) = scanner.readLine()) != null);
 		scanner.close();
+		reader.close();
 
 		/* This part makes sure broken wars don't get processed */
 		Predicate<War> filter = war->(war == null || war.getOriginalAttacker().equals("") || war.getOriginalDefender().equals(""));

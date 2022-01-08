@@ -60,7 +60,7 @@ public class ModelServiceImpl implements ModelService {
 		try {
 			utilServ.writePathsToFile();
 		} catch (IOException e) {
-			return "Couldn't write to file";
+			return "Couldn't write paths to file";
 		}
 		countryMap.forEach((tag, country) -> country.setFlag(utilServ.loadFlag(tag)));
 		return "Analyzed " + warList.size() + " wars in ~" + ((System.nanoTime() - start)/1000000000.00) + "s";

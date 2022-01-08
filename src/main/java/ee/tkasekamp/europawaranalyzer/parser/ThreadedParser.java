@@ -86,7 +86,7 @@ public class ThreadedParser extends Parser {
         int i = 0;
         String originalLine = "";
         while ((originalLine = reader.readLine()) != null) {
-            if (originalLine.contains("start_date=")) {
+            if (originalLine.contains("start_date=") && modelService.getStartDate().equals("")) {
                 modelService.setStartDate(addZerosToDate(
                         nameExtractor(originalLine.replaceAll("\t", ""), 11, false)));
             } else if (originalLine.equals("active_war={")) {
