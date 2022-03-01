@@ -89,7 +89,7 @@
 								<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" fx:id="x1"/>
 							</padding>
 						</HBox>
-						<Label styleClass="label-dark" text="Tõnis Kasekamp, 2013-2015; CSCMe, 2020-2021"
+						<Label styleClass="label-dark" text="Tõnis Kasekamp, 2013-2015; CSCMe, 2020-2022"
 							   GridPane.columnIndex="1"
 							   GridPane.rowIndex="7"/>
 						<CheckBox fx:id="localisationCheck" mnemonicParsing="false" selected="true"
