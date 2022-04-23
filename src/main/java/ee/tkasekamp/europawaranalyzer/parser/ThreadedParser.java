@@ -89,7 +89,7 @@ public class ThreadedParser extends Parser {
             if (originalLine.contains("start_date=") && modelService.getStartDate().equals("")) {
                 modelService.setStartDate(addZerosToDate(
                         nameExtractor(originalLine.replaceAll("\t", ""), 11, false)));
-            } else if (originalLine.equals("active_war={")) {
+            } else if (originalLine.equals("active_war={") || originalLine.equals("previous_war={")) {
                 break;
             }
         }

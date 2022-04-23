@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ThreadedParserTest {
@@ -48,10 +49,11 @@ public class ThreadedParserTest {
         threadedList = new ArrayList<>(servicePair.getValue().getWars());
 
         if (normalList.isEmpty() || threadedList.isEmpty()) {
-            Assertions.fail();
+            assertEquals(normalList.size(), threadedList.size());
+            System.out.print("No wars detected: ");
         }
         assertTrue(normalList.containsAll(threadedList) && threadedList.containsAll(normalList), normalList.size() + "," + threadedList.size());
-        System.out.println("wars: " + normalList.size());
+        System.out.println("wars: " + normalList.size() + ":" + threadedList.size());
     }
 
     @ParameterizedTest
@@ -59,14 +61,18 @@ public class ThreadedParserTest {
     public void testDynamicCountries(Pair<ModelService, ModelService> servicePair) {
         Map<String, Country> normalCountries = servicePair.getKey().getCountries();
         Map<String, Country> threadedCountries = servicePair.getValue().getCountries();
+
         if (normalCountries.isEmpty() || threadedCountries.isEmpty()) {
-            Assertions.fail();
+            assertEquals(normalCountries.size(), threadedCountries.size());
+            System.out.print("No dynamic countries detected: ");
         }
-        assertTrue(normalCountries.keySet().containsAll(threadedCountries.keySet())
-                && threadedCountries.keySet().containsAll(normalCountries.keySet()));
-        assertTrue(normalCountries.values().containsAll(threadedCountries.values())
-                && threadedCountries.values().containsAll(normalCountries.values()));
-        System.out.println("countries: " + normalCountries.size());
+        assertEquals(normalCountries.size(), threadedCountries.size());
+        assertEquals(normalCountries, threadedCountries);
+        //assertTrue(normalCountries.keySet().containsAll(threadedCountries.keySet())
+       //         && threadedCountries.keySet().containsAll(normalCountries.keySet()));
+       // assertTrue(normalCountries.values().containsAll(threadedCountries.values())
+        //        && threadedCountries.values().containsAll(normalCountries.values()));
+        System.out.println("countries: " + normalCountries.size() + ":" + threadedCountries.size());
     }
 
     private static ArrayList<File> getSaves() {
