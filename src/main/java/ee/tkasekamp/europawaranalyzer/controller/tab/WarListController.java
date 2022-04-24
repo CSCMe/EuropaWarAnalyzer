@@ -204,7 +204,6 @@ public class WarListController extends AbstractController {
 	private void populateCountryList() {
 		modelServ.getCountries()
 				.forEach((tag, x) -> selectCountryIssue.getItems().add(new CountryLabel(x)));
-
 	}
 
 	private void searchCountryList() {

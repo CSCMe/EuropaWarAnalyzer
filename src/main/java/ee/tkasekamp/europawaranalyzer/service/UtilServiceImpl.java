@@ -10,6 +10,7 @@ public class UtilServiceImpl implements UtilService {
 	// Have to be static so they can be saved at the end
 	private String saveGameFolder = "";
 	private String installFolder = "";
+	private String modFolder = "";
 
 	@Override
 	public void guessFolders() throws IOException {
@@ -36,6 +37,9 @@ public class UtilServiceImpl implements UtilService {
 	}
 
 	@Override
+	public String getModFolder() { return modFolder; }
+
+	@Override
 	public void reset() {
 
 	}
@@ -51,10 +55,10 @@ public class UtilServiceImpl implements UtilService {
 	}
 
 	@Override
-	public void setFolderPaths(String saveFolder, String installFolder) {
+	public void setFolderPaths(String saveFolder, String installFolder, String modFolder) {
 		this.installFolder = installFolder.replace("\\", "/");
 		this.saveGameFolder = FolderHandler.getDirectoryOnly(saveFolder.replace("\\", "/"));
-
+		this.modFolder = modFolder.replace("\\", "/");
 	}
 
 	@Override

@@ -18,11 +18,13 @@ public interface UtilService {
 
 	public String getInstallFolder();
 
+	public String getModFolder();
+
 	public void setSaveGameFolder(String pathToFolder);
 
 	public void setInstallFolder(String pathToFolder);
 
-	public void setFolderPaths(String saveFolder, String installFolder);
+	public void setFolderPaths(String saveFolder, String installFolder, String modFolder);
 
 	public void reset();
 

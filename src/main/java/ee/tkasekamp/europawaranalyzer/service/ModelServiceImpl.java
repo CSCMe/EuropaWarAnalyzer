@@ -56,6 +56,7 @@ public class ModelServiceImpl implements ModelService {
 				Country country = countryMap.getOrDefault(x.getTag(), new Country("---"));
 				country.setOfficialName(x.getOfficialName());
 			});
+			Localisation.readLocalisation(utilServ.getModFolder(), countryMap);
 		}
 		try {
 			utilServ.writePathsToFile();

@@ -23,10 +23,10 @@ public class Localisation {
 			Map<String, Country> countryMap) {
 
 		try {
-			List<String> loclist = getLocalisationFiles(installPath);
+			List<String> loclist = getAllLocalisationFiles(installPath);
 
 			for (String string : loclist) {
-				readYML(installPath + "/localisation/" + string, countryMap);
+				readYML(string, countryMap);
 			}
 
 		} catch (NullPointerException | IOException e) {}
@@ -42,7 +42,7 @@ public class Localisation {
 
 		String line;
 		while ((line = scanner.readLine()) != null) {
-			String[] dataArray = line.split(":[01] "); // Splitting the line
+			String[] dataArray = line.split(":[0-9] "); // Splitting the line
 			String countryTag = dataArray[0].replace(" ", ""); //Gets the country tag properly
 			if(dataArray.length > 1) { //only do the later parts if the array is long enough
 				String countryName = dataArray[1].replace("\"","");
@@ -85,6 +85,24 @@ public class Localisation {
 	private static List<String> getLocalisationFiles(String path) throws NullPointerException {
 		List<String> locList = new ArrayList<>();
 
+		File folder = new File(path);
+		File[] listOfFiles = folder.listFiles();
+		String file;
+
+		for (File listOfFile : listOfFiles) {
+			if (listOfFile.isFile()) {
+				file = listOfFile.getName(); //only gets the english names
+				if ((file.endsWith(ENGLISH_LANGUAGE + ".yml") || file.endsWith(ENGLISH_LANGUAGE + ".YML"))) {
+					locList.add(listOfFile.getAbsolutePath());
+				}
+			}
+		}
+
+		return locList;
+
+	}
+	private static List<String> getAllLocalisationFiles(String path) throws NullPointerException {
+		List<String> locList = new ArrayList<>();
 		File folder = new File(path + "/localisation");
 		File[] listOfFiles = folder.listFiles();
 		String file;
@@ -93,12 +111,13 @@ public class Localisation {
 			if (listOfFile.isFile()) {
 				file = listOfFile.getName(); //only gets the english names
 				if ((file.endsWith(ENGLISH_LANGUAGE + ".yml") || file.endsWith(ENGLISH_LANGUAGE + ".YML"))) {
-					locList.add(file);
+					locList.add(listOfFile.getAbsolutePath());
 				}
+			} else if (listOfFile.isDirectory()) {
+				locList.addAll(getLocalisationFiles(listOfFile.getAbsolutePath()));
+
 			}
 		}
-
 		return locList;
-
 	}
 }

@@ -18,7 +18,13 @@ public class SettingsController extends AbstractController {
 	private TextField installTextField;
 
 	@FXML
+	private TextField modTextField;
+
+	@FXML
 	private Button directoryIssue;
+
+	@FXML
+	private Button modIssue;
 
 	@FXML
 	private TextField saveGameTextField;
@@ -69,6 +75,22 @@ public class SettingsController extends AbstractController {
 	}
 
 	@FXML
+	void modIssueFired(ActionEvent event) {
+		DirectoryChooser chooser = new DirectoryChooser();
+		chooser.setTitle("Mod directory");
+		/* Only if there is a path is it given to the chooser */
+		if (!(utilServ.getModFolder() == null || utilServ.getModFolder().equals(""))) {
+			chooser.setInitialDirectory(new File(utilServ.getModFolder()));
+		}
+		// Throws error when user cancels selection
+		try {
+			File file = chooser.showDialog(null);
+			modTextField.setText(file.getPath());
+		} catch (NullPointerException e) {
+		}
+	}
+
+	@FXML
 	void saveGameIssueFired(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("EU IV save game");
@@ -102,7 +124,7 @@ public class SettingsController extends AbstractController {
 	}
 
 	public void setFolderPaths() {
-		utilServ.setFolderPaths(saveGameTextField.getText(), installTextField.getText());
+		utilServ.setFolderPaths(saveGameTextField.getText(), installTextField.getText(), modTextField.getText());
 	}
 
 	public void populate() {
