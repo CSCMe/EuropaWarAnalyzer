@@ -23,16 +23,18 @@ public class ModelServiceImpl implements ModelService {
 	private String startDate = "";
 	private ConcurrentSkipListMap<String, Country> countryMap;
 	private ArrayList<War> warList;
+	private ArrayList<String> modList;
 
 	private final UtilService utilServ;
 	public ModelServiceImpl(UtilService utilServ) {
 		this.utilServ = utilServ;
 		countryMap = new ConcurrentSkipListMap<>();
 		warList = new ArrayList<>();
+		modList = new ArrayList<>();
 	}
 
 	@Override
-	public String createModel(String saveGamePath, boolean useLocalisation, boolean useMultithreading) {
+	public String createModel(String saveGamePath, boolean useLocalisation, boolean useModLocalisation, boolean useMultithreading) {
 		Parser parser;
 		if(useMultithreading) {
 			parser = new ThreadedParser(this);
@@ -48,15 +50,16 @@ public class ModelServiceImpl implements ModelService {
 		}
 		/* Generating a list of countries from warList */
 		createUniqueCountryList();
-
 		/* Localisation */
 		if (useLocalisation) {
 			Localisation.readLocalisation(utilServ.getInstallFolder(), countryMap);
+			if (useModLocalisation) {
+				Localisation.readModLocalisation(utilServ.getModFolder(), utilServ.getSteamModFolder(), modList, countryMap);
+			}
 			parser.getDynamicCountries().forEach(x -> {
 				Country country = countryMap.getOrDefault(x.getTag(), new Country("---"));
 				country.setOfficialName(x.getOfficialName());
 			});
-			Localisation.readLocalisation(utilServ.getModFolder(), countryMap);
 		}
 		try {
 			utilServ.writePathsToFile();
@@ -147,6 +150,9 @@ public class ModelServiceImpl implements ModelService {
 		return warList;
 	}
 
+	public void setModList(ArrayList<String> modList) {
+		this.modList = modList;
+	}
 
 	@Override
 	public Image getFlag(String tag) {

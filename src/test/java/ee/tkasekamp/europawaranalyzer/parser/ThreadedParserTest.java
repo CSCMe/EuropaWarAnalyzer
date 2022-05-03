@@ -84,8 +84,8 @@ public class ThreadedParserTest {
         for (File file : testSaves) {
             ModelService normalModel = new ModelServiceImpl(new UtilServiceImpl());
             ModelService threadedModel = new ModelServiceImpl(new UtilServiceImpl());
-            normalModel.createModel(file.getAbsolutePath(), true, false);
-            threadedModel.createModel(file.getAbsolutePath(), true, true);
+            normalModel.createModel(file.getAbsolutePath(), false, false,false);
+            threadedModel.createModel(file.getAbsolutePath(), false, false,true);
             models.add(new Pair<>(normalModel, threadedModel));
         }
         return models;

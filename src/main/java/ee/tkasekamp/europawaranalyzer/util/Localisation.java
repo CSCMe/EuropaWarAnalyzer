@@ -23,7 +23,7 @@ public class Localisation {
 			Map<String, Country> countryMap) {
 
 		try {
-			List<String> loclist = getAllLocalisationFiles(installPath);
+			List<String> loclist = getLocalisationFiles(installPath + "/localisation");
 
 			for (String string : loclist) {
 				readYML(string, countryMap);
@@ -31,6 +31,24 @@ public class Localisation {
 
 		} catch (NullPointerException | IOException e) {}
 
+	}
+
+	public static void readModLocalisation(String modsPath, String steamModsPath, ArrayList<String> mods, Map<String, Country> countryMap) {
+		for (int i = 0; i < mods.size(); i++) {
+			mods.set(i, mods.get(i).replace("mod", "").replace(".", ""));
+		}
+
+		for (String mod : mods) {
+			String modLocPath = modsPath + mod;
+			readLocalisation(modLocPath, countryMap);
+		}
+
+		if (!steamModsPath.isEmpty()) {
+			for (String mod : mods) {
+				String modLocPath = modsPath + mod.replace("ugc_", "");
+				readLocalisation(modLocPath, countryMap);
+			}
+		}
 	}
 
 	private static void readYML(String filename, Map<String, Country> countryMap)
@@ -84,26 +102,7 @@ public class Localisation {
 
 	private static List<String> getLocalisationFiles(String path) throws NullPointerException {
 		List<String> locList = new ArrayList<>();
-
 		File folder = new File(path);
-		File[] listOfFiles = folder.listFiles();
-		String file;
-
-		for (File listOfFile : listOfFiles) {
-			if (listOfFile.isFile()) {
-				file = listOfFile.getName(); //only gets the english names
-				if ((file.endsWith(ENGLISH_LANGUAGE + ".yml") || file.endsWith(ENGLISH_LANGUAGE + ".YML"))) {
-					locList.add(listOfFile.getAbsolutePath());
-				}
-			}
-		}
-
-		return locList;
-
-	}
-	private static List<String> getAllLocalisationFiles(String path) throws NullPointerException {
-		List<String> locList = new ArrayList<>();
-		File folder = new File(path + "/localisation");
 		File[] listOfFiles = folder.listFiles();
 		String file;
 

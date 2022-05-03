@@ -3,6 +3,7 @@ package ee.tkasekamp.europawaranalyzer.service;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public interface UtilService {
 	/**
@@ -19,6 +20,8 @@ public interface UtilService {
 	public String getInstallFolder();
 
 	public String getModFolder();
+
+	public String getSteamModFolder();
 
 	public void setSaveGameFolder(String pathToFolder);
 

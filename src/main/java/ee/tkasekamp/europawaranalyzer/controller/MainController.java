@@ -57,10 +57,10 @@ public class MainController {
 		settingsController.setErrorText(text);
 	}
 
-	public void readSaveGame(String saveGamePath, boolean useLocalisation, boolean useMultithreading) {
+	public void readSaveGame(String saveGamePath, boolean useLocalisation, boolean useModLocalisation,boolean useMultithreading) {
 		reset();
 		settingsController.setFolderPaths();
-		String text = modelServ.createModel(saveGamePath, useLocalisation, useMultithreading);
+		String text = modelServ.createModel(saveGamePath, useLocalisation, useModLocalisation, useMultithreading);
 		setErrorText(text);
 		warListController.populate();
 	}

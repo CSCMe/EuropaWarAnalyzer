@@ -36,11 +36,25 @@ public class SettingsController extends AbstractController {
 	private Button startIssue;
 
 	@FXML
+	private Label modLabel;
+
+	@FXML
+	private Label modDescription;
+
+	@FXML
+	private Label directoryLabel;
+
+	@FXML
+	private Label directoryDescription;
+
+	@FXML
 	private Label errorLabel;
 
 	@FXML
 	private CheckBox localisationCheck;
 
+	@FXML
+	private CheckBox modLocalisationCheck;
 	@FXML
 	private CheckBox multithreadingCheck;
 
@@ -111,10 +125,38 @@ public class SettingsController extends AbstractController {
 	}
 
 	@FXML
+	void localisationCheckIssueFired(ActionEvent event) {
+		boolean selected = localisationCheck.isSelected();
+		installTextField.setVisible(selected);
+		directoryLabel.setVisible(selected);
+		directoryIssue.setVisible(selected);
+		directoryDescription.setVisible(selected);
+
+		modLocalisationCheck.setVisible(selected);
+		if (!selected) {
+			modLocalisationCheck.setSelected(false);
+			modTextField.setVisible(false);
+			modLabel.setVisible(false);
+			modDescription.setVisible(false);
+			modIssue.setVisible(false);
+		}
+	}
+
+	@FXML
+	void modLocalisationCheckIssueFired(ActionEvent event) {
+		boolean selected = modLocalisationCheck.isSelected();
+		modTextField.setVisible(selected);
+		modLabel.setVisible(selected);
+		modDescription.setVisible(selected);
+		modIssue.setVisible(selected);
+	}
+
+	@FXML
 	void startIssueFired(ActionEvent event) {
 		boolean useLocalisation = localisationCheck.isSelected();
 		boolean useMultithreading = multithreadingCheck.isSelected();
-		main.readSaveGame(saveGameTextField.getText(), useLocalisation, useMultithreading);
+		boolean useModLocalisation = modLocalisationCheck.isSelected();
+		main.readSaveGame(saveGameTextField.getText(), useLocalisation, useModLocalisation,useMultithreading);
 	}
 
 	@Override
@@ -130,6 +172,6 @@ public class SettingsController extends AbstractController {
 	public void populate() {
 		installTextField.setText(utilServ.getInstallFolder());
 		saveGameTextField.setText(utilServ.getSaveGameFolder());
-
+		modTextField.setText(utilServ.getModFolder());
 	}
 }

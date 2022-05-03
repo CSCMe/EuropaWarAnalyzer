@@ -19,7 +19,7 @@ public interface ModelService {
 	 * @return How the creation was handled
 	 * @throws IOException
 	 */
-	public String createModel(String saveGamePath, boolean useLocalisation, boolean useMultithreading);
+	public String createModel(String saveGamePath, boolean useLocalisation, boolean useModLocalisation,boolean useMultithreading);
 
 	public void setDate(String line);
 
@@ -49,5 +49,5 @@ public interface ModelService {
 
 	public ArrayList<War> getWars();
 
-
+	public void setModList(ArrayList<String> modList);
 }

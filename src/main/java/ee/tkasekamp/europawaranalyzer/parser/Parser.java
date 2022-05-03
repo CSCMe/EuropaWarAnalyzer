@@ -24,9 +24,17 @@ public abstract class Parser {
     public void readMetaData(InputStream metaDataStream) throws IOException {
         InputStreamReader reader = new InputStreamReader(metaDataStream, "ISO8859_1");
         BufferedReader scanner = new BufferedReader(reader);
-
         String line;
+
+        ArrayList<String> modPaths = new ArrayList<>();
+        boolean parsingMods = false;
         while((line = scanner.readLine()) != null) {
+            if (parsingMods || line.startsWith("mods_enabled_names={")) {
+                parsingMods = true;
+                if (line.replace("\t", "").startsWith("filename")) {
+                    modPaths.add(line.substring(line.indexOf("\"") + 1, line.lastIndexOf("\"")));
+                }
+            }
             if (line.startsWith("date=") && modelService.getDate().equals("")) {
                 line = nameExtractor(line, 5, false);
                 modelService.setDate(addZerosToDate(line));
@@ -36,6 +44,11 @@ public abstract class Parser {
                 line = nameExtractor(line, 8, true);
                 modelService.setPlayer(line);
                 reader.close();
+            }
+            else if (line.startsWith("multi_player")) {
+                modelService.setModList(modPaths);
+                reader.close();
+                scanner.close();
                 return;
             }
         }

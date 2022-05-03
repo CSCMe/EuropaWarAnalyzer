@@ -4,6 +4,7 @@ import ee.tkasekamp.europawaranalyzer.util.FolderHandler;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class UtilServiceImpl implements UtilService {
 	public static final String FLAGPATH = "/flags/";
@@ -17,12 +18,12 @@ public class UtilServiceImpl implements UtilService {
 		String[] folders = FolderHandler.getFolders();
 		saveGameFolder = folders[0];
 		installFolder = folders[1];
-
+		modFolder = folders[2];
 	}
 
 	@Override
 	public void writePathsToFile() throws IOException {
-		FolderHandler.savePaths(saveGameFolder, installFolder);
+		FolderHandler.savePaths(new String[]{saveGameFolder, installFolder, modFolder});
 
 	}
 
@@ -36,8 +37,16 @@ public class UtilServiceImpl implements UtilService {
 		return installFolder;
 	}
 
-	@Override
 	public String getModFolder() { return modFolder; }
+
+	@Override
+	public String getSteamModFolder() {
+		if (getInstallFolder().contains("steamapps/common")) {
+			return getSaveGameFolder().replace("common/Europa Universalis IV", "workshop/content/236850");
+		} else {
+			return "";
+		}
+	}
 
 	@Override
 	public void reset() {

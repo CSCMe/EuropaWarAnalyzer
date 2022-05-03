@@ -2,6 +2,7 @@ package ee.tkasekamp.europawaranalyzer.util;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class FolderHandler {
 	public static final String PROGRAM_FILES_X86 = "C:/Program Files (x86)";
@@ -20,12 +21,13 @@ public class FolderHandler {
 	 * @throws IOException
 	 */
 	public static String[] getFolders() throws IOException {
-		String[] paths = new String[2];
+		String[] paths = new String[3];
 		if ((new File(PATHS)).exists()) {
 			paths = readPaths();
 		} else {
 			paths[0] = checkSaveGameFolder();
 			paths[1] = checkInstallFolder();
+			paths[2] = checkModFolder();
 		}
 		return paths;
 	}
@@ -69,6 +71,16 @@ public class FolderHandler {
 		}
 	}
 
+	private static String checkModFolder() {
+		String user = System.getProperty("user.name");
+		String modFolder = "C:/Users/" + user
+				+ "/Documents/Paradox Interactive/Europa Universalis IV/mod/";
+		if (new File(modFolder).exists())
+			return modFolder;
+		else
+			return "";
+	}
+
 	/**
 	 * Takes the path of the full path of the savegame and return the directory
 	 * it was in
@@ -89,13 +101,14 @@ public class FolderHandler {
 	 *
 	 * @throws IOException
 	 */
-	public static void savePaths(String saveGameFolder, String installFolder) throws IOException {
+	public static void savePaths(String[] paths) throws IOException {
 		try {
 			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream("paths.txt"), StandardCharsets.UTF_8));
-			out.write(saveGameFolder);
-			out.write("\n");
-			out.write(installFolder);
+			for (String path: paths) {
+				out.write(path);
+				out.write("\n");
+			}
 			out.close();
 		} catch (IOException e) {
 			throw new IOException("Could not save the paths.txt.");
@@ -111,8 +124,7 @@ public class FolderHandler {
 	 * @throws IOException
 	 */
 	private static String[] readPaths() throws IOException {
-		String[] paths = new String[2];
-
+		String[] paths = new String[3];
 		InputStreamReader reader = new InputStreamReader(new FileInputStream(
 				PATHS), StandardCharsets.UTF_8);
 		BufferedReader scanner = new BufferedReader(reader);
@@ -120,11 +132,10 @@ public class FolderHandler {
 		String line;
 		int counter = 0;
 		while ((line = scanner.readLine()) != null) {
-			if (counter == 0 | counter == 1)
+			if (!line.isEmpty()) {
 				paths[counter] = line;
-
-			counter++;
-
+				counter++;
+			}
 		}
 		scanner.close();
 
