@@ -136,20 +136,13 @@ public class SettingsController extends AbstractController {
 		modLocalisationCheck.setVisible(selected);
 		if (!selected) {
 			modLocalisationCheck.setSelected(false);
-			modTextField.setVisible(false);
-			modLabel.setVisible(false);
-			modDescription.setVisible(false);
-			modIssue.setVisible(false);
+			setModVisibility(false);
 		}
 	}
 
 	@FXML
 	void modLocalisationCheckIssueFired(ActionEvent event) {
-		boolean selected = modLocalisationCheck.isSelected();
-		modTextField.setVisible(selected);
-		modLabel.setVisible(selected);
-		modDescription.setVisible(selected);
-		modIssue.setVisible(selected);
+		setModVisibility(modLocalisationCheck.isSelected());
 	}
 
 	@FXML
@@ -184,5 +177,13 @@ public class SettingsController extends AbstractController {
 		installTextField.setText(utilServ.getInstallFolder());
 		saveGameTextField.setText(utilServ.getSaveGameFolder());
 		modTextField.setText(utilServ.getModFolder());
+		setModVisibility(modLocalisationCheck.isSelected());
+	}
+
+	private void setModVisibility(boolean selected) {
+		modTextField.setVisible(selected);
+		modLabel.setVisible(selected);
+		modDescription.setVisible(selected);
+		modIssue.setVisible(selected);
 	}
 }
