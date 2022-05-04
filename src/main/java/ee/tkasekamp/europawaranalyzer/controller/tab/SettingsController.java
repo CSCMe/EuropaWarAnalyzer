@@ -2,18 +2,19 @@ package ee.tkasekamp.europawaranalyzer.controller.tab;
 
 import ee.tkasekamp.europawaranalyzer.controller.MainController;
 import ee.tkasekamp.europawaranalyzer.service.UtilService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
 
 public class SettingsController extends AbstractController {
+	@FXML
+	private ProgressIndicator progressIndicator;
+
 	@FXML
 	private TextField installTextField;
 
@@ -159,10 +160,20 @@ public class SettingsController extends AbstractController {
 		main.readSaveGame(saveGameTextField.getText(), useLocalisation, useModLocalisation,useMultithreading);
 	}
 
+	public void showAnalyzingProgress() {
+		errorLabel.setText("Analyzing...");
+		progressIndicator.setVisible(true);
+	}
+
+	public void stoppedAnalyzing(String message) {
+		errorLabel.setText(message);
+		progressIndicator.setVisible(false);
+	}
+
 	@Override
 	public void reset() {
 		errorLabel.setText("");
-
+		progressIndicator.setVisible(false);
 	}
 
 	public void setFolderPaths() {

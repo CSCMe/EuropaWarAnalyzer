@@ -7,10 +7,13 @@ import ee.tkasekamp.europawaranalyzer.service.ModelService;
 import ee.tkasekamp.europawaranalyzer.service.ModelServiceImpl;
 import ee.tkasekamp.europawaranalyzer.service.UtilService;
 import ee.tkasekamp.europawaranalyzer.service.UtilServiceImpl;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public class MainController {
 	@FXML
@@ -42,7 +45,7 @@ public class MainController {
 		try {
 			utilServ.guessFolders();
 		} catch (IOException e) {
-			setErrorText(e.getMessage());
+			settingsController.setErrorText(e.getMessage());
 		}
 
 		battleController.init(this, modelServ, battleTab);
@@ -53,16 +56,29 @@ public class MainController {
 
 	}
 
-	public void setErrorText(String text) {
-		settingsController.setErrorText(text);
-	}
 
 	public void readSaveGame(String saveGamePath, boolean useLocalisation, boolean useModLocalisation,boolean useMultithreading) {
 		reset();
 		settingsController.setFolderPaths();
-		String text = modelServ.createModel(saveGamePath, useLocalisation, useModLocalisation, useMultithreading);
-		setErrorText(text);
-		warListController.populate();
+		Task<String> analyze = new Task<String>() {
+			@Override
+			protected String call() {
+				return modelServ.createModel(saveGamePath, useLocalisation, useModLocalisation, useMultithreading);
+			}
+		};
+
+		analyze.setOnScheduled(event -> settingsController.showAnalyzingProgress());
+		analyze.setOnSucceeded(event -> {
+			warListController.populate();
+			try {
+				settingsController.stoppedAnalyzing(analyze.get());
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+		});
+		Thread analyzer = new Thread(analyze);
+		analyzer.setDaemon(true);
+		analyzer.start();
 	}
 
 	public void populateWarTab(War war) {

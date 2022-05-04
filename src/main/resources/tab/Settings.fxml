@@ -48,7 +48,7 @@
 						</HBox>
 						<Label fx:id="errorLabel" prefHeight="108.0" prefWidth="527.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 						<Label alignment="CENTER" contentDisplay="CENTER" prefWidth="505.0" styleClass="label-header" text="EU IV war analyzer" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-						<Label ellipsisString="" prefHeight="81.0" prefWidth="527.0" text="The save game reader has been tested to work with the base version and Extended Timeline. This tool works as long as the save game structure remains the same. Any flags added by mods are not used. " textAlignment="JUSTIFY" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+						<Label ellipsisString="" prefHeight="148.0" prefWidth="508.0" text="The save game reader has been tested to work with the base version, Extended Timeline, and the Ck3toEU4 converter. &#10;It will work as long as the save game structure remains the same. &#10;Any flags added by mods are not used. " textAlignment="JUSTIFY" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 						<HBox id="HBox" alignment="CENTER" spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="0">
 							<children>
 								<Label contentDisplay="RIGHT" prefWidth="73.0" styleClass="label-dark" text="Version 1.0.0-pre" wrapText="true" />
@@ -56,17 +56,25 @@
 						</HBox>
 						<HBox id="HBox" alignment="CENTER" spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
 							<children>
-								<Label fx:id="directoryDescription" styleClass="label-dark" text="Install location - used for localisation." textAlignment="CENTER" wrapText="true" />
+								<Label fx:id="directoryDescription" styleClass="label-dark" text="Install location - used for localisation" textAlignment="CENTER" wrapText="true" />
 							</children>
 							<padding>
 								<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" fx:id="x1" />
 							</padding>
 						</HBox>
-						<Label styleClass="label-dark" text="Tõnis Kasekamp, 2013-2015; CSCMe, 2020-2022" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+						<Label styleClass="label-dark" text="Tõnis Kasekamp, 2013-2015; CSCMe, 2020-2022" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 						<CheckBox fx:id="localisationCheck" mnemonicParsing="false" onAction="#localisationCheckIssueFired" selected="true" styleClass="label" text="Use English localisation" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
-						<CheckBox fx:id="multithreadingCheck" mnemonicParsing="false" selected="false" styleClass="label" text="Enable multithreaded parsing. EXPERIMENTAL!" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+						<CheckBox fx:id="multithreadingCheck" mnemonicParsing="false" selected="false" styleClass="label" text="Enable multithreaded parsing" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
                   <TextField id="modtextField" fx:id="modTextField" prefWidth="352.0" text="document mod dir" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <HBox id="HBox" alignment="CENTER" spacing="5.0" GridPane.rowIndex="5" />
+                  <HBox id="HBox" alignment="CENTER" spacing="5.0" GridPane.rowIndex="5">
+                     <children>
+                        <HBox prefHeight="54.0" prefWidth="175.0" />
+                        <ProgressIndicator fx:id="progressIndicator" maxHeight="35.0" maxWidth="35.0" prefHeight="35.0" prefWidth="35.0" visible="false">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </ProgressIndicator>
+                     </children></HBox>
                   <HBox id="HBox" alignment="CENTER" spacing="5.0" GridPane.rowIndex="6" />
                   <HBox id="HBox" alignment="CENTER" spacing="5.0" GridPane.rowIndex="3">
                      <children>
@@ -79,7 +87,7 @@
                      </children>
                   </HBox>
 								<Button fx:id="startIssue" mnemonicParsing="false" onAction="#startIssueFired" prefHeight="36.0" prefWidth="156.0" text="Read file" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-                  <Label fx:id="modDescription" styleClass="label-dark" text="Mod folder location - used for localisation" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <Label fx:id="modDescription" styleClass="label-dark" text="Mod folder location - usually in Documents" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                   <Label fx:id="saveGameDescription" styleClass="label-dark" text="Select save game - required" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                   <CheckBox fx:id="modLocalisationCheck" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#modLocalisationCheckIssueFired" selected="true" styleClass="label" text="Use Modded localisation" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
 					</children>
