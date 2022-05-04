@@ -5,7 +5,7 @@ Based on the Victoria II war analyzer:
 * [Github](https://github.com/TKasekamp/VickyWarAnalyzer/)
 ## Download links
 
-* Current version download: [v1.0.0](https://github.com/CSCMe/EuropaWarAnalyzer/releases/tag/v1.0.0)
+* Current version download: [v1.0.0a](https://github.com/CSCMe/EuropaWarAnalyzer/releases/tag/v1.0.0a)
 * You can find the releases in the releases tab or the dist folder. 
 
 ## What is it

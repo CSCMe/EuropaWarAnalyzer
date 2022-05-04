@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ee.tkasekamp</groupId>
 	<artifactId>europawaranalyzer</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.0a</version>
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

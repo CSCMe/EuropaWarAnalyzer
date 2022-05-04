@@ -124,7 +124,7 @@ public class FolderHandler {
 	 * @throws IOException
 	 */
 	private static String[] readPaths() throws IOException {
-		String[] paths = new String[3];
+		String[] paths = new String[]{"","",""};
 		InputStreamReader reader = new InputStreamReader(new FileInputStream(
 				PATHS), StandardCharsets.UTF_8);
 		BufferedReader scanner = new BufferedReader(reader);
