@@ -50,10 +50,13 @@ public class ModelServiceImpl implements ModelService {
 		}
 		/* Generating a list of countries from warList */
 		createUniqueCountryList();
+		double analyzeTime = (System.nanoTime() - start)/1000000000.00;
+		start = System.nanoTime();
 		/* Localisation */
 		if (useLocalisation) {
 			Localisation.readLocalisation(utilServ.getInstallFolder(), countryMap);
 			if (useModLocalisation) {
+				String modFolder = utilServ.getSteamModFolder();
 				Localisation.readModLocalisation(utilServ.getModFolder(), utilServ.getSteamModFolder(), modList, countryMap);
 			}
 			parser.getDynamicCountries().forEach(x -> {
@@ -61,13 +64,23 @@ public class ModelServiceImpl implements ModelService {
 				country.setOfficialName(x.getOfficialName());
 			});
 		}
+		double localisationTime = (System.nanoTime() - start)/1000000000.00;
+		start = System.nanoTime();
 		try {
-			utilServ.writePathsToFile();
+			if (useMultithreading) {
+				utilServ.writePathsToFile();
+			}
 		} catch (IOException e) {
 			return "Couldn't write paths to file";
 		}
+
 		countryMap.forEach((tag, country) -> country.setFlag(utilServ.loadFlag(tag)));
-		return "Analyzed " + warList.size() + " wars in ~" + ((System.nanoTime() - start)/1000000000.00) + "s";
+		/* User Feedback */
+		String returnString = "Analyzed " + warList.size() + " wars in ~" + analyzeTime + "s\n";
+		if (useLocalisation) {
+			returnString += "Localisation loaded in ~" + localisationTime + "s\t";
+		}
+		return returnString;
 	}
 
 	@Override
@@ -77,6 +90,7 @@ public class ModelServiceImpl implements ModelService {
 		startDate = "";
 		countryMap.clear();
 		warList.clear();
+		modList.clear();
 	}
 
 	@Override

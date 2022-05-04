@@ -6,18 +6,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import ee.tkasekamp.europawaranalyzer.core.Country;
 
 public class Localisation {
 
-	private static String ENGLISH_LANGUAGE = "english";
+	private final static String ENGLISH_LANGUAGE_LOC = "_l_english.yml";
+
 	/**
-	 * Main method of this class. Manages the reading from csv
+	 * Main method of this class.
+	 * Manages reading from game .yml files
 	 */
 	public static void readLocalisation(String installPath,
 			Map<String, Country> countryMap) {
@@ -33,6 +32,15 @@ public class Localisation {
 
 	}
 
+	/**
+	 * Manages reading localisation from mods
+	 * Checks the mod directory for mods and reads their localisation
+	 * Checks the Steam directory if EUIV is installed via steam
+	 * @param modsPath Path to the documents mod dir
+	 * @param steamModsPath Path the the steam mod dir
+	 * @param mods List of Strings with the format: "mod/[MODNAME].mod"
+	 * @param countryMap CountryMap
+	 */
 	public static void readModLocalisation(String modsPath, String steamModsPath, ArrayList<String> mods, Map<String, Country> countryMap) {
 		for (int i = 0; i < mods.size(); i++) {
 			mods.set(i, mods.get(i).replace("mod", "").replace(".", ""));
@@ -45,7 +53,7 @@ public class Localisation {
 
 		if (!steamModsPath.isEmpty()) {
 			for (String mod : mods) {
-				String modLocPath = modsPath + mod.replace("ugc_", "");
+				String modLocPath = steamModsPath + mod.replace("ugc_", "");
 				readLocalisation(modLocPath, countryMap);
 			}
 		}
@@ -62,7 +70,7 @@ public class Localisation {
 		while ((line = scanner.readLine()) != null) {
 			String[] dataArray = line.split(":[0-9] "); // Splitting the line
 			String countryTag = dataArray[0].replace(" ", ""); //Gets the country tag properly
-			if(dataArray.length > 1) { //only do the later parts if the array is long enough
+			if(countryTag.length() == 3 && dataArray.length > 1) { //only do the later parts if the array is long enough
 				String countryName = dataArray[1].replace("\"","");
 				if (countryMap.containsKey(countryTag)) {
 					countryMap.get(countryTag).setOfficialName(countryName);
@@ -109,7 +117,7 @@ public class Localisation {
 		for (File listOfFile : listOfFiles) {
 			if (listOfFile.isFile()) {
 				file = listOfFile.getName(); //only gets the english names
-				if ((file.endsWith(ENGLISH_LANGUAGE + ".yml") || file.endsWith(ENGLISH_LANGUAGE + ".YML"))) {
+				if ((file.toLowerCase().endsWith(ENGLISH_LANGUAGE_LOC))) {
 					locList.add(listOfFile.getAbsolutePath());
 				}
 			} else if (listOfFile.isDirectory()) {

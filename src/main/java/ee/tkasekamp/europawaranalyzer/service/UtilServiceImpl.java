@@ -42,7 +42,7 @@ public class UtilServiceImpl implements UtilService {
 	@Override
 	public String getSteamModFolder() {
 		if (getInstallFolder().contains("steamapps/common")) {
-			return getSaveGameFolder().replace("common/Europa Universalis IV", "workshop/content/236850");
+			return getInstallFolder().replace("common/Europa Universalis IV", "workshop/content/236850");
 		} else {
 			return "";
 		}
