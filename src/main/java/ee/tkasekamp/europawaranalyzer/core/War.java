@@ -44,6 +44,13 @@ public class War {
 		}
 	}
 
+	public void warProcessing() {
+		setCasusBelliAndStartDate();
+		if (!isActive) {
+			endDate = action;
+		}
+	}
+
 	/**
 	 * Calculate the losses for a country in this war.
 	 * Iterates through every battle and returns a sum of the total man and ship losses.

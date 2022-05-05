@@ -1,7 +1,5 @@
 package ee.tkasekamp.europawaranalyzer.core;
 
-import ee.tkasekamp.europawaranalyzer.util.Constants;
-
 import java.util.Arrays;
 
 public class Battle {
@@ -77,16 +75,21 @@ public class Battle {
 		}
 	}
 
-	public int attackerUnitSize() {
+	public void battleProcessing() {
+		determineBattleType();
+		totalLosses = attackerLosses + defenderLosses;
+	}
+
+	public long attackerUnitSize() {
 		return getUnitSize(attackerUnits);
 	}
 
-	public int defenderUnitSize() {
+	public long defenderUnitSize() {
 		return getUnitSize(defenderUnits);
 	}
 
-	public static int getUnitSize(Unit[] units) {
-		int size = 0;
+	public static long getUnitSize(Unit[] units) {
+		long size = 0;
 		for (Unit unit : units) {
 			size += unit.getNumber();
 		}

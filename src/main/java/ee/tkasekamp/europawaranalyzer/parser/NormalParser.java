@@ -363,7 +363,7 @@ public class NormalParser extends Parser {
 			try {
 				String[] pieces = line.split("=");
 				int losses = Integer.parseInt(pieces[1]);
-				unitList.add(Unit.createUnit(pieces[0], losses));
+				unitList.add(new Unit(pieces[0], losses));
 			} catch (NumberFormatException e) {
 				// Mainly debug if the lines which come here aren't integers
 //				controller.getErrorLabel().setText(controller.getErrorLabel().getText() + "Problem with reading: " + line);
