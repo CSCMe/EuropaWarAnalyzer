@@ -87,7 +87,7 @@ public class BattleCountryBox {
 
 	private void setColumnValues() {
 		/* Attacker side */
-		colUnitType.setCellValueFactory(new PropertyValueFactory<>("type"));
+		colUnitType.setCellValueFactory(new PropertyValueFactory<>("name"));
 		colUnitNumber.setCellValueFactory(new PropertyValueFactory<>("number"));
 
 	}

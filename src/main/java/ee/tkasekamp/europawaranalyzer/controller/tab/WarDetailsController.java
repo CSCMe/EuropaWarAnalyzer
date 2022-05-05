@@ -4,7 +4,7 @@ import ee.tkasekamp.europawaranalyzer.controller.MainController;
 import ee.tkasekamp.europawaranalyzer.controller.box.WarCountryBox;
 import ee.tkasekamp.europawaranalyzer.core.Battle;
 import ee.tkasekamp.europawaranalyzer.core.Result;
-import ee.tkasekamp.europawaranalyzer.core.Battle.Type;
+import ee.tkasekamp.europawaranalyzer.core.Type;
 import ee.tkasekamp.europawaranalyzer.core.War;
 import ee.tkasekamp.europawaranalyzer.service.ModelService;
 import javafx.collections.FXCollections;

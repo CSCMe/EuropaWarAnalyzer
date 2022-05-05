@@ -49,12 +49,6 @@ public class Battle {
 		attackerLosses = 0;
 	}
 
-	/**
-	 * Battle TYPE. Land or naval.
-	 */
-	public enum Type {
-		LAND, NAVAL
-	}
 
 	@Override
 	public String toString() {
@@ -70,23 +64,17 @@ public class Battle {
 	}
 
 	/**
-	 * Checks if any of the units are ships. If they are, sets the battleType to true.
+	 * Checks if any of the units are ships. If they are, sets the battleType to Naval.
 	 */
-	public void determineType() {
+	public void determineBattleType() {
 		/* Some battles have no attacker units. Catching these strange battles */
-		String unit;
-		try {
-			if (!(attackerUnits.length == 0) || !(defenderUnits.length == 0)) {
-				unit = attackerUnits[0].getType();
-				for (String ship : Constants.NAVAL_UNITS) {
-					if (unit.equals(ship)) {
-						setBattleType(Type.NAVAL);
-					}
-				}
-			}
-		} catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+		if (attackerUnits.length != 0) {
+			setBattleType(attackerUnits[0].getType());
+		} else if (defenderUnits.length != 0) {
+			setBattleType(defenderUnits[0].getType());
+		} else {
+			setBattleType(Type.LAND);
 		}
-
 	}
 
 	public int attackerUnitSize() {

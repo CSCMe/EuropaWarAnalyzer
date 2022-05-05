@@ -188,7 +188,7 @@ public class WarParser implements Callable<War> {
                 battleList.get(BATTLE_COUNTER).setAttackerUnits(unitTempList2);
                 unitList.clear();
                 /* Battle type */
-                battleList.get(BATTLE_COUNTER).determineType();
+                battleList.get(BATTLE_COUNTER).determineBattleType();
 
             } else {
                 battleList.get(BATTLE_COUNTER).setLeaderDefender(line);
@@ -211,7 +211,7 @@ public class WarParser implements Callable<War> {
             try {
                 String[] pieces = line.split("=");
                 int losses = Integer.parseInt(pieces[1]);
-                unitList.add(new Unit(pieces[0], losses));
+                unitList.add(Unit.createUnit(pieces[0], losses));
             } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                 // Mainly debug if the lines which come here aren't integers
 				//controller.getErrorLabel().setText(controller.getErrorLabel().getText() + "Problem with reading: " + line);
