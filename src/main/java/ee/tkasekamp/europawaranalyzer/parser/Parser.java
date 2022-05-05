@@ -69,7 +69,7 @@ public abstract class Parser {
      * @param removeLast If true, removes the last character (used for ")
      * @return The correct line
      */
-    protected String nameExtractor(String line, int index, boolean removeLast) {
+    public static String nameExtractor(String line, int index, boolean removeLast) {
         StringBuilder sb = new StringBuilder(line);
         sb.delete(0, index);
         if (removeLast) {
@@ -78,17 +78,7 @@ public abstract class Parser {
         return sb.toString();
     }
 
-    protected ArrayList<Country> createDynamicCountryList(String line) {
-        ArrayList<Country> list = new ArrayList<>();
-        line = line.replaceAll("\t", "");
-        String[] splitLine = line.split("\\s");
-        for (String countryTag : splitLine) {
-            list.add(new Country(countryTag));
-        }
-        return list;
-    }
-
-    protected String addZerosToDate(String date) {
+    public static String addZerosToDate(String date) {
         String[] splitDate = date.split("\\.");
         for(int i = splitDate[0].length(); i < 4; i++) {
             splitDate[0] = "0" + splitDate[0];
@@ -100,5 +90,15 @@ public abstract class Parser {
             splitDate[2] = "0" + splitDate[2];
         }
         return splitDate[0] + "." + splitDate[1] + "." + splitDate[2];
+    }
+
+    protected ArrayList<Country> createDynamicCountryList(String line) {
+        ArrayList<Country> list = new ArrayList<>();
+        line = line.replaceAll("\t", "");
+        String[] splitLine = line.split("\\s");
+        for (String countryTag : splitLine) {
+            list.add(new Country(countryTag));
+        }
+        return list;
     }
 }

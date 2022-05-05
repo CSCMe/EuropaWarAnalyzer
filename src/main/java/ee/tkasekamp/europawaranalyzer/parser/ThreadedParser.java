@@ -6,9 +6,7 @@ import ee.tkasekamp.europawaranalyzer.service.ModelService;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Predicate;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -109,16 +107,23 @@ public class ThreadedParser extends Parser {
 
         reader.close();
         warLists.remove(0);
+
         ExecutorService es = Executors.newCachedThreadPool();
+        ArrayList<Future<War>> futures = new ArrayList<>();
         for (ArrayList<String> war : warLists) {
-            es.execute(new WarParser(war, this));
+            FutureTask<War> currentTask = new FutureTask<War>(new WarParser(war));
+            futures.add(currentTask);
+            es.execute(currentTask);
+        }
+
+        for (Future<War> warFuture : futures) {
+            try {
+                warList.add(warFuture.get(1, TimeUnit.SECONDS));
+            } catch (ExecutionException | TimeoutException | InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         es.shutdown();
-        try {
-            es.awaitTermination(5, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     public void readDynamicCountries(InputStream stream) throws IOException{

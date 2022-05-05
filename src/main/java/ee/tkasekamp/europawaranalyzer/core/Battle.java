@@ -14,14 +14,25 @@ public class Battle {
 	// Attacker 
 	private String attacker; // Not shown, used to identify
 	private String leaderAttacker;
-	private Unit[] attackerUnits; // There are only 20 different unit types in total
+	private Unit[] attackerUnits; // There are only 7 different unit types in total
 	private int attackerLosses;
 	// Defender
 	private String defender; // Not shown, used to identify
 	private String leaderDefender = "";
-	private Unit[] defenderUnits; // There are only 20 different unit types in total
+	private Unit[] defenderUnits; // There are only 7 different unit types in total
 	private int defenderLosses;
 
+	public Battle() {
+		this.date = "";
+		this.name = "";
+		battleType = Type.LAND;
+		totalLosses = 0;
+		attacker = "";
+		leaderAttacker = "";
+		defender = "";
+		defenderLosses = 0;
+		attackerLosses = 0;
+	}
 
 	public Battle(String date, String name) {
 		super();

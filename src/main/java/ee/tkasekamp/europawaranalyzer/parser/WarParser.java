@@ -5,10 +5,10 @@ import ee.tkasekamp.europawaranalyzer.util.Constants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.Callable;
 
-public class WarParser implements Runnable {
+public class WarParser implements Callable<War> {
     private final ArrayList<String> lines;
-    private final ThreadedParser parser;
 
     private String dateBuffer = ""; // Stores the last date for JoinedCountry or Battle dates
     private final ArrayList<JoinedCountry> countryList = new ArrayList<>();  // Stores temporarily to give to war
@@ -26,12 +26,12 @@ public class WarParser implements Runnable {
     
     private War war;
     
-    WarParser(ArrayList<String> lines, ThreadedParser parser) {
+    WarParser(ArrayList<String> lines) {
         this.lines = lines;
-        this.parser = parser;
     }
+
     @Override
-    public void run() {
+    public War call() {
         war = new War(lines.get(0).contains("active"));
         for (String actualLine : lines) {
             String line = actualLine.replaceAll("\t", "");
@@ -67,7 +67,7 @@ public class WarParser implements Runnable {
         countryList.clear();
         battleList.clear();
         war.setCasusBelliAndStartDate();
-        parser.addWar(war);
+        return war;
     }
 
     /**
@@ -78,29 +78,29 @@ public class WarParser implements Runnable {
      */
     private void warReader(String line) {
         if (line.startsWith("name") && (war.getName().equals(""))) { // Name check required so it is not overwritten
-            line = parser.nameExtractor(line, 6, true);
+            line = Parser.nameExtractor(line, 6, true);
             war.setName(line);
         } else if (line.matches("([0-9]{1,4}\\.((1[0-2])|[0-9])\\.([1-3][0-9]|[0-9]))+=.*")) {
             line = line.split("=")[0];
-            dateBuffer = parser.addZerosToDate(line);
+            dateBuffer = Parser.addZerosToDate(line);
 
         } else if (line.startsWith("add_attacker=")) {
-            line = parser.nameExtractor(line, 14, true);
+            line = Parser.nameExtractor(line, 14, true);
             JoinedCountry country = new JoinedCountry(line, true, dateBuffer);
             countryList.add(country);
         } else if (line.startsWith("add_defender=")) {
-            line = parser.nameExtractor(line, 14, true);
+            line = Parser.nameExtractor(line, 14, true);
             JoinedCountry country = new JoinedCountry(line, false, dateBuffer);
             countryList.add(country);
         } else if (line.startsWith("rem_attacker=")) {
-            line = parser.nameExtractor(line, 14, true);
+            line = Parser.nameExtractor(line, 14, true);
             for (JoinedCountry item : countryList) {
                 if (item.getTag().equals(line)) {
                     item.setEndDate(dateBuffer);
                 }
             }
         } else if (line.startsWith("rem_defender=")) {
-            line = parser.nameExtractor(line, 14, true);
+            line = Parser.nameExtractor(line, 14, true);
             for (JoinedCountry item : countryList) {
                 if (item.getTag().equals(line)) {
                     item.setEndDate(dateBuffer);
@@ -110,32 +110,26 @@ public class WarParser implements Runnable {
                 }
             }
         } else if (line.startsWith("original_attacker=")) {
-            line = parser.nameExtractor(line, 19, true);
+            line = Parser.nameExtractor(line, 19, true);
             /* Checking required for some older wars */
             if (!line.equals("---")) {
                 war.setOriginalAttacker(line);
             }
 
         } else if (line.startsWith("original_defender=")) {
-            line = parser.nameExtractor(line, 19, true);
+            line = Parser.nameExtractor(line, 19, true);
             /* Checking required for some older wars */
             if (!line.equals("---")) {
                 war.setOriginalDefender(line);
             }
 
         } else if (line.startsWith("action")) {
-            line = parser.nameExtractor(line, 7, false);
-            war.setAction(parser.addZerosToDate(line));
+            line = Parser.nameExtractor(line, 7, false);
+            war.setAction(Parser.addZerosToDate(line));
         } else if (line.startsWith("outcome")) {
             Result result;
-            line = parser.nameExtractor(line, 8, false);
-            switch(line) {
-                case "3" : result = Result.LOST; break;
-                case "2" : result = Result.WON; break;
-                case "1" : result = Result.WHITE; break;
-                default: result = Result.UNKNOWN;
-            }
-            war.setResult(result);
+            line = Parser.nameExtractor(line, 8, false);
+            war.setResult(Result.getResultFromNumber(line));
         }
 
 
@@ -148,15 +142,15 @@ public class WarParser implements Runnable {
     private void battleReader(String line) {
         //Process the first part of the battle
         if (line.startsWith("name")) {
-            line = parser.nameExtractor(line, 6, true);
+            line = Parser.nameExtractor(line, 6, true);
             Battle b = new Battle(dateBuffer, line);
             battleList.add(b);
         } else if (line.startsWith("location")) {
-            line = parser.nameExtractor(line, 9, false);
+            line = Parser.nameExtractor(line, 9, false);
             int location = Integer.parseInt(line);
             battleList.get(BATTLE_COUNTER).setLocation(location);
         } else if (line.startsWith("result")) {
-            line = parser.nameExtractor(line, 7, false);
+            line = Parser.nameExtractor(line, 7, false);
             if (line.equals("yes")) {
                 battleList.get(BATTLE_COUNTER).setRes(Result.WON);
             } else {
@@ -167,7 +161,7 @@ public class WarParser implements Runnable {
         } else if(line.startsWith("defender")) { //Check if it's about the defender
             attacker = false; // From now on all unit data will be about the defender
         } else if (line.startsWith("losses")) {
-            line = parser.nameExtractor(line, 7, false);
+            line = Parser.nameExtractor(line, 7, false);
             int losses = Integer.parseInt(line);
             if (attacker) {
                 battleList.get(BATTLE_COUNTER).setAttackerLosses(losses);
@@ -177,14 +171,14 @@ public class WarParser implements Runnable {
                 battleList.get(BATTLE_COUNTER).setTotalLosses(losses + battleList.get(BATTLE_COUNTER).getAttackerLosses());
             }
         } else if (line.startsWith("country")) {
-            line = parser.nameExtractor(line, 9, true);
+            line = Parser.nameExtractor(line, 9, true);
             if (attacker) {
                 battleList.get(BATTLE_COUNTER).setAttacker(line);
             } else {
                 battleList.get(BATTLE_COUNTER).setDefender(line);
             }
         } else if (line.startsWith("commander")) {
-            line = parser.nameExtractor(line, 11, true);
+            line = Parser.nameExtractor(line, 11, true);
             if (attacker) {
                 battleList.get(BATTLE_COUNTER).setLeaderAttacker(line);
 
@@ -236,14 +230,14 @@ public class WarParser implements Runnable {
         if (line.startsWith("war_goal")) {
             warGoal = new WarGoal();
         } else if (line.startsWith("province")) { // state_province_id
-            line = parser.nameExtractor(line, 9, false);
+            line = Parser.nameExtractor(line, 9, false);
             int state = Integer.parseInt(line);
             warGoal.setState_province_id(state);
         } else if (line.startsWith("casus")) { //Moving Casus Belli Processing somewhere else
-            line = parser.nameExtractor(line, 13, true);
+            line = Parser.nameExtractor(line, 13, true);
             warGoal.setCasus_belli(line);
         } else if (line.startsWith("country")) {
-            line = parser.nameExtractor(line, 9, true);
+            line = Parser.nameExtractor(line, 9, true);
             warGoal.setCountry(line);
         } else if (line.startsWith("}")) {
             /* This is always the last line in a war goal
@@ -258,21 +252,21 @@ public class WarParser implements Runnable {
      */
     private void casusBelliReader(String line) {
         if (line.startsWith("province")) { // state_province_id
-            line = parser.nameExtractor(line, 9, false);
+            line = Parser.nameExtractor(line, 9, false);
             int state = Integer.parseInt(line);
             warGoal.setState_province_id(state);
         }else if (line.startsWith("tag")) {
-            line = parser.nameExtractor(line, 5, true);
+            line = Parser.nameExtractor(line, 5, true);
             warGoal.setCountry(line);
         } else if (line.startsWith("casus_belli")) {
             /* This is always the last line in a war goal
              * Clearing the wargoal list and passing it on to war like in battleReader*/
-            line = parser.nameExtractor(line, 13, true);
+            line = Parser.nameExtractor(line, 13, true);
             warGoal.setCasus_belli(line);
         } else if (line.startsWith("type")) {
             /* This is always the last line in a war goal
              * Clearing the wargoal list and passing it on to war like in battleReader*/
-            line = parser.nameExtractor(line, 6, true);
+            line = Parser.nameExtractor(line, 6, true);
             if(warGoal.getCasus_belli().equals("")) {
                 warGoal.setCasus_belli(line);
             }

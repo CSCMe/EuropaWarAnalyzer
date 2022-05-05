@@ -8,6 +8,7 @@ public class JoinedCountry {
 	private boolean isAttacker; // True is attacker, false is defender
 	private String startDate = "";
 	private String endDate = "";
+	private long losses = 0;
 
 
 	public JoinedCountry(String tag, boolean isAttacker, String startDate) {
@@ -64,5 +65,12 @@ public class JoinedCountry {
 		this.endDate = endDate;
 	}
 
+	public long getLosses() {
+		return losses;
+	}
+
+	public void setLosses(long losses) {
+		this.losses = losses;
+	}
 
 }

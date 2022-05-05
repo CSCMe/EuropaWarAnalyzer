@@ -279,15 +279,8 @@ public class NormalParser extends Parser {
 			line = nameExtractor(line, 7, false);
 			warList.get(WAR_COUNTER).setAction(addZerosToDate(line));
 		} else if (line.startsWith("outcome")) {
-			Result result = Result.UNKNOWN;
 			line = nameExtractor(line, 8, false);
-			switch(line) {
-				case "3" : result = Result.LOST; break;
-				case "2" : result = Result.WON; break;
-				case "1" : result = Result.WHITE; break;
-				default: result = Result.UNKNOWN;
-			}
-			warList.get(WAR_COUNTER).setResult(result);
+			warList.get(WAR_COUNTER).setResult(Result.getResultFromNumber(line));
 		}
 
 
