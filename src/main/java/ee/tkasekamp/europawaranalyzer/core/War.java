@@ -46,8 +46,8 @@ public class War {
 
 	public void warProcessing() {
 		setCasusBelliAndStartDate();
-		if (!isActive) {
-			endDate = action;
+		if (!isActive && joinedCountryList.length != 0) {
+			endDate = joinedCountryList[0].getEndDate();
 		}
 	}
 
@@ -57,7 +57,13 @@ public class War {
 	 *
 	 * @return <code>int[]{countryTotalLosses, countryTotalShipLosses}</code>
 	 */
-	public int[] getCountryLosses(JoinedCountry joinedCountry) {
+	public long[] getCountryLosses(JoinedCountry joinedCountry) {
+
+		if (joinedCountry.getLostUnits() != null) {
+			return new long[]{joinedCountry.getLandLosses(), joinedCountry.getNavalLosses()};
+		}
+
+
 		int countryTotalLosses = 0;
 		int countryTotalShipLosses = 0;
 
@@ -81,7 +87,7 @@ public class War {
 			}
 		}
 
-		return new int[]{countryTotalLosses, countryTotalShipLosses};
+		return new long[]{countryTotalLosses, countryTotalShipLosses};
 	}
 
 	/**
@@ -103,7 +109,7 @@ public class War {
 		or the defending side, depending on which side it was on
 		*/
 		for (JoinedCountry joinedCountry : joinedCountryList) {
-			int[] countryLosses = getCountryLosses(joinedCountry);
+			long[] countryLosses = getCountryLosses(joinedCountry);
 			if (joinedCountry.isAttacker()) {
 				attackerTotalLosses += countryLosses[0];
 				attackerTotalShipLosses += countryLosses[1];

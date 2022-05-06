@@ -5,6 +5,7 @@ import ee.tkasekamp.europawaranalyzer.core.War;
 import ee.tkasekamp.europawaranalyzer.service.ModelService;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.*;
 import java.util.function.Predicate;
@@ -111,7 +112,7 @@ public class ThreadedParser extends Parser {
         ExecutorService es = Executors.newCachedThreadPool();
         ArrayList<Future<War>> futures = new ArrayList<>();
         for (ArrayList<String> war : warLists) {
-            FutureTask<War> currentTask = new FutureTask<War>(new WarParser(war));
+            FutureTask<War> currentTask = new FutureTask<War>(new BetterWarParser(war));
             futures.add(currentTask);
             es.execute(currentTask);
         }

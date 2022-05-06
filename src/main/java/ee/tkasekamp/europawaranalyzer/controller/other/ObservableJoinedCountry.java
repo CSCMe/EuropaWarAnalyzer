@@ -8,10 +8,10 @@ public class ObservableJoinedCountry {
 	private ImageView flag;
 	private String joinDate = "";
 	private String endDate = "";
-	private int shipLossesUnderCommand;
-	private int lossesUnderCommand;
+	private long shipLossesUnderCommand;
+	private long lossesUnderCommand;
 
-	public ObservableJoinedCountry(String officialName, Image flag, String joinDate, String endDate, int[] losses) {
+	public ObservableJoinedCountry(String officialName, Image flag, String joinDate, String endDate, long[] losses) {
 		super();
 		this.officialName = officialName;
 		this.flag = new ImageView(flag);
@@ -45,7 +45,7 @@ public class ObservableJoinedCountry {
 		return lossesUnderCommand;
 	}
 
-	public int getShipLossesUnderCommand() {
+	public long getShipLossesUnderCommand() {
 		return shipLossesUnderCommand;
 	}
 }

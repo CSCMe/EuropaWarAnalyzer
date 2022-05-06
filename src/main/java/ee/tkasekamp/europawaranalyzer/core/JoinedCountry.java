@@ -1,5 +1,7 @@
 package ee.tkasekamp.europawaranalyzer.core;
 
+import ee.tkasekamp.europawaranalyzer.util.Constants;
+
 /**
  * Class for storing "add_attacker", "add_defender", "rem_attacker", "rem_defender" data
  */
@@ -8,7 +10,7 @@ public class JoinedCountry {
 	private boolean isAttacker; // True is attacker, false is defender
 	private String startDate = "";
 	private String endDate = "";
-	private long losses = 0;
+	private Unit[] lostUnits;
 
 
 	public JoinedCountry(String tag, boolean isAttacker, String startDate) {
@@ -65,12 +67,28 @@ public class JoinedCountry {
 		this.endDate = endDate;
 	}
 
-	public long getLosses() {
-		return losses;
+	public Unit[] getLostUnits() {
+		return lostUnits;
 	}
 
-	public void setLosses(long losses) {
-		this.losses = losses;
+	public void setLostUnits(Unit[] lostUnits) {
+		this.lostUnits = lostUnits;
+	}
+
+	public long getLandLosses() {
+		long total = 0;
+		for (int i = 0; i < Constants.LAND_UNITS.length * 3; i++) {
+			total += lostUnits[i].getNumber();
+		}
+		return total;
+	}
+
+	public long getNavalLosses() {
+		long total = 0;
+		for (int i = Constants.LAND_UNITS.length * 3; i < (Constants.NAVAL_UNITS.length + Constants.LAND_UNITS.length)* 3; i++) {
+			total += lostUnits[i].getNumber();
+		}
+		return total;
 	}
 
 }
