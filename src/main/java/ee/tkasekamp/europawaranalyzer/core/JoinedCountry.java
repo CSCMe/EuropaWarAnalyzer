@@ -11,6 +11,7 @@ public class JoinedCountry {
 	private String startDate = "";
 	private String endDate = "";
 	private Unit[] lostUnits;
+	private double participationScore = 0;
 
 
 	public JoinedCountry(String tag, boolean isAttacker, String startDate) {
@@ -77,18 +78,25 @@ public class JoinedCountry {
 
 	public long getLandLosses() {
 		long total = 0;
-		for (int i = 0; i < Constants.LAND_UNITS.length * 3; i++) {
-			total += lostUnits[i].getNumber();
+		for (int i = 0; i < Constants.LAND_UNITS.length; i++) {
+			total += lostUnits[i * 3].getNumber();
 		}
 		return total;
 	}
 
 	public long getNavalLosses() {
 		long total = 0;
-		for (int i = Constants.LAND_UNITS.length * 3; i < (Constants.NAVAL_UNITS.length + Constants.LAND_UNITS.length)* 3; i++) {
-			total += lostUnits[i].getNumber();
+		for (int i = Constants.LAND_UNITS.length; i < (Constants.NAVAL_UNITS.length + Constants.LAND_UNITS.length); i++) {
+			total += lostUnits[i * 3].getNumber();
 		}
 		return total;
 	}
 
+	public double getParticipationScore() {
+		return participationScore;
+	}
+
+	public void setParticipationScore(double participationScore) {
+		this.participationScore = participationScore;
+	}
 }

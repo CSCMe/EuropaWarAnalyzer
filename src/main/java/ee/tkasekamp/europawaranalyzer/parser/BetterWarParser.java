@@ -83,7 +83,7 @@ public class BetterWarParser implements Callable<War> {
             return null;
         }
         war.setBattleList(battleList.toArray(new Battle[0]));
-        war.warProcessing();
+        war.setCasusBelliAndStartDate();
         return war;
     }
 
@@ -91,14 +91,19 @@ public class BetterWarParser implements Callable<War> {
         String originalLine = "";
         String dateBuffer = "";
         JoinedCountry country = new JoinedCountry("---",false, "");
+        double participationScore = 0;
         /* Order is important for this expression */
         while (curlyBalance > 1 && (originalLine = reader.readLine()) != null) {
             String line = originalLine.replaceAll("\t", "");
             curlyBalance(line);
             String[] parts = line.split("=");
             switch (parts[0]) {
+                case "value":
+                    participationScore = Double.parseDouble(parts[1]);
+                    break;
                 case "tag":
                     country = joinedCountryMap.get(quoteExtractor(parts[1]));
+                    country.setParticipationScore(participationScore);
                     break;
                 case "members":
                     country.setLostUnits(parseParticipantLosses(reader.readLine().replaceAll("\t", "")));
@@ -136,28 +141,30 @@ public class BetterWarParser implements Callable<War> {
             if (parts[0].matches("([0-9]{1,4}\\.((1[0-2])|[0-9])\\.([1-3][0-9]|[0-9]))+")) {
                 dateBuffer = Parser.addZerosToDate(parts[0]);
             }
+            boolean isAttacker = true;
+            String tag = "";
             switch (parts[0]) {
                 case "battle":
                     battleList.add(battleParser(reader, dateBuffer));
                     break;
                 case "add_defender":
-                    String attackerTag = quoteExtractor(parts[1]);
-                    joinedCountryMap.put(attackerTag, new JoinedCountry(attackerTag, false, dateBuffer));
-                    break;
-
+                    isAttacker = false;
                 case "add_attacker":
-                    String defenderTag = quoteExtractor(parts[1]);
-                    joinedCountryMap.put(defenderTag, new JoinedCountry(defenderTag, true, dateBuffer));
+                    tag = quoteExtractor(parts[1]);
+                    joinedCountryMap.put(tag, new JoinedCountry(tag, isAttacker, dateBuffer));
                     break;
-                case "rem_attacker":
                 case "rem_defender":
-                    String removeTag = quoteExtractor(parts[1]);
-                    JoinedCountry country = joinedCountryMap.get(removeTag);
-                    if (country != null) {
-                        country.setEndDate(dateBuffer);
-                    }
+                    isAttacker = false;
+                case "rem_attacker":
+                    tag = quoteExtractor(parts[1]);
+                    JoinedCountry country = joinedCountryMap.getOrDefault(tag, new JoinedCountry(tag, isAttacker, "?"));
+                    country.setEndDate(dateBuffer);
+                    joinedCountryMap.putIfAbsent(tag, country);
                     break;
             }
+        }
+        if (!war.isActive()) {
+            war.setEndDate(dateBuffer);
         }
     }
 

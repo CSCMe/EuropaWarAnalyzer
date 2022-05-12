@@ -43,14 +43,6 @@ public class War {
 			this.casus_belli = warGoal.getCasus_belli();
 		}
 	}
-
-	public void warProcessing() {
-		setCasusBelliAndStartDate();
-		if (!isActive && joinedCountryList.length != 0) {
-			endDate = joinedCountryList[0].getEndDate();
-		}
-	}
-
 	/**
 	 * Calculate the losses for a country in this war.
 	 * Iterates through every battle and returns a sum of the total man and ship losses.
@@ -59,7 +51,7 @@ public class War {
 	 */
 	public long[] getCountryLosses(JoinedCountry joinedCountry) {
 
-		if (joinedCountry.getLostUnits() != null) {
+		if (joinedCountry.getLostUnits() != null) { //VERY different from battle losses for some reason
 			return new long[]{joinedCountry.getLandLosses(), joinedCountry.getNavalLosses()};
 		}
 

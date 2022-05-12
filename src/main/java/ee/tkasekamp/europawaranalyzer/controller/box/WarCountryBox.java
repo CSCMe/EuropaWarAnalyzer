@@ -129,9 +129,11 @@ public class WarCountryBox extends AbstractController {
 								modelService.getFlag(x.getTag()),
 								x.getStartDate(),
 								x.getEndDate(),
-								war.getCountryLosses(x))));
+								war.getCountryLosses(x),
+								x.getParticipationScore())));
 
 		/* Adding the countries to table */
+		tableContent.sort(ObservableJoinedCountry::compareTo);
 		table.setItems(tableContent);
 	}
 
